@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/tactics-board/static/css/main.5f361e03.chunk.css",
+    "main.js": "/tactics-board/static/js/main.4994fc7f.chunk.js",
+    "main.js.map": "/tactics-board/static/js/main.4994fc7f.chunk.js.map",
+    "runtime-main.js": "/tactics-board/static/js/runtime-main.4bb3167f.js",
+    "runtime-main.js.map": "/tactics-board/static/js/runtime-main.4bb3167f.js.map",
+    "static/js/2.2baa5e75.chunk.js": "/tactics-board/static/js/2.2baa5e75.chunk.js",
+    "static/js/2.2baa5e75.chunk.js.map": "/tactics-board/static/js/2.2baa5e75.chunk.js.map",
+    "index.html": "/tactics-board/index.html",
+    "precache-manifest.e4f14188bff94e46af8c97a2b96bc0b8.js": "/tactics-board/precache-manifest.e4f14188bff94e46af8c97a2b96bc0b8.js",
+    "service-worker.js": "/tactics-board/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/tactics-board/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.2baa5e75.chunk.js.LICENSE.txt": "/tactics-board/static/js/2.2baa5e75.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/tactics-board/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4bb3167f.js",
+    "static/js/2.2baa5e75.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.4994fc7f.chunk.js"
+  ]
+}
