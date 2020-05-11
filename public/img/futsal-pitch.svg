@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4400 2700">
+	<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">
+		<line x1="0" x2="20" y1="0" y2="20" />
+		<line x1="20" x2="00" y1="0" y2="20" />
+	</pattern>
 	<g id="background">
 		<rect width="4400" height="2700" fill="#b7b7b7" />
 	</g>
@@ -26,6 +30,10 @@
 			<path fill="none" d="M600,1158 a600,600 0 0,1 -600,600" />
 			<line x1="0" x2="-25" y1="500" y2="500" />
 			<line x1="0" x2="-25" y1="1500" y2="1500" />
+			<g id="goal-left">
+				<rect width="100" height="300" x="-100" y="850" fill="none" />
+				<rect width="100" height="300" x="-100" y="850" fill="url(#goal-net)" stroke="red" stroke-dasharray="30" />
+			</g>
 		</g>
 		<g id="left-penalty" fill="white" fill-opacity="1" stroke-width="0">
 			<circle r="10" cx="1000" cy="500" />
@@ -39,6 +47,10 @@
 			<path fill="none" d="M3400,1158 a600,600 0 0,0 600,600" />
 			<line x1="4000" x2="4025" y1="500" y2="500" />
 			<line x1="4000" x2="4025" y1="1500" y2="1500" />
+			<g id="goal-right">
+				<rect width="100" height="300" x="4000" y="850" fill="none" />
+				<rect width="100" height="300" x="4000" y="850" fill="url(#goal-net)" stroke="red" stroke-dasharray="30" />
+			</g>
 		</g>
 		<g id="right-penalty" fill="white" fill-opacity="1" stroke-width="0">
 			<circle r="10" cx="3000" cy="500" />
