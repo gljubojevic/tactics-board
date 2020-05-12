@@ -10,7 +10,7 @@
 		<rect width="4000" height="2000" />
 		<line x1="2000" x2="2000" y1="0" y2="2000" />
 		<circle r="300" cx="2000" cy="1000" fill="none" />
-		<circle r="15" cx="2000" cy="1000" fill="white" fill-opacity="1" stroke-width="0" />
+		<circle r="12" cx="2000" cy="1000" fill="white" fill-opacity="1" stroke-width="0" />
 		<g id="corner_marks">
 			<path fill="none" d="M25,0 a25,25 0 0,1 -25,25" />
 			<path fill="none" d="M4000,25 a25,25 0 0,1 -25,-25" />
@@ -25,7 +25,7 @@
 		</g>
 		<g id="left">
 			<line x1="600" x2="600" y1="842" y2="1158" />
-			<circle r="15" cx="600" cy="1000" fill="white" fill-opacity="1" stroke-width="0" />
+			<circle r="12" cx="600" cy="1000" fill="white" fill-opacity="1" stroke-width="0" />
 			<path fill="none" d="M0,242 a600,600 0 0,1 600,600" />
 			<path fill="none" d="M600,1158 a600,600 0 0,1 -600,600" />
 			<line x1="0" x2="-25" y1="500" y2="500" />
@@ -38,12 +38,12 @@
 		</g>
 		<g id="left-penalty" fill="white" fill-opacity="1" stroke-width="0">
 			<rect width="8" height="8" x="996" y="496" />
-			<circle r="15" cx="1000" cy="1000"/>
+			<circle r="12" cx="1000" cy="1000"/>
 			<rect width="8" height="8" x="996" y="1496" />
 		</g>
 		<g id="right">
 			<line x1="3400" x2="3400" y1="842" y2="1158" />
-			<circle r="15" cx="3400" cy="1000" fill="white" fill-opacity="1" stroke-width="0" />
+			<circle r="12" cx="3400" cy="1000" fill="white" fill-opacity="1" stroke-width="0" />
 			<path fill="none" d="M3400,842 a600,600 0 0,1 600,-600" />
 			<path fill="none" d="M3400,1158 a600,600 0 0,0 600,600" />
 			<line x1="4000" x2="4025" y1="500" y2="500" />
@@ -56,7 +56,7 @@
 		</g>
 		<g id="right-penalty" fill="white" fill-opacity="1" stroke-width="0">
 			<rect width="8" height="8" x="2996" y="496" />
-			<circle r="15" cx="3000" cy="1000" />
+			<circle r="12" cx="3000" cy="1000" />
 			<rect width="8" height="8" x="2996" y="1496" />
 		</g>
 	</g>
