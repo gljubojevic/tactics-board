@@ -26,7 +26,7 @@
 		<g id="left">
 			<line x1="600" x2="600" y1="842" y2="1158" />
 			<circle r="15" cx="600" cy="1000" fill="white" fill-opacity="1" stroke-width="0" />
-			<path fill="none" d="M0,292 a600,600 0 0,1 600,600" />
+			<path fill="none" d="M0,242 a600,600 0 0,1 600,600" />
 			<path fill="none" d="M600,1158 a600,600 0 0,1 -600,600" />
 			<line x1="0" x2="-25" y1="500" y2="500" />
 			<line x1="0" x2="-25" y1="1500" y2="1500" />
