@@ -37,9 +37,9 @@
 			</g>
 		</g>
 		<g id="left-penalty" fill="white" fill-opacity="1" stroke-width="0">
-			<circle r="10" cx="1000" cy="500" />
+			<rect width="8" height="8" x="996" y="496" />
 			<circle r="15" cx="1000" cy="1000"/>
-			<circle r="10" cx="1000" cy="1500"/>
+			<rect width="8" height="8" x="996" y="1496" />
 		</g>
 		<g id="right">
 			<line x1="3400" x2="3400" y1="842" y2="1158" />
@@ -55,9 +55,9 @@
 			</g>
 		</g>
 		<g id="right-penalty" fill="white" fill-opacity="1" stroke-width="0">
-			<circle r="10" cx="3000" cy="500" />
+			<rect width="8" height="8" x="2996" y="496" />
 			<circle r="15" cx="3000" cy="1000" />
-			<circle r="10" cx="3000" cy="1500" />
+			<rect width="8" height="8" x="2996" y="1496" />
 		</g>
 	</g>
 </svg>
