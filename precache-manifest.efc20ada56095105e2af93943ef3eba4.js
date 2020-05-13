@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "64e0ace7d7eb69128ec8a8ea7bfd49d3",
+    "revision": "f2dd824695555db16d2dcf847b0e909b",
     "url": "/tactics-board/index.html"
   },
   {
-    "revision": "f82c9720fabf3b5e7abc",
+    "revision": "f2b3da61015a5cfc9039",
     "url": "/tactics-board/static/css/main.6cf66762.chunk.css"
   },
   {
@@ -16,15 +16,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tactics-board/static/js/2.9c89e5ab.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "f82c9720fabf3b5e7abc",
-    "url": "/tactics-board/static/js/main.0281a3d8.chunk.js"
+    "revision": "f2b3da61015a5cfc9039",
+    "url": "/tactics-board/static/js/main.f47b5075.chunk.js"
   },
   {
     "revision": "0caa8ae798eb51ab2490",
     "url": "/tactics-board/static/js/runtime-main.4bb3167f.js"
   },
   {
-    "revision": "4f6a1777a714e044932ec73734cfb2a5",
-    "url": "/tactics-board/static/media/futsal-pitch.4f6a1777.svg"
+    "revision": "3e766e3a35d7f534a9b23b20cf3ae2fd",
+    "url": "/tactics-board/static/media/futsal-pitch.3e766e3a.svg"
   }
 ]);
