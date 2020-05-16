@@ -1,11 +1,11 @@
 import React from 'react';
-import { ReactComponent as FutsalPitch } from './img/futsal-pitch.svg';
+import Pitch from './Pitch'
 import './App.css';
 
 function App() {
 	return (
 		<div className="pitch">
-			<FutsalPitch />
+			<Pitch />
 		</div>
 	);
 }
