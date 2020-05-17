@@ -1,5 +1,5 @@
 import React from 'react';
-import PitchEdit from './PitchEdit'
+import PitchEdit from './editors/PitchEdit'
 import './App.css';
 
 function App() {
