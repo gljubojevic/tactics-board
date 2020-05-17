@@ -5,7 +5,7 @@ import './App.css';
 function App() {
 	return (
 		<div className="pitch">
-			<Pitch />
+			<Pitch noPlayers={4} />
 		</div>
 	);
 }

@@ -1,7 +1,35 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Player from './Player'
 
 class Pitch extends Component {
+
+	constructor(props) {
+		super(props);
+		this._players = this.initPlayers(props.noPlayers);
+	}
+
+	initPlayers(noPlayers) {
+		console.log("Create player data noPlayers:", noPlayers)
+		let players = [];
+		for (var i = 0; i <= noPlayers; i++) {
+			players.push({
+				index:i,
+				x:i*200,
+				y:-i* 200,
+				name:"Player " + (i+1).toString()
+			});
+		}
+		return players;
+	}
+	
 	render() {
+		const playersShow = this._players.map((pl, index) => {
+			return (
+				<Player key={index.toString()} index={pl.index} x={pl.x} y={pl.y} name={pl.name} />
+			);
+		});
+
 		return (
 			<svg xmlns='http://www.w3.org/2000/svg' viewBox="0 0 4300 2300">
 				<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">
@@ -66,16 +94,21 @@ class Pitch extends Component {
 					</g>
 				</g>
 				<g id="players" transform="translate(150 2150)" fontSize="50">
-					<g id="player-01" textAnchor="middle">
-						<circle r="50" cx="50" cy="70" />
-						<text fill="white" x="50" y="70" dominantBaseline="central">0</text>
-						<text x="50">Goran Test</text>
-					</g>
+					{playersShow}
 				</g>
 				<g id="balls"></g>
 			</svg>
 		);
 	}
 }
+
+Pitch.defaultProps = {
+	noPlayers: 0,
+}
+
+Pitch.propTypes = {
+	noPlayers: PropTypes.number,
+}
+
 
 export default Pitch;
