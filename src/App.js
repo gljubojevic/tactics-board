@@ -1,11 +1,11 @@
 import React from 'react';
-import Pitch from './Pitch'
+import PitchEdit from './PitchEdit'
 import './App.css';
 
 function App() {
 	return (
 		<div className="pitch">
-			<Pitch noPlayers={4} />
+			<PitchEdit noPlayers={4} />
 		</div>
 	);
 }

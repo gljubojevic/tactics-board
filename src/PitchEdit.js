@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Player from './Player'
+import PlayerEdit from './PlayerEdit'
 
-class Pitch extends Component {
+class PitchEdit extends Component {
 
 	constructor(props) {
 		super(props);
@@ -26,7 +26,7 @@ class Pitch extends Component {
 	render() {
 		const playersShow = this._players.map((pl, index) => {
 			return (
-				<Player key={index.toString()} index={pl.index} x={pl.x} y={pl.y} name={pl.name} />
+				<PlayerEdit key={index.toString()} index={pl.index} x={pl.x} y={pl.y} name={pl.name} />
 			);
 		});
 
@@ -102,13 +102,13 @@ class Pitch extends Component {
 	}
 }
 
-Pitch.defaultProps = {
+PitchEdit.defaultProps = {
 	noPlayers: 0,
 }
 
-Pitch.propTypes = {
+PitchEdit.propTypes = {
 	noPlayers: PropTypes.number,
 }
 
 
-export default Pitch;
+export default PitchEdit;

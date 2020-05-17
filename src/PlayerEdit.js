@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class Player extends Component {
+class PlayerEdit extends Component {
 	constructor(props) {
 		super(props);
 		console.log("Creating player:", props.index);
@@ -19,18 +19,18 @@ class Player extends Component {
 	}
 }
 
-Player.defaultProps = {
+PlayerEdit.defaultProps = {
 	index: 0,
 	x:0,
 	y:0,
 	name: ""
 }
 
-Player.propTypes = {
+PlayerEdit.propTypes = {
 	index: PropTypes.number,
 	x: PropTypes.number,
 	y: PropTypes.number,
 	name: PropTypes.string
 }
 
-export default Player;
+export default PlayerEdit;
