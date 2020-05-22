@@ -1,4 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4300 2300">
+	<style>
+		.player {
+			fill: red;
+			cursor: hand;
+		}		
+		.player text {
+			fill: black;
+		}		
+		.player text.number {
+			fill: white;
+		}		
+	</style>
 	<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">
 		<line x1="0" x2="20" y1="0" y2="20" />
 		<line x1="20" x2="00" y1="0" y2="20" />
@@ -61,9 +73,9 @@
 		</g>
 	</g>
 	<g id="players" transform="translate(150 2150)" font-size="50">
-		<g id="player-01" text-anchor="middle">
+		<g id="player-01" text-anchor="middle" class="player">
 			<circle r="50" cx="50" cy="70" />
-			<text fill="white" x="50" y="70" dominant-baseline="central">0</text>
+			<text class="number" x="50" y="70" dominant-baseline="central">0</text>
 			<text x="50">Goran Test</text>
 		</g>
 	</g>
