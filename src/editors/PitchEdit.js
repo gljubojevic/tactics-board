@@ -29,7 +29,7 @@ class PitchEdit extends Component {
 	}
 
 	initPlayers(noPlayers, noColors) {
-		console.log("Create player data noPlayers:", noPlayers)
+		//console.log("Create player data noPlayers:", noPlayers)
 		let groupSize = Math.floor(noPlayers / noColors)
 		let players = [];
 		for (var i = 0; i < noPlayers; i++) {
@@ -48,7 +48,7 @@ class PitchEdit extends Component {
 	}
 
 	initBalls(noBalls, noColors) {
-		console.log("Create ball data noBalls:", noBalls)
+		//console.log("Create ball data noBalls:", noBalls)
 		let groupSize = Math.floor(noBalls / noColors)
 		let balls = [];
 		for (var i = 0; i < noBalls; i++) {
