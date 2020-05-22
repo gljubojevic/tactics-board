@@ -4,9 +4,7 @@ import './App.css';
 
 function App() {
 	return (
-		<div className="pitch">
-			<PitchEdit noPlayers={4} />
-		</div>
+		<PitchEdit noPlayers={200} noBalls={100} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4300} viewBoxBottom={2300} />
 	);
 }
 

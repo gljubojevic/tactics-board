@@ -2,17 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class PlayerEdit extends Component {
-	constructor(props) {
-		super(props);
-		console.log("Creating player:", props.index);
-	}
 
 	render() {
+		const className = 'player pc' + this.props.color;
 		const transform = 'translate(' + this.props.x + ' ' + this.props.y + ')';
 		return (
-			<g textAnchor="middle" transform={transform}>
-				<circle r="50" cx="50" cy="70" />
-				<text fill="white" x="50" y="70" dominantBaseline="central">{this.props.index}</text>
+			<g className={className} textAnchor="middle" transform={transform}>
+				<circle r="50" cx="50" cy="70" className="draggable" data-ref={this.props.id} />
+				<text className="number" x="50" y="70" dominantBaseline="central">{this.props.number}</text>
 				<text x="50">{this.props.name}</text>
 			</g>
 		);
@@ -20,16 +17,20 @@ class PlayerEdit extends Component {
 }
 
 PlayerEdit.defaultProps = {
-	index: 0,
+	id:"",
 	x:0,
 	y:0,
+	color:0,
+	number: "",
 	name: ""
 }
 
 PlayerEdit.propTypes = {
-	index: PropTypes.number,
+	id: PropTypes.string,
 	x: PropTypes.number,
 	y: PropTypes.number,
+	color: PropTypes.number,
+	number: PropTypes.string,
 	name: PropTypes.string
 }
 

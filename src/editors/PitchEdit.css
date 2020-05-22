@@ -1,0 +1,23 @@
+.pc0 {	fill: #8b2323;	}
+.pc1 {	fill: #e7e739;	}
+.pc2 {	fill: #912cee;	}
+.pc3 {	fill: #04b804;	}
+.pc4 {	fill: #1d4ba0;	}
+.pc5 {	fill: #ee2c2c;	}
+.pc6 {	fill: #ff7f50;	}
+.pc7 {	fill: #1389b1;	}
+
+.bc0 { fill: #ffa500; }
+.bc1 { fill: #cc3333; }
+.bc2 { fill: #222333; }
+.bc3 { fill: #0000ff; }
+.bc4 { fill: #444444; }
+
+.player { pointer-events: none; }
+.player text { fill: black;	}
+.player text.number { fill: white; }
+
+.draggable {
+	cursor: move;
+	pointer-events: all;
+}

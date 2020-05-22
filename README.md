@@ -22,3 +22,7 @@ https://github.com/svgdotjs/svg.js
 
 Example of custom react svg component:  
 https://github.com/hugozap/react-rotary-knob
+
+Drag/Rezize:  
+https://interactjs.io/
+- Maybe usefull as example
