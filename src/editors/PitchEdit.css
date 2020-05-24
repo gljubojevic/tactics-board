@@ -5,13 +5,14 @@
 .pc4 {	fill: #1d4ba0;	}
 .pc5 {	fill: #ee2c2c;	}
 .pc6 {	fill: #ff7f50;	}
-.pc7 {	fill: #1389b1;	}
+.pc7 {	fill: #56c6eb;	}
 
 .bc0 { fill: #ffa500; }
 .bc1 { fill: #cc3333; }
 .bc2 { fill: #222333; }
 .bc3 { fill: #0000ff; }
-.bc4 { fill: #444444; }
+.bc4 { fill: #ffffff; }
+.bc4 svg { fill: #000000; }
 
 .player { pointer-events: none; }
 .player text { fill: black;	}

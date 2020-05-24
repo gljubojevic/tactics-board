@@ -4,6 +4,10 @@ Project for Futsal Tactics board [preview](https://gljubojevic.github.io/tactics
 ## References
 https://create-react-app.dev/
 
+SVG to png:  
+https://github.com/webkul/myscale  
+Check source and canvas part
+
 SVG Convert to react:  
 https://github.com/gregberge/svgr
 - Maybe usefull
