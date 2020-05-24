@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/tactics-board/static/css/main.5ad950c1.chunk.css",
-    "main.js": "/tactics-board/static/js/main.786f0ebd.chunk.js",
-    "main.js.map": "/tactics-board/static/js/main.786f0ebd.chunk.js.map",
+    "main.css": "/tactics-board/static/css/main.c7ef2207.chunk.css",
+    "main.js": "/tactics-board/static/js/main.b624a5fe.chunk.js",
+    "main.js.map": "/tactics-board/static/js/main.b624a5fe.chunk.js.map",
     "runtime-main.js": "/tactics-board/static/js/runtime-main.4bb3167f.js",
     "runtime-main.js.map": "/tactics-board/static/js/runtime-main.4bb3167f.js.map",
     "static/js/2.a7f13a90.chunk.js": "/tactics-board/static/js/2.a7f13a90.chunk.js",
     "static/js/2.a7f13a90.chunk.js.map": "/tactics-board/static/js/2.a7f13a90.chunk.js.map",
     "index.html": "/tactics-board/index.html",
-    "precache-manifest.9ae6b859dda14a9837c7879bb29ec017.js": "/tactics-board/precache-manifest.9ae6b859dda14a9837c7879bb29ec017.js",
+    "precache-manifest.be1a525d20f24bd569979b4cb033599b.js": "/tactics-board/precache-manifest.be1a525d20f24bd569979b4cb033599b.js",
     "service-worker.js": "/tactics-board/service-worker.js",
-    "static/css/main.5ad950c1.chunk.css.map": "/tactics-board/static/css/main.5ad950c1.chunk.css.map",
+    "static/css/main.c7ef2207.chunk.css.map": "/tactics-board/static/css/main.c7ef2207.chunk.css.map",
     "static/js/2.a7f13a90.chunk.js.LICENSE.txt": "/tactics-board/static/js/2.a7f13a90.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4bb3167f.js",
     "static/js/2.a7f13a90.chunk.js",
-    "static/css/main.5ad950c1.chunk.css",
-    "static/js/main.786f0ebd.chunk.js"
+    "static/css/main.c7ef2207.chunk.css",
+    "static/js/main.b624a5fe.chunk.js"
   ]
 }
