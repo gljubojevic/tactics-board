@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import PlayerEdit from './PlayerEdit'
 import BallEdit from './BallEdit'
 import './PitchEdit.css';
+
+// this is for offset from toolbar and default class
+const styles = theme => ({
+	offset: {
+		paddingTop: theme.mixins.toolbar.minHeight,
+	}
+})
 
 class PitchEdit extends Component {
 
@@ -150,7 +158,6 @@ class PitchEdit extends Component {
 		}
 	}
 
-
 	render() {
 		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
 
@@ -166,8 +173,11 @@ class PitchEdit extends Component {
 			);
 		});
 
+		// default class is full screen width and height with paading for menu height
+		const pitchClasses = "pitch " + this.props.classes.offset;
+
 		return (
-			<div className="pitch">
+			<div className={pitchClasses}>
 				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
 					<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">
 						<line x1="0" x2="20" y1="0" y2="20" />
@@ -258,5 +268,4 @@ PitchEdit.propTypes = {
 	viewBoxBottom: PropTypes.number
 }
 
-
-export default PitchEdit;
+export default withStyles(styles, { withTheme: true })(PitchEdit);

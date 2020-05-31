@@ -4,6 +4,12 @@ Project for Futsal Tactics board [preview](https://gljubojevic.github.io/tactics
 ## References
 https://create-react-app.dev/
 
+UI using:  
+https://material-ui.com/
+
+UI alternatives:  
+https://classpert.com/blog/top-bootstrap-alternatives
+
 SVG to png:  
 https://github.com/webkul/myscale  
 Check source and canvas part
