@@ -1,6 +1,7 @@
 .pitch {
 	width: 100vw; 
 	height: 100vh;
+	background: url(img/wood_floor.jpg);
 }
 
 .pitch svg {

@@ -184,7 +184,7 @@ class PitchEdit extends Component {
 						<line x1="20" x2="00" y1="0" y2="20" />
 					</pattern>
 					<g id="background" ref={this._bgRef}>
-						<rect width="4300" height="2300" fill="#b7b7b7" />
+						<rect width="4300" height="2300" fill="#b7b7b7" fill-opacity="0.5" />
 					</g>
 					<g id="pitch" transform="translate(150 100)" fill="#0280c6" stroke="white" strokeWidth="8">
 						<rect width="4000" height="2000" />
