@@ -12,7 +12,7 @@ function App() {
 		<React.Fragment>
 			<ThemeProvider theme={appTheme}>
 				<AppTools />
-				<PitchEdit noPlayers={200} noBalls={100} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4300} viewBoxBottom={2300} />
+				<PitchEdit noPlayers={200} noBalls={100} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 			</ThemeProvider>
 		</React.Fragment>
 	);

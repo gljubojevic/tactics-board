@@ -176,6 +176,21 @@ class PitchEdit extends Component {
 		// default class is full screen width and height with paading for menu height
 		const pitchClasses = "pitch " + this.props.classes.offset;
 
+		// Caclculate pitch position in viewBox
+		const pitchLeft = (this._orgWidth - 4000) / 2; // Goals are relative to pitch no need to take them in calc
+		const pitchTop = (this._orgHeight - 2000) / 2;
+		const pitchTransform = 'translate(' + pitchLeft + ' ' + pitchTop + ')';
+
+		// calculate players position in viewbox
+		const playersLeft = pitchLeft;
+		const playersTop = pitchTop + 2000 + 50;
+		const playersTransform = 'translate(' + playersLeft + ' ' + playersTop + ')';
+
+		// calclulate balls position in viewBox
+		const ballsLeft = pitchLeft + 1050
+		const ballsTop = pitchTop + 2000 + 100;
+		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"
+
 		return (
 			<div className={pitchClasses}>
 				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
@@ -184,9 +199,9 @@ class PitchEdit extends Component {
 						<line x1="20" x2="00" y1="0" y2="20" />
 					</pattern>
 					<g id="background" ref={this._bgRef}>
-						<rect width="4300" height="2300" fill="#b7b7b7" fill-opacity="0.5" />
+						<rect width={this._orgWidth} height={this._orgHeight} fill="#b7b7b7" fillOpacity="0.5" />
 					</g>
-					<g id="pitch" transform="translate(150 100)" fill="#0280c6" stroke="white" strokeWidth="8">
+					<g id="pitch" transform={pitchTransform} fill="#0280c6" stroke="white" strokeWidth="8">
 						<rect width="4000" height="2000" />
 						<line x1="2000" x2="2000" y1="0" y2="2000" />
 						<circle r="300" cx="2000" cy="1000" fill="none" />
@@ -240,10 +255,10 @@ class PitchEdit extends Component {
 							<rect width="16" height="16" x="2992" y="1492" />
 						</g>
 					</g>
-					<g id="players" transform="translate(150 2150)" fontSize="50">
+					<g id="players" transform={playersTransform} fontSize="50">
 						{playersShow}
 					</g>
-					<g id="balls" transform="translate(1200 2210)">
+					<g id="balls" transform={ballsTransform}>
 						{ballsShow}
 					</g>
 				</svg>
