@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import PlayerEdit from './PlayerEdit'
 import BallEdit from './BallEdit'
-import './PitchEdit.css';
+// import './PitchEdit.css';	// embedded to svg for now
 
 // this is for offset from toolbar and default class
 const styles = theme => ({
@@ -16,6 +16,7 @@ class PitchEdit extends Component {
 
 	constructor(props) {
 		super(props);
+		this._editRef = React.createRef();	// refernece to editor container
 		this._bgRef = React.createRef();	// background reference to get client size of pitch for editing
 		this._orgWidth = this.props.viewBoxRight - this.props.viewBoxLeft;
 		this._orgHeight = this.props.viewBoxBottom - this.props.viewBoxTop;
@@ -108,6 +109,7 @@ class PitchEdit extends Component {
 	}
 
 	hMouseDown(e) {
+		//console.log("Buttons", e.button, e.buttons);
 		if (!e.target.classList.contains('draggable')) {
 			return;
 		}
@@ -158,6 +160,15 @@ class PitchEdit extends Component {
 		}
 	}
 
+	// return current SVG in editor
+	getSVG() {
+		return {
+			width: this._orgWidth,
+			height: this._orgHeight,
+			svgText: this._editRef.current.children[0].outerHTML
+		}
+	}
+
 	render() {
 		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
 
@@ -192,8 +203,31 @@ class PitchEdit extends Component {
 		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"
 
 		return (
-			<div className={pitchClasses}>
+			<div ref={this._editRef} className={pitchClasses}>
 				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
+					<style>
+						{[
+							'.pc0 {	fill: #8b2323;	}',
+							'.pc0 {	fill: #8b2323;	}',
+							'.pc1 {	fill: #e7e739;	}',
+							'.pc2 {	fill: #912cee;	}',
+							'.pc3 {	fill: #04b804;	}',
+							'.pc4 {	fill: #1d4ba0;	}',
+							'.pc5 {	fill: #ee2c2c;	}',
+							'.pc6 {	fill: #ff7f50;	}',
+							'.pc7 {	fill: #56c6eb;	}',
+							'.bc0 { fill: #ffa500; }',
+							'.bc1 { fill: #cc3333; }',
+							'.bc2 { fill: #222333; }',
+							'.bc3 { fill: #0000ff; }',
+							'.bc4 { fill: #ffffff; }',
+							'.bc4 svg { fill: #000000; }',
+							'.player { pointer-events: none; }',
+							'.player text { fill: black;	}',
+							'.player text.number { fill: white; }',
+							'.draggable { cursor: move; pointer-events: all;}'
+						]}
+					</style>
 					<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">
 						<line x1="0" x2="20" y1="0" y2="20" />
 						<line x1="20" x2="00" y1="0" y2="20" />
@@ -271,8 +305,8 @@ PitchEdit.defaultProps = {
 	noPlayers: 0,
 	viewBoxLeft: 0,
 	viewBoxTop: 0,
-	viewBoxRight: 4300,
-	viewBoxBottom: 2300
+	viewBoxRight: 4500,
+	viewBoxBottom: 2500
 }
 
 PitchEdit.propTypes = {

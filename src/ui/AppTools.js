@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -36,6 +37,7 @@ class AppTools extends Component {
 		}
 		this.toggleDrawer = this.toggleDrawer.bind(this);
 		this.toggleFullScreen = this.toggleFullScreen.bind(this);
+		this.saveImage = this.saveImage.bind(this);
 	}
 
 	toggleDrawer(e) {
@@ -46,6 +48,10 @@ class AppTools extends Component {
 		this.setState({
 			drawerOpen:isOpen
 		});
+	}
+
+	saveImage() {
+		this.props.pitchEditSaveImage();
 	}
 
 	domFullScreenToggle(toFullScreen) {
@@ -100,13 +106,13 @@ class AppTools extends Component {
 			<React.Fragment>
 				<AppBar position="fixed">
 					<Toolbar variant="regular">
-						<IconButton edge="start" color="inherit" aria-label="menu" onClick={this.toggleDrawer} >
+						<IconButton edge="start" color="inherit" aria-label="menu" onClick={this.toggleDrawer}>
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Save picture">
-							<IconButton aria-label="Save picture" color="inherit">
+							<IconButton aria-label="Save picture" color="inherit" onClick={this.saveImage}>
 								<GetAppIcon />
 							</IconButton>
 						</Tooltip>
@@ -145,6 +151,14 @@ class AppTools extends Component {
 			</React.Fragment>
 		);
 	}
+}
+
+AppTools.defaultProps = {
+	pitchEditSaveImage: null,
+}
+
+AppTools.propTypes = {
+	pitchEditSaveImage: PropTypes.func,
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);
