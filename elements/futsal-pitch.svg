@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4300 2300">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4500 2500">
 	<style>
 		.player {
 			fill: red;
@@ -16,9 +16,9 @@
 		<line x1="20" x2="00" y1="0" y2="20" />
 	</pattern>
 	<g id="background">
-		<rect width="4300" height="2300" fill="#b7b7b7" />
+		<rect width="4500" height="2500" fill="#b7b7b7" />
 	</g>
-	<g id="pitch" transform="translate(150 100)" fill="#0280c6" stroke="white" stroke-width="8">
+	<g id="pitch" transform="translate(250 200)" fill="#0280c6" stroke="white" stroke-width="8">
 		<rect width="4000" height="2000" />
 		<line x1="2000" x2="2000" y1="0" y2="2000" />
 		<circle r="300" cx="2000" cy="1000" fill="none" />
@@ -72,7 +72,7 @@
 			<rect width="16" height="16" x="2992" y="1492" />
 		</g>
 	</g>
-	<g id="players" transform="translate(150 2150)" font-size="50">
+	<g id="players" transform="translate(250 2250)" font-size="50">
 		<g id="player-01" text-anchor="middle" class="player">
 			<circle r="50" cx="50" cy="70" />
 			<text class="number" x="50" y="70" dominant-baseline="central">0</text>
