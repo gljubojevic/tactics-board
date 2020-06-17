@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import PlayerEdit from './PlayerEdit'
 import BallEdit from './BallEdit'
+import PlayerDialog from './PlayerDialog'
 // import './PitchEdit.css';	// embedded to svg for now
 
 // this is for offset from toolbar and default class
@@ -18,6 +19,7 @@ class PitchEdit extends Component {
 		super(props);
 		this._editRef = React.createRef();	// refernece to editor container
 		this._bgRef = React.createRef();	// background reference to get client size of pitch for editing
+		this._playerDialogRef = React.createRef(); // edit player dialog refernece
 		this._orgWidth = this.props.viewBoxRight - this.props.viewBoxLeft;
 		this._orgHeight = this.props.viewBoxBottom - this.props.viewBoxTop;
 		this.state = {
@@ -32,9 +34,13 @@ class PitchEdit extends Component {
 		this._mouseY = 0;
 
 		// add events
+		this.hContextMenu = this.hContextMenu.bind(this);
 		this.hMouseDown = this.hMouseDown.bind(this);
 		this.hMouseUp = this.hMouseUp.bind(this);
 		this.hMouseMove = this.hMouseMove.bind(this);
+		
+		// callbacks
+		this.playerEditDone = this.playerEditDone.bind(this);
 	}
 
 	initPlayers(noPlayers, noColors) {
@@ -47,9 +53,13 @@ class PitchEdit extends Component {
 			players.push({
 				id: "pl"+i.toString(),
 				x: col * 120,
+				orgx: col * 120,
 				y: 0,
+				orgy: 0,
+				rotation: 0,
 				color: col,
-				number: numb.toString(),
+				number: numb,
+				orgnumber: numb,
 				name: "",
 			});
 		}
@@ -106,27 +116,88 @@ class PitchEdit extends Component {
 		this.setState({
 			balls:bl
 		});
-	}
-
-	hMouseDown(e) {
-		//console.log("Buttons", e.button, e.buttons);
+    }
+	
+	isDragStarted(e) {
+		if (0 !== e.button) {
+			return false;
+		}
 		if (!e.target.classList.contains('draggable')) {
-			return;
+			return false;
 		}
 		this._dragNode = e.target.getAttribute("data-ref");
 		if (null === this._dragNode) {
-			return;
+			return false;
 		}
-		e.preventDefault();
-		this._mouseX = e.clientX;
-		this._mouseY = e.clientY;
-
 		this._dragObjectType = -1;
 		if (this._dragNode.startsWith("pl")) {
 			this._dragObjectType = 0;
 		}
 		if (this._dragNode.startsWith("bl")) {
 			this._dragObjectType = 1;
+		}
+		this._mouseX = e.clientX;
+		this._mouseY = e.clientY;
+		return true;
+	}
+	
+	playerEditStarted(e) {
+		let editNode = e.target.getAttribute("data-ref");
+		if (null === editNode) {
+			return false;
+		}
+		if (!editNode.startsWith("pl")) {
+			return false;
+		}
+		// Edit player data
+		const pl = this.state.players.find(p => editNode === p.id);
+		// disable editing non placed players
+		if (pl.x === pl.orgx && pl.y === pl.orgy) {
+			return false;
+		}
+		const editPlayer = {
+			id: pl.id,
+			name: pl.name,
+			number: pl.number
+		}
+		this._playerDialogRef.current.openDialog(editPlayer);
+		return true;
+	}
+
+	// player edit dialog callback
+	playerEditDone(player) {
+		const pl = this.state.players.map(p => {
+			if (player.id !== p.id) {
+				return p;
+			}
+			if (player.remove) {
+				p.x = p.orgx;
+				p.y = p.orgy;
+				p.number = p.orgnumber;
+				p.name = "";
+			} else {
+				p.name = player.name;
+				p.number = player.number;
+			}
+			return p;
+		});
+
+		this.setState({
+			players:pl
+		});
+	}
+
+	hContextMenu(e) {
+		if (this.playerEditStarted(e)) {
+			e.preventDefault();
+			return;
+		}
+	}
+
+	hMouseDown(e) {
+		if (this.isDragStarted(e)) {
+			e.preventDefault();
+			return;
 		}
 	}
 
@@ -161,6 +232,7 @@ class PitchEdit extends Component {
 	}
 
 	// return current SVG in editor
+	// TODO: Cleanup unused players and balls
 	getSVG() {
 		return {
 			width: this._orgWidth,
@@ -203,8 +275,9 @@ class PitchEdit extends Component {
 		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"
 
 		return (
+			<React.Fragment>
 			<div ref={this._editRef} className={pitchClasses}>
-				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
+				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onContextMenu={this.hContextMenu} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
 					<style>
 						{[
 							'.pc0 {	fill: #8b2323;	}',
@@ -297,6 +370,8 @@ class PitchEdit extends Component {
 					</g>
 				</svg>
 			</div>
+			<PlayerDialog ref={this._playerDialogRef} onEditDone={this.playerEditDone} />
+			</React.Fragment>
 		);
 	}
 }
