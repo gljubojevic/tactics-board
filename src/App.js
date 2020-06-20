@@ -3,6 +3,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PitchEdit from './editors/PitchEdit'
 import SvgToImg from './editors/SvgToImg'
 import AppTools from './ui/AppTools'
+import PitchFutsal from './pitch/PitchFutsal'
 import './App.css';
 
 // application Material-UI theme
@@ -10,6 +11,12 @@ const appTheme = createMuiTheme();
 
 const refPitchEdit = React.createRef();
 const refSvgToImg = React.createRef();
+
+// init default pitch
+const pitchFutsal = new PitchFutsal(
+	200, 8, 120, 
+	100, 5, 80
+);
 
 function SaveImage() {
 	console.log("App save image");
@@ -26,7 +33,7 @@ function App() {
 		<React.Fragment>
 			<ThemeProvider theme={appTheme}>
 				<AppTools pitchEditSaveImage={SaveImage} />
-				<PitchEdit ref={refPitchEdit} noPlayers={200} noBalls={100} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+				<PitchEdit ref={refPitchEdit} pitch={pitchFutsal} noPlayers={200} noBalls={100} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 				<SvgToImg ref={refSvgToImg} />
 			</ThemeProvider>
 		</React.Fragment>

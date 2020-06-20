@@ -9,7 +9,7 @@ class PlayerEdit extends Component {
 		return (
 			<g className={className} textAnchor="middle" transform={transform}>
 				<circle r="50" cx="50" cy="70" className="draggable" data-ref={this.props.id} />
-				<text className="number" x="50" y="70" dominantBaseline="central">{this.props.number}</text>
+				<text className="number" x="50" y="70" dominantBaseline="central">{this.props.no}</text>
 				<text x="50">{this.props.name}</text>
 			</g>
 		);
@@ -21,7 +21,7 @@ PlayerEdit.defaultProps = {
 	x:0,
 	y:0,
 	color:0,
-	number: "",
+	no: "",
 	name: ""
 }
 
@@ -30,7 +30,7 @@ PlayerEdit.propTypes = {
 	x: PropTypes.number,
 	y: PropTypes.number,
 	color: PropTypes.number,
-	number: PropTypes.string,
+	no: PropTypes.string,
 	name: PropTypes.string
 }
 

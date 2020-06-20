@@ -12,7 +12,7 @@ class PlayerDialog extends Component {
 		super(props);
 		this.state = {
 			open: false,
-			player: {id:"", name:"", number: 0}
+			player: {id:"", name:"", no: 0}
 		};
 
 		// input references
@@ -48,7 +48,7 @@ class PlayerDialog extends Component {
 			id: this.state.player.id,
 			remove: false,
 			name: this._refName.current.value,
-			number: this._refNumber.current.value
+			no: this._refNumber.current.value
 		})
 	}
 
@@ -70,7 +70,7 @@ class PlayerDialog extends Component {
 				<Dialog open={this.state.open} onClose={this.close} aria-labelledby="form-dialog-title">
 					<DialogTitle id="form-dialog-title">Edit player</DialogTitle>
 					<DialogContent>
-						<TextField inputRef={this._refNumber} margin="dense" id="playerNumber" defaultValue={this.state.player.number} label="Number" type="number" fullWidth autoFocus />
+						<TextField inputRef={this._refNumber} margin="dense" id="playerNumber" defaultValue={this.state.player.no} label="Number" type="number" fullWidth autoFocus />
 						<TextField inputRef={this._refName} margin="dense" id="playerName" defaultValue={this.state.player.name} label="Name" type="text" fullWidth />
 					</DialogContent>
 					<DialogActions>

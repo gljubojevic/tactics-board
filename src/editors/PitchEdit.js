@@ -22,9 +22,10 @@ class PitchEdit extends Component {
 		this._playerDialogRef = React.createRef(); // edit player dialog refernece
 		this._orgWidth = this.props.viewBoxRight - this.props.viewBoxLeft;
 		this._orgHeight = this.props.viewBoxBottom - this.props.viewBoxTop;
+		this._pitch = this.props.pitch;
 		this.state = {
-			players: this.initPlayers(props.noPlayers, 8),
-			balls: this.initBalls(props.noBalls, 5)
+			players: this._pitch.players,
+			balls: this._pitch.balls
 		};
 	
 		// mouse drag init
@@ -43,45 +44,6 @@ class PitchEdit extends Component {
 		this.playerEditDone = this.playerEditDone.bind(this);
 	}
 
-	initPlayers(noPlayers, noColors) {
-		//console.log("Create player data noPlayers:", noPlayers)
-		let groupSize = Math.floor(noPlayers / noColors)
-		let players = [];
-		for (var i = 0; i < noPlayers; i++) {
-			let col = Math.floor(i / groupSize);
-			let numb = groupSize - (i % groupSize);
-			players.push({
-				id: "pl"+i.toString(),
-				x: col * 120,
-				orgx: col * 120,
-				y: 0,
-				orgy: 0,
-				rotation: 0,
-				color: col,
-				number: numb,
-				orgnumber: numb,
-				name: "",
-			});
-		}
-		return players;
-	}
-
-	initBalls(noBalls, noColors) {
-		//console.log("Create ball data noBalls:", noBalls)
-		let groupSize = Math.floor(noBalls / noColors)
-		let balls = [];
-		for (var i = 0; i < noBalls; i++) {
-			let col = Math.floor(i / groupSize);
-			balls.push({
-				id: "bl"+i.toString(),
-				x: col * 80,
-				y: 0,
-				color: col
-			});
-		}
-		return balls;
-	}
-
 	getScale() {
 		const box = this._bgRef.current.getBoundingClientRect();
 		return {
@@ -91,30 +53,14 @@ class PitchEdit extends Component {
 	}
 
 	playerDrag(id, deltaX, deltaY) {
-		const pl = this.state.players.map(p => {
-			if (id === p.id) {
-				p.x += deltaX;
-				p.y += deltaY;
-			}
-			return p;
-		});
-
 		this.setState({
-			players:pl
+			players: this._pitch.playerMove(id, deltaX, deltaY)
 		});
 	}
 
 	ballDrag(id, deltaX, deltaY) {
-		const bl = this.state.balls.map(b => {
-			if (id === b.id) {
-				b.x += deltaX;
-				b.y += deltaY;
-			}
-			return b;
-		});
-
 		this.setState({
-			balls:bl
+			balls: this._pitch.ballMove(id, deltaX, deltaY)
 		});
     }
 	
@@ -141,24 +87,13 @@ class PitchEdit extends Component {
 		return true;
 	}
 	
-	playerEditStarted(e) {
-		let editNode = e.target.getAttribute("data-ref");
-		if (null === editNode) {
-			return false;
-		}
+	playerEditStarted(editNode) {
 		if (!editNode.startsWith("pl")) {
 			return false;
 		}
-		// Edit player data
-		const pl = this.state.players.find(p => editNode === p.id);
-		// disable editing non placed players
-		if (pl.x === pl.orgx && pl.y === pl.orgy) {
+		const editPlayer = this._pitch.playerEditStart(editNode);
+		if (null === editPlayer) {
 			return false;
-		}
-		const editPlayer = {
-			id: pl.id,
-			name: pl.name,
-			number: pl.number
 		}
 		this._playerDialogRef.current.openDialog(editPlayer);
 		return true;
@@ -166,29 +101,17 @@ class PitchEdit extends Component {
 
 	// player edit dialog callback
 	playerEditDone(player) {
-		const pl = this.state.players.map(p => {
-			if (player.id !== p.id) {
-				return p;
-			}
-			if (player.remove) {
-				p.x = p.orgx;
-				p.y = p.orgy;
-				p.number = p.orgnumber;
-				p.name = "";
-			} else {
-				p.name = player.name;
-				p.number = player.number;
-			}
-			return p;
-		});
-
 		this.setState({
-			players:pl
+			players: this._pitch.playerEditDone(player)
 		});
 	}
 
 	hContextMenu(e) {
-		if (this.playerEditStarted(e)) {
+		let editNode = e.target.getAttribute("data-ref");
+		if (null === editNode) {
+			return;
+		}
+		if (this.playerEditStarted(editNode)) {
 			e.preventDefault();
 			return;
 		}
@@ -246,12 +169,12 @@ class PitchEdit extends Component {
 
 		const playersShow = this.state.players.map((pl, index) => {
 			return (
-				<PlayerEdit key={index.toString()} id={pl.id} x={pl.x} y={pl.y} number={pl.number} name={pl.name} color={pl.color} />
+				<PlayerEdit key={index.toString()} id={pl.id} x={pl.x} y={pl.y} no={pl.no} name={pl.name} color={pl.color} />
 			);
 		});
 
 		const ballsShow = this.state.balls.map((b, index) => {
-			return (
+				return (
 				<BallEdit key={index.toString()} id={b.id} x={b.x} y={b.y} color={b.color} />
 			);
 		});
@@ -377,6 +300,7 @@ class PitchEdit extends Component {
 }
 
 PitchEdit.defaultProps = {
+	pitch: null,
 	noPlayers: 0,
 	viewBoxLeft: 0,
 	viewBoxTop: 0,
@@ -385,6 +309,7 @@ PitchEdit.defaultProps = {
 }
 
 PitchEdit.propTypes = {
+	pitch: PropTypes.object,
 	noPlayers: PropTypes.number,
 	viewBoxLeft: PropTypes.number,
 	viewBoxTop: PropTypes.number,
