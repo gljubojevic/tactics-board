@@ -7,6 +7,9 @@ https://create-react-app.dev/
 UI using:  
 https://material-ui.com/
 
+UI Icons additional:
+https://materialdesignicons.com/
+
 UI alternatives:  
 https://classpert.com/blog/top-bootstrap-alternatives
 
