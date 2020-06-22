@@ -301,7 +301,6 @@ class PitchEdit extends Component {
 
 PitchEdit.defaultProps = {
 	pitch: null,
-	noPlayers: 0,
 	viewBoxLeft: 0,
 	viewBoxTop: 0,
 	viewBoxRight: 4500,
@@ -310,7 +309,6 @@ PitchEdit.defaultProps = {
 
 PitchEdit.propTypes = {
 	pitch: PropTypes.object,
-	noPlayers: PropTypes.number,
 	viewBoxLeft: PropTypes.number,
 	viewBoxTop: PropTypes.number,
 	viewBoxRight: PropTypes.number,

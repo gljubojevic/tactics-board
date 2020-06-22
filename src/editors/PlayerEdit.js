@@ -21,7 +21,7 @@ PlayerEdit.defaultProps = {
 	x:0,
 	y:0,
 	color:0,
-	no: "",
+	no: 0,
 	name: ""
 }
 
@@ -30,7 +30,7 @@ PlayerEdit.propTypes = {
 	x: PropTypes.number,
 	y: PropTypes.number,
 	color: PropTypes.number,
-	no: PropTypes.string,
+	no: PropTypes.number,
 	name: PropTypes.string
 }
 

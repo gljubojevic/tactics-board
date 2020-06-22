@@ -1,5 +1,6 @@
 import Ball from "./Ball";
 import Player from "./Player";
+import DrawMode from "./DrawMode";
 
 class PitchFutsal {
 	constructor(noPlayers = 0, noPlayerColors=0, playerSize=1, noBalls=0, noBallColors=0, ballSize=1) {
@@ -18,6 +19,7 @@ class PitchFutsal {
 		// init objects
 		this._initPlayers();
 		this._initBalls();
+		this._drawMode = new DrawMode();
 	}
 
 	_initPlayers() {
@@ -49,6 +51,13 @@ class PitchFutsal {
 			);
 			this._balls.push(ball);
 		}
+	}
+
+	get drawMode() {
+		return this._drawMode;
+	}
+	set drawMode(value) {
+		this._drawMode = value;
 	}
 
 	get players() {

@@ -32,8 +32,8 @@ function App() {
 	return (
 		<React.Fragment>
 			<ThemeProvider theme={appTheme}>
-				<AppTools pitchEditSaveImage={SaveImage} />
-				<PitchEdit ref={refPitchEdit} pitch={pitchFutsal} noPlayers={200} noBalls={100} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+				<AppTools pitchFutsal={pitchFutsal} pitchEditSaveImage={SaveImage} />
+				<PitchEdit ref={refPitchEdit} pitch={pitchFutsal} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 				<SvgToImg ref={refSvgToImg} />
 			</ThemeProvider>
 		</React.Fragment>
