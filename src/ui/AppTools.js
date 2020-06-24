@@ -17,13 +17,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import MovieCreationIcon from '@material-ui/icons/MovieCreation';
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
-import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import LinkIcon from '@material-ui/icons/Link';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui'
 import DrawMenu from './DrawMenu';
+import FullscreenToggle from './FullscreenToggle'
 
 // this is for custom position classes
 const styles = theme => ({
@@ -38,10 +37,8 @@ class AppTools extends Component {
 		this.state = {
 			drawerOpen: false,
 			drawingMode: this.props.pitchFutsal.drawMode.mode,
-			fullScreen: false
 		}
 		this.toggleDrawer = this.toggleDrawer.bind(this);
-		this.toggleFullScreen = this.toggleFullScreen.bind(this);
 		this.saveImage = this.saveImage.bind(this);
 
 		// Drawing menu
@@ -66,50 +63,6 @@ class AppTools extends Component {
 		this.props.pitchEditSaveImage();
 	}
 
-	domFullScreenToggle(toFullScreen) {
-		if (toFullScreen) {
-			var elem = document.documentElement;
-			if (elem.requestFullscreen) {
-				elem.requestFullscreen();
-				} else if (elem.mozRequestFullScreen) { /* Firefox */
-				elem.mozRequestFullScreen();
-				} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-				elem.webkitRequestFullscreen();
-				} else if (elem.msRequestFullscreen) { /* IE/Edge */
-				elem.msRequestFullscreen();
-			}
-			return;
-		}
-
-		if (document.exitFullscreen) {
-			document.exitFullscreen();
-		} else if (document.mozCancelFullScreen) {
-			document.mozCancelFullScreen();
-		} else if (document.webkitExitFullscreen) {
-			document.webkitExitFullscreen();
-		} else if (document.msExitFullscreen) {
-			document.msExitFullscreen();
-		}
-	}
-
-	toggleFullScreen() {
-		const isFullScreen = !this.state.fullScreen;
-		// dom toogle
-		this.domFullScreenToggle(isFullScreen);
-		// change state to update buttons
-		this.setState({
-			fullScreen:isFullScreen
-		});
-	}
-
-	fsIconGet(){
-		if (this.state.fullScreen) {
-			return(<FullscreenExitIcon />);
-		} else {
-			return(<FullscreenIcon />);
-		};
-	}
-
 	drawMenuOpen() {
 		this._refDrawMenu.current.open();
 	}
@@ -121,7 +74,7 @@ class AppTools extends Component {
 	}
 
 	drawingModeIcon() {
-		//console.log("Draw mode", this.state.drawingMode);
+		console.log("Draw mode", this.state.drawingMode);
 		switch (this.state.drawingMode) {
 			case 'line':
 				return (<VectorLine />);
@@ -137,10 +90,7 @@ class AppTools extends Component {
 		}
 	}
 
-
 	render() {
-		const fsIcon = this.fsIconGet();
-		const fsLabel = this.state.fullScreen ? "Exit full screen" : "Enter full screen";
 		const drawingModeIcon = this.drawingModeIcon();
 
 		return (
@@ -167,11 +117,7 @@ class AppTools extends Component {
 								<LinkIcon />
 							</IconButton>
 						</Tooltip>
-						<Tooltip title={fsLabel}>
-							<IconButton aria-label={fsLabel} color="inherit" onClick={this.toggleFullScreen}>
-								{fsIcon}
-							</IconButton>
-						</Tooltip>
+						<FullscreenToggle />
 					</Toolbar>
 				</AppBar>
 				<Drawer anchor="left" open={this.state.drawerOpen} onClose={this.toggleDrawer}>

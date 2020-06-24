@@ -10,6 +10,7 @@ class DrawMode {
 		return this._mode;
 	}
 	set mode(value) {
+		console.log("Mode selected", value);
 		this._mode = value;
 	}
 	// default modes
@@ -26,6 +27,7 @@ class DrawMode {
 		return this._lineArrowStart;
 	}
 	set lineArrowStart(value) {
+		console.log("Line Arrow Start", value);
 		this._lineArrowStart = value;
 	}
 
@@ -33,6 +35,7 @@ class DrawMode {
 		return this._lineArrowEnd;
 	}
 	set lineArrowEnd(value) {
+		console.log("Line Arrow End", value);
 		this._lineArrowEnd = value;
 	}
 
@@ -40,6 +43,7 @@ class DrawMode {
 		return this._lineDashed;
 	}
 	set lineDashed(value) {
+		console.log("Line Dashed", value);
 		this._lineDashed = value;
 	}
 

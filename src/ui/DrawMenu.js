@@ -37,14 +37,21 @@ class DrawMenu extends Component {
 		this.setState({open:true});
 	}
 
-	close(mode) {
-		if (null !== mode) {
+	close(e) {
+		// read from "data-value" attribute
+		let mode = e.currentTarget.dataset.value;
+		if (mode) {
 			this.props.drawMode.mode = mode;
+			// trigger callback
+			if (null !== this.props.onClose) {
+				this.props.onClose();
+			}
 		}
-		if (null !== this.props.onClose) {
-			this.props.onClose();
-		}
-		this.setState({open:false});
+		// close
+		this.setState({
+			open:false,
+			lineArrows: false
+		});
 	}
 
 	lineArrowsToggle() {
@@ -80,19 +87,19 @@ class DrawMenu extends Component {
 		return (<Minus />);
 	}
 
+
 	render() {
 		const arrowsIcon = this.lineArrowsIcon();
-
 		return (
 		<Menu id="drawingMenu" anchorEl={this.props.anchorEl.current} keepMounted open={this.state.open} onClose={this.close}>
-			<MenuItem onClick={()=>{this.close('select')}}>
+			<MenuItem data-value="select" onClick={this.close}>
 				<ListItemIcon>
 					<CursorDefault />
 				</ListItemIcon>
 				<ListItemText primary="Select / Move" />
 			</MenuItem>
 			<Divider />
-			<MenuItem onClick={()=>{this.close('line')}}>
+			<MenuItem data-value="line" onClick={this.close}>
 				<ListItemIcon>
 					<VectorLine />
 				</ListItemIcon>
@@ -128,21 +135,21 @@ class DrawMenu extends Component {
 				</List>
 			</Collapse>
 			<Divider />
-			<MenuItem onClick={()=>{this.close('square')}}>
+			<MenuItem data-value="square" onClick={this.close}>
 				<ListItemIcon>
 					<ShapeSquarePlus />
 				</ListItemIcon>
 				<ListItemText primary="Draw square" />
 			</MenuItem>
 			<Divider />
-			<MenuItem onClick={()=>{this.close('oval')}}>
+			<MenuItem data-value="oval" onClick={this.close}>
 				<ListItemIcon>
 					<ShapeOvalPlus />
 				</ListItemIcon>
 				<ListItemText primary="Draw elipse" />
 			</MenuItem>
 			<Divider />
-			<MenuItem onClick={()=>{this.close('text')}}>
+			<MenuItem data-value="text" onClick={this.close}>
 				<ListItemIcon>
 					<TextFieldsIcon />
 				</ListItemIcon>
