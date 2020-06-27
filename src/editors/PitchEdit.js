@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import PitchFutsal from '../pitch/PitchFutsal';
+import { withStyles } from '@material-ui/core/styles';
 import PlayerEdit from './PlayerEdit'
 import BallEdit from './BallEdit'
+import SquareEdit from './SquareEdit'
+import EllipseEdit from './EllipseEdit'
 import PlayerDialog from './PlayerDialog'
 // import './PitchEdit.css';	// embedded to svg for now
 
@@ -25,7 +28,11 @@ class PitchEdit extends Component {
 		this._pitch = this.props.pitch;
 		this.state = {
 			players: this._pitch.players,
-			balls: this._pitch.balls
+			balls: this._pitch.balls,
+			squares: this._pitch.squares,
+			ellipses: this._pitch.ellipses,
+			texts: this._pitch.texts,
+			lines: this._pitch.lines
 		};
 	
 		// mouse drag init
@@ -52,6 +59,23 @@ class PitchEdit extends Component {
 		}
 	}
 
+	getRealPosition(e) {
+		let scale = this.getScale();	// TODO: recosider scale
+		let box = this._bgRef.current.getBoundingClientRect();
+ 		let x = e.clientX - box.left;	//x position within the element.
+  		let y = e.clientY - box.top; 	//y position within the element.
+		let realPosition = {
+			X: x * scale.X,
+			Y: y * scale.Y
+		}
+		return realPosition;
+	}
+
+	resetMouseDrag(e) {
+		this._mouseX = e.clientX;
+		this._mouseY = e.clientY;
+	}
+
 	playerDrag(id, deltaX, deltaY) {
 		this.setState({
 			players: this._pitch.playerMove(id, deltaX, deltaY)
@@ -62,7 +86,8 @@ class PitchEdit extends Component {
 		this.setState({
 			balls: this._pitch.ballMove(id, deltaX, deltaY)
 		});
-    }
+	}
+	
 	
 	isDragStarted(e) {
 		if (0 !== e.button) {
@@ -82,8 +107,7 @@ class PitchEdit extends Component {
 		if (this._dragNode.startsWith("bl")) {
 			this._dragObjectType = 1;
 		}
-		this._mouseX = e.clientX;
-		this._mouseY = e.clientY;
+		this.resetMouseDrag(e);
 		return true;
 	}
 	
@@ -106,6 +130,20 @@ class PitchEdit extends Component {
 		});
 	}
 
+	objectDrag(deltaX, deltaY) {
+		switch (this._dragObjectType) {
+			case 0:
+				this.playerDrag(this._dragNode, deltaX, deltaY);
+				break;
+			case 1:
+				this.ballDrag(this._dragNode, deltaX, deltaY);
+				break;
+			default:
+				console.log("Invalid drag object type", this._dragObjectType, this._dragNode);
+				break;
+		}
+	}
+
 	hContextMenu(e) {
 		let editNode = e.target.getAttribute("data-ref");
 		if (null === editNode) {
@@ -118,14 +156,64 @@ class PitchEdit extends Component {
 	}
 
 	hMouseDown(e) {
-		if (this.isDragStarted(e)) {
-			e.preventDefault();
-			return;
+		let pos = this.getRealPosition(e);
+		switch (this.props.pitch.drawMode.mode) {
+			case 'line':
+				break;
+			case 'square':
+				e.preventDefault();
+				let sq = this.props.pitch.squareCreate(pos.X, pos.Y);
+				this._dragNode = sq.id;
+				this.setState({
+					squares: this.props.pitch.squareAdd(sq)
+				});
+				break;
+			case 'ellipse':
+				e.preventDefault();
+				let el = this.props.pitch.ellipseCreate(pos.X, pos.Y);
+				this._dragNode = el.id;
+				this.setState({
+					ellipses: this.props.pitch.ellipseAdd(el)
+				});
+				break;
+			case 'text':
+				break;
+			case 'select':
+			default:
+				if (this.isDragStarted(e)) {
+					e.preventDefault();
+					return;
+				}
+				break;
 		}
 	}
 
 	hMouseUp(e) {
 		e.preventDefault();
+		switch (this.props.pitch.drawMode.mode) {
+			case 'line':
+				break;
+			case 'square':
+				this.setState({
+					squares: this.props.pitch.squareCleanup()
+				});
+				break;
+			case 'ellipse':
+				this.setState({
+					ellipses: this.props.pitch.ellipseCleanup()
+				});
+				break;
+			case 'text':
+				break;
+			case 'select':
+			default:
+				let scale = this.getScale();
+				let deltaX = (e.clientX - this._mouseX) * scale.X;
+				let deltaY = (e.clientY - this._mouseY) * scale.Y;
+				this.resetMouseDrag(e);
+				this.objectDrag(deltaX, deltaY);
+				break;
+		}
 		this._dragNode = null;
 		this._dragObjectType = -1;
 	}
@@ -135,21 +223,34 @@ class PitchEdit extends Component {
 			return;
 		}
 		e.preventDefault();
-		let scale = this.getScale();
-		let deltaX = (e.clientX - this._mouseX) * scale.X;
-		let deltaY = (e.clientY - this._mouseY) * scale.Y;
-		this._mouseX = e.clientX;
-		this._mouseY = e.clientY;
 
-		switch (this._dragObjectType) {
-			case 0:
-				this.playerDrag(this._dragNode, deltaX, deltaY);
+		let realPos = this.getRealPosition(e);
+		switch (this.props.pitch.drawMode.mode) {
+			case 'line':
 				break;
-			case 1:
-				this.ballDrag(this._dragNode, deltaX, deltaY);
+			case 'square':
+				this.setState({
+					squares: this.props.pitch.squareResize(
+						this._dragNode, realPos.X, realPos.Y
+					)
+				});
 				break;
+			case 'ellipse':
+				this.setState({
+					ellipses: this.props.pitch.ellipseResize(
+						this._dragNode, realPos.X, realPos.Y
+					)
+				});
+				break;
+			case 'text':
+				break;
+			case 'select':
 			default:
-				console.log("Invalid drag object type", this._dragObjectType, this._dragNode);
+				let scale = this.getScale();
+				let deltaX = (e.clientX - this._mouseX) * scale.X;
+				let deltaY = (e.clientY - this._mouseY) * scale.Y;
+				this.resetMouseDrag(e);
+				this.objectDrag(deltaX, deltaY);
 				break;
 		}
 	}
@@ -164,20 +265,45 @@ class PitchEdit extends Component {
 		}
 	}
 
-	render() {
-		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
-
-		const playersShow = this.state.players.map((pl, index) => {
+	renderPlayers() {
+		return this.state.players.map((pl, index) => {
 			return (
 				<PlayerEdit key={index.toString()} id={pl.id} x={pl.x} y={pl.y} no={pl.no} name={pl.name} color={pl.color} />
 			);
 		});
+	}
 
-		const ballsShow = this.state.balls.map((b, index) => {
-				return (
+	renderBalls(){
+		return this.state.balls.map((b, index) => {
+			return (
 				<BallEdit key={index.toString()} id={b.id} x={b.x} y={b.y} color={b.color} />
 			);
 		});
+	}
+
+	renderSquares(){
+		return this.state.squares.map((s, index) => {
+			return (
+				<SquareEdit key={index.toString()} id={s.id} color={s.color} x={s.x} y={s.y} width={s.width} height={s.height} />
+			);
+		});
+	}
+
+	renderEllipses(){
+		return this.state.ellipses.map((el, index) => {
+			return (
+				<EllipseEdit key={index.toString()} id={el.id} color={el.color} cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} />
+			);
+		});
+	}
+
+	render() {
+		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
+
+		const playersShow = this.renderPlayers();
+		const ballsShow = this.renderBalls();
+		const squaresShow = this.renderSquares();
+		const ellipsesShow = this.renderEllipses();
 
 		// default class is full screen width and height with paading for menu height
 		const pitchClasses = "pitch " + this.props.classes.offset;
@@ -221,6 +347,8 @@ class PitchEdit extends Component {
 							'.player { pointer-events: none; }',
 							'.player text { fill: black;	}',
 							'.player text.number { fill: white; }',
+							'.square rect { fill-opacity: 0.8; }',
+							'.ellipse ellipse { fill-opacity: 0.8; }',
 							'.draggable { cursor: move; pointer-events: all;}'
 						]}
 					</style>
@@ -285,12 +413,16 @@ class PitchEdit extends Component {
 							<rect width="16" height="16" x="2992" y="1492" />
 						</g>
 					</g>
+					<g id="ellipses">{ellipsesShow}</g>
+					<g id="squares">{squaresShow}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
 						{playersShow}
 					</g>
 					<g id="balls" transform={ballsTransform}>
 						{ballsShow}
 					</g>
+					<g id="lines"></g>
+					<g id="texts"></g>
 				</svg>
 			</div>
 			<PlayerDialog ref={this._playerDialogRef} onEditDone={this.playerEditDone} />
@@ -308,7 +440,7 @@ PitchEdit.defaultProps = {
 }
 
 PitchEdit.propTypes = {
-	pitch: PropTypes.object,
+	pitch: PropTypes.instanceOf(PitchFutsal),
 	viewBoxLeft: PropTypes.number,
 	viewBoxTop: PropTypes.number,
 	viewBoxRight: PropTypes.number,

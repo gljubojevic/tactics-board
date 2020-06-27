@@ -4,23 +4,23 @@ class DrawMode {
 		this._lineArrowStart = lineArrowStart;
 		this._lineArrowEnd = lineArrowEnd;
 		this._lineDashed = lineDashed;
+		this._color = 0;
 	}
 
 	get mode() {
 		return this._mode;
 	}
 	set mode(value) {
-		console.log("Mode selected", value);
 		this._mode = value;
 	}
 	// default modes
 	// select	- select / move
 	// line		- draw lines
 	// square	- draw square
-	// oval		- draw oval
+	// ellipse	- draw ellipse
 	// text		- draw text
 	get modeOptions(){
-		return ['select','line','square','oval','text'];
+		return ['select','line','square','ellipse','text'];
 	}
 
 	get lineArrowStart() {
@@ -45,6 +45,14 @@ class DrawMode {
 	set lineDashed(value) {
 		console.log("Line Dashed", value);
 		this._lineDashed = value;
+	}
+
+	get color() {
+		return this._color;
+	}
+	set color(value) {
+		console.log("Color", value);
+		this._color = value;
 	}
 
 }

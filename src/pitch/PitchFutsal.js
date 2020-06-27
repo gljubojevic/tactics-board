@@ -1,6 +1,8 @@
 import Ball from "./Ball";
 import Player from "./Player";
 import DrawMode from "./DrawMode";
+import Square from "./Square";
+import Ellipse from "./Ellipse";
 
 class PitchFutsal {
 	constructor(noPlayers = 0, noPlayerColors=0, playerSize=1, noBalls=0, noBallColors=0, ballSize=1) {
@@ -15,6 +17,18 @@ class PitchFutsal {
 		this._noBallColors = noBallColors;
 		this._ballSize = ballSize;
 		this._balls = [];
+
+		this._squareID = 0;
+		this._squares = [];
+
+		this._ellipseID = 0;
+		this._ellipses = [];
+		
+		this._lineID = 0;
+		this._lines = [];
+
+		this._textID = 0;
+		this._texts = [];
 
 		// init objects
 		this._initPlayers();
@@ -67,13 +81,6 @@ class PitchFutsal {
 		this._players = value;
 	}
 
-	get balls() {
-		return this._balls;
-	}
-	set balls(value) {
-		this._balls = value;
-	}
-
 	playerMove(id, deltaX, deltaY) {
 		this.players = this.players.map(p => {
 			if (id === p.id) {
@@ -119,6 +126,13 @@ class PitchFutsal {
 		return this.players;
 	}
 
+	get balls() {
+		return this._balls;
+	}
+	set balls(value) {
+		this._balls = value;
+	}
+
 	ballMove(id, deltaX, deltaY) {
 		this.balls = this.balls.map(b => {
 			if (id === b.id) {
@@ -129,6 +143,100 @@ class PitchFutsal {
 		});
 		return this.balls;
 	}
+
+	get lines() {
+		return this._lines;
+	}
+	set lines(value) {
+		this._lines = value;
+	}
+
+	get ellipses() {
+		return this._ellipses;
+	}
+	set ellipses(value) {
+		this._ellipses = value;
+	}
+
+	ellipseCreate(x,y) {
+		let id = 'el'+this._ellipseID.toString();
+		this._ellipseID += 1;
+		return new Ellipse(
+			id, this._drawMode.color,
+			x,y,0,0,0
+		);
+	}
+
+	ellipseAdd(el) {
+		this.ellipses = this.ellipses.map((e) => e);
+		this.ellipses.push(el);
+		return this.ellipses;
+	}
+
+	ellipseResize(id, x2, y2) {
+		this.ellipses = this.ellipses.map(el => {
+			if (id === el.id) {
+				el.x2 = x2;
+				el.y2 = y2;
+			}
+			return el;
+		});
+		return this.ellipses;
+	}
+
+	// remove empty ellipses
+	ellipseCleanup() {
+		this.ellipses = this.ellipses.filter(el => el.rx > 0 && el.ry > 0);
+		return this.ellipses;
+	}
+
+
+	get squares() {
+		return this._squares;
+	}
+	set squares(value) {
+		this._squares = value;
+	}
+
+	squareCreate(x,y) {
+		let id = 'sq'+this._squareID.toString();
+		this._squareID += 1;
+		return new Square(
+			id, this._drawMode.color,
+			x,y,0,0,0
+		);
+	}
+
+	squareAdd(sq) {
+		this.squares = this.squares.map((s) => s);
+		this.squares.push(sq);
+		return this.squares;
+	}
+
+	squareResize(id, x2, y2) {
+		this.squares = this.squares.map(sq => {
+			if (id === sq.id) {
+				sq.x2 = x2;
+				sq.y2 = y2;
+			}
+			return sq;
+		});
+		return this.squares;
+	}
+
+	// remove empty squares
+	squareCleanup() {
+		this.squares = this.squares.filter(sq => sq.width > 0 && sq.height > 0);
+		return this.squares;
+	}
+
+	get texts() {
+		return this._texts;
+	}
+	set texts(value) {
+		this._texts = value;
+	}
+
 }
 
 export default PitchFutsal;

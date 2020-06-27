@@ -74,13 +74,12 @@ class AppTools extends Component {
 	}
 
 	drawingModeIcon() {
-		console.log("Draw mode", this.state.drawingMode);
 		switch (this.state.drawingMode) {
 			case 'line':
 				return (<VectorLine />);
 			case 'square':
 				return (<ShapeSquarePlus />);
-			case 'oval':
+			case 'ellipse':
 				return (<ShapeOvalPlus />);
 			case 'text':
 				return (<TextFieldsIcon />);

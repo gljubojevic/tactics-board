@@ -142,7 +142,7 @@ class DrawMenu extends Component {
 				<ListItemText primary="Draw square" />
 			</MenuItem>
 			<Divider />
-			<MenuItem data-value="oval" onClick={this.close}>
+			<MenuItem data-value="ellipse" onClick={this.close}>
 				<ListItemIcon>
 					<ShapeOvalPlus />
 				</ListItemIcon>
