@@ -211,11 +211,16 @@ class PitchFutsal {
 		return this.ellipses;
 	}
 
-	ellipseResize(id, x2, y2) {
+	ellipseResize(id, x2, y2, proportional) {
 		this.ellipses = this.ellipses.map(el => {
 			if (id === el.id) {
 				el.x2 = x2;
-				el.y2 = y2;
+				if (!proportional) {
+					el.y2 = y2;
+				} else {
+					let szy = el.rx * (el.y1 < y2 ? 2 : -2);
+					el.y2 = el.y1 + szy;
+				}
 			}
 			return el;
 		});
@@ -252,11 +257,16 @@ class PitchFutsal {
 		return this.squares;
 	}
 
-	squareResize(id, x2, y2) {
+	squareResize(id, x2, y2, proportional) {
 		this.squares = this.squares.map(sq => {
 			if (id === sq.id) {
 				sq.x2 = x2;
-				sq.y2 = y2;
+				if (!proportional) {
+					sq.y2 = y2;
+				} else {
+					let szy = sq.width * (sq.y1 < y2 ? 1 : -1);
+					sq.y2 = sq.y1 + szy;
+				}
 			}
 			return sq;
 		});

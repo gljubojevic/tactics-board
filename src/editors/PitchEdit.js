@@ -246,14 +246,14 @@ class PitchEdit extends Component {
 			case 'square':
 				this.setState({
 					squares: this.props.pitch.squareResize(
-						this._dragNode, realPos.X, realPos.Y
+						this._dragNode, realPos.X, realPos.Y, e.getModifierState("Shift")
 					)
 				});
 				break;
 			case 'ellipse':
 				this.setState({
 					ellipses: this.props.pitch.ellipseResize(
-						this._dragNode, realPos.X, realPos.Y
+						this._dragNode, realPos.X, realPos.Y, e.getModifierState("Shift")
 					)
 				});
 				break;
