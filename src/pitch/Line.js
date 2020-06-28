@@ -1,11 +1,14 @@
 class Line {
-	constructor(id="", color=0, x1=0, y1=0, x2=0, y2=0){
+	constructor(id="", color=0, x1=0, y1=0, x2=0, y2=0, arrowStart=false, arrowEnd=false, dashed=false){
 		this._id = id;
 		this._color = color;
 		this._x1 = x1;
 		this._y1 = y1;
 		this._x2 = x2;
 		this._y2 = y2;
+		this._arrowStart = arrowStart;
+		this._arrowEnd = arrowEnd;
+		this._dashed = dashed;
 	}
 
 	get id() {
@@ -49,6 +52,28 @@ class Line {
 	set y2(value) {
 		this._y2 = value;
 	}
+
+	get arrowStart() {
+		return this._arrowStart;
+	}
+	set arrowStart(value) {
+		this._arrowStart = value;
+	}
+
+	get arrowEnd() {
+		return this._arrowEnd;
+	}
+	set arrowEnd(value) {
+		this._arrowEnd = value;
+	}
+
+	get dashed() {
+		return this._dashed;
+	}
+	set dashed(value) {
+		this._dashed = value;
+	}
+
 }
 
 export default Line;

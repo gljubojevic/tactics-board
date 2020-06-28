@@ -6,6 +6,7 @@ import PlayerEdit from './PlayerEdit'
 import BallEdit from './BallEdit'
 import SquareEdit from './SquareEdit'
 import EllipseEdit from './EllipseEdit'
+import LineEdit from './LineEdit'
 import PlayerDialog from './PlayerDialog'
 // import './PitchEdit.css';	// embedded to svg for now
 
@@ -159,6 +160,12 @@ class PitchEdit extends Component {
 		let pos = this.getRealPosition(e);
 		switch (this.props.pitch.drawMode.mode) {
 			case 'line':
+				e.preventDefault();
+				let l = this.props.pitch.lineCreate(pos.X, pos.Y);
+				this._dragNode = l.id;
+				this.setState({
+					lines: this.props.pitch.lineAdd(l)
+				});
 				break;
 			case 'square':
 				e.preventDefault();
@@ -192,6 +199,9 @@ class PitchEdit extends Component {
 		e.preventDefault();
 		switch (this.props.pitch.drawMode.mode) {
 			case 'line':
+				this.setState({
+					lines: this.props.pitch.lineCleanup()
+				});
 				break;
 			case 'square':
 				this.setState({
@@ -227,6 +237,11 @@ class PitchEdit extends Component {
 		let realPos = this.getRealPosition(e);
 		switch (this.props.pitch.drawMode.mode) {
 			case 'line':
+				this.setState({
+					lines: this.props.pitch.lineResize(
+						this._dragNode, realPos.X, realPos.Y
+					)
+				});
 				break;
 			case 'square':
 				this.setState({
@@ -297,6 +312,14 @@ class PitchEdit extends Component {
 		});
 	}
 
+	renderLines(){
+		return this.state.lines.map((l, index) => {
+			return (
+				<LineEdit key={index.toString()} id={l.id} color={l.color} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} arrowStart={l.arrowStart} arrowEnd={l.arrowEnd} dashed={l.dashed} />
+			);
+		});
+	}
+
 	render() {
 		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
 
@@ -304,6 +327,7 @@ class PitchEdit extends Component {
 		const ballsShow = this.renderBalls();
 		const squaresShow = this.renderSquares();
 		const ellipsesShow = this.renderEllipses();
+		const linesShow = this.renderLines();
 
 		// default class is full screen width and height with paading for menu height
 		const pitchClasses = "pitch " + this.props.classes.offset;
@@ -329,15 +353,15 @@ class PitchEdit extends Component {
 				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onContextMenu={this.hContextMenu} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
 					<style>
 						{[
-							'.pc0 {	fill: #8b2323;	}',
-							'.pc0 {	fill: #8b2323;	}',
-							'.pc1 {	fill: #e7e739;	}',
-							'.pc2 {	fill: #912cee;	}',
-							'.pc3 {	fill: #04b804;	}',
-							'.pc4 {	fill: #1d4ba0;	}',
-							'.pc5 {	fill: #ee2c2c;	}',
-							'.pc6 {	fill: #ff7f50;	}',
-							'.pc7 {	fill: #56c6eb;	}',
+							'.pc0 {	fill: #8b2323; stroke: #8b2323; }',
+							'.pc0 {	fill: #8b2323; stroke: #8b2323; }',
+							'.pc1 {	fill: #e7e739; stroke: #e7e739; }',
+							'.pc2 {	fill: #912cee; stroke: #912cee; }',
+							'.pc3 {	fill: #04b804; stroke: #04b804; }',
+							'.pc4 {	fill: #1d4ba0; stroke: #1d4ba0; }',
+							'.pc5 {	fill: #ee2c2c; stroke: #ee2c2c; }',
+							'.pc6 {	fill: #ff7f50; stroke: #ff7f50; }',
+							'.pc7 {	fill: #56c6eb; stroke: #56c6eb; }',
 							'.bc0 { fill: #ffa500; }',
 							'.bc1 { fill: #cc3333; }',
 							'.bc2 { fill: #222333; }',
@@ -347,8 +371,9 @@ class PitchEdit extends Component {
 							'.player { pointer-events: none; }',
 							'.player text { fill: black;	}',
 							'.player text.number { fill: white; }',
-							'.square rect { fill-opacity: 0.8; }',
-							'.ellipse ellipse { fill-opacity: 0.8; }',
+							'.square rect { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
+							'.ellipse ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
+							'.line line { stroke-width: 8; }',
 							'.draggable { cursor: move; pointer-events: all;}'
 						]}
 					</style>
@@ -356,6 +381,12 @@ class PitchEdit extends Component {
 						<line x1="0" x2="20" y1="0" y2="20" />
 						<line x1="20" x2="00" y1="0" y2="20" />
 					</pattern>
+					<marker id="arrowEnd" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+						<path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+					</marker>
+					<marker id="arrowStart" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+						<path d="M9,0 L9,6 L0,3 z" fill="#f00" />
+					</marker>
 					<g id="background" ref={this._bgRef}>
 						<rect width={this._orgWidth} height={this._orgHeight} fill="#b7b7b7" fillOpacity="0.5" />
 					</g>
@@ -421,7 +452,7 @@ class PitchEdit extends Component {
 					<g id="balls" transform={ballsTransform}>
 						{ballsShow}
 					</g>
-					<g id="lines"></g>
+					<g id="lines">{linesShow}</g>
 					<g id="texts"></g>
 				</svg>
 			</div>

@@ -3,6 +3,7 @@ import Player from "./Player";
 import DrawMode from "./DrawMode";
 import Square from "./Square";
 import Ellipse from "./Ellipse";
+import Line from "./Line";
 
 class PitchFutsal {
 	constructor(noPlayers = 0, noPlayerColors=0, playerSize=1, noBalls=0, noBallColors=0, ballSize=1) {
@@ -150,6 +151,42 @@ class PitchFutsal {
 	set lines(value) {
 		this._lines = value;
 	}
+
+	lineCreate(x,y) {
+		let id = 'el'+this._lineID.toString();
+		this._lineID += 1;
+		return new Line(
+			id, this._drawMode.color,
+			x,y,x,y,
+			this._drawMode.lineArrowStart,
+			this._drawMode.lineArrowEnd,
+			this._drawMode.lineDashed
+		);
+	}
+
+	lineAdd(l) {
+		this.lines = this.lines.map((lx) => lx);
+		this.lines.push(l);
+		return this.lines;
+	}
+
+	lineResize(id, x2, y2) {
+		this.lines = this.lines.map(l => {
+			if (id === l.id) {
+				l.x2 = x2;
+				l.y2 = y2;
+			}
+			return l;
+		});
+		return this.lines;
+	}
+
+	// remove empty lines
+	lineCleanup() {
+		this.lines = this.lines.filter(l => l.x1 !== l.x2 && l.y1 !== l.y2);
+		return this.lines;
+	}
+
 
 	get ellipses() {
 		return this._ellipses;
