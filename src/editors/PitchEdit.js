@@ -299,7 +299,7 @@ class PitchEdit extends Component {
 	renderSquares(){
 		return this.state.squares.map((s, index) => {
 			return (
-				<SquareEdit key={index.toString()} id={s.id} color={s.color} x={s.x} y={s.y} width={s.width} height={s.height} />
+				<SquareEdit key={index.toString()} id={s.id} color={s.color} x={s.x} y={s.y} width={s.width} height={s.height} dashed={s.dashed} />
 			);
 		});
 	}
@@ -307,7 +307,7 @@ class PitchEdit extends Component {
 	renderEllipses(){
 		return this.state.ellipses.map((el, index) => {
 			return (
-				<EllipseEdit key={index.toString()} id={el.id} color={el.color} cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} />
+				<EllipseEdit key={index.toString()} id={el.id} color={el.color} cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} dashed={el.dashed} />
 			);
 		});
 	}
@@ -354,7 +354,6 @@ class PitchEdit extends Component {
 					<style>
 						{[
 							'.pc0 {	fill: #8b2323; stroke: #8b2323; }',
-							'.pc0 {	fill: #8b2323; stroke: #8b2323; }',
 							'.pc1 {	fill: #e7e739; stroke: #e7e739; }',
 							'.pc2 {	fill: #912cee; stroke: #912cee; }',
 							'.pc3 {	fill: #04b804; stroke: #04b804; }',
@@ -371,6 +370,7 @@ class PitchEdit extends Component {
 							'.player { pointer-events: none; }',
 							'.player text { fill: black;	}',
 							'.player text.number { fill: white; }',
+							'.dashed { stroke-dasharray: 20; }',
 							'.square rect { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
 							'.ellipse ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
 							'.line line { stroke-width: 8; }',

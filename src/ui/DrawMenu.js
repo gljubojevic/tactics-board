@@ -13,7 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Switch from '@material-ui/core/Switch';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
-import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus } from 'mdi-material-ui'
+import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
 
 class DrawMenu extends Component {
 	constructor(props) {
@@ -21,6 +21,8 @@ class DrawMenu extends Component {
 		this.state = {
 			open: false,
 			lineArrows: false,
+			linePattern: false,
+			lineDashed: this.props.drawMode.lineDashed,
 			lineArrowStart: this.props.drawMode.lineArrowStart,
 			lineArrowEnd: this.props.drawMode.lineArrowEnd,
 		}
@@ -30,7 +32,12 @@ class DrawMenu extends Component {
 		this.lineArrowsToggle = this.lineArrowsToggle.bind(this);
 		this.lineArrowEndToggle = this.lineArrowEndToggle.bind(this);
 		this.lineArrowStartToggle = this.lineArrowStartToggle.bind(this);
-		this.lineArrowsIcon = this.lineArrowsIcon.bind(this);
+		//this.lineArrowsIcon = this.lineArrowsIcon.bind(this);
+
+		this.linePatternToggle = this.linePatternToggle.bind(this);
+		this.lineDashedOn = this.lineDashedOn.bind(this);
+		this.lineDashedOff = this.lineDashedOff.bind(this);
+		//this.linePatternIcon = this.linePatternIcon.bind(this);
 	}
 
 	open() {
@@ -87,9 +94,38 @@ class DrawMenu extends Component {
 		return (<Minus />);
 	}
 
+	linePatternToggle() {
+		this.setState({
+			linePattern: !this.state.linePattern
+		});
+	}
+
+	lineDashedOn() {
+		this.props.drawMode.lineDashed = true;
+		this.setState({
+			lineDashed: this.props.drawMode.lineDashed,
+			linePattern: false
+		});
+	}
+
+	lineDashedOff() {
+		this.props.drawMode.lineDashed = false;
+		this.setState({
+			lineDashed: this.props.drawMode.lineDashed,
+			linePattern: false
+		});
+	}
+
+	linePatternIcon() {
+		if (this.state.lineDashed) {
+			return (<DotsHorizontal />);
+		}
+		return (<Minus />);
+	}
 
 	render() {
 		const arrowsIcon = this.lineArrowsIcon();
+		const patternIcon = this.linePatternIcon();
 		return (
 		<Menu id="drawingMenu" anchorEl={this.props.anchorEl.current} keepMounted open={this.state.open} onClose={this.close}>
 			<MenuItem data-value="select" onClick={this.close}>
@@ -131,6 +167,29 @@ class DrawMenu extends Component {
 						<ListItemSecondaryAction>
 							<Switch edge="end" onChange={this.lineArrowStartToggle} checked={this.state.lineArrowStart} />
 						</ListItemSecondaryAction>
+					</MenuItem>
+				</List>
+			</Collapse>
+			<MenuItem onClick={this.linePatternToggle}>
+				<ListItemIcon>
+					{patternIcon}
+				</ListItemIcon>
+				<ListItemText primary="Line pattern" />
+				{this.state.linePattern ? <ExpandLess /> : <ExpandMore />}
+			</MenuItem>
+			<Collapse in={this.state.linePattern} timeout="auto" unmountOnExit>
+				<List component="div" disablePadding>
+					<MenuItem onClick={this.lineDashedOff}>
+						<ListItemIcon>
+							<Minus />
+						</ListItemIcon>
+						<ListItemText primary="Solid" />
+					</MenuItem>
+					<MenuItem onClick={this.lineDashedOn}>
+						<ListItemIcon>
+							<DotsHorizontal />
+						</ListItemIcon>
+						<ListItemText primary="Dashed" />
 					</MenuItem>
 				</List>
 			</Collapse>

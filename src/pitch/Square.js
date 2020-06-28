@@ -1,5 +1,5 @@
 class Square {
-	constructor(id="", color=0, x1=0, y1=0, width=0, height=0, rotation=0){
+	constructor(id="", color=0, x1=0, y1=0, width=0, height=0, rotation=0, dashed=false){
 		this._id = id;
 		this._color = color;
 		this._x1 = x1;
@@ -7,6 +7,7 @@ class Square {
 		this._x2 = x1 + width;
 		this._y2 = y1 + height;
 		this._rotation = rotation;
+		this._dashed = dashed;
 	}
 
 	get id() {
@@ -72,6 +73,13 @@ class Square {
 	}
 	set rotation(value) {
 		this._rotation = value;
+	}
+
+	get dashed() {
+		return this._dashed;
+	}
+	set dashed(value) {
+		this._dashed = value;
 	}
 
 }

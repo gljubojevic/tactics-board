@@ -200,7 +200,8 @@ class PitchFutsal {
 		this._ellipseID += 1;
 		return new Ellipse(
 			id, this._drawMode.color,
-			x,y,0,0,0
+			x,y,0,0,0,
+			this._drawMode.lineDashed
 		);
 	}
 
@@ -240,7 +241,8 @@ class PitchFutsal {
 		this._squareID += 1;
 		return new Square(
 			id, this._drawMode.color,
-			x,y,0,0,0
+			x,y,0,0,0,
+			this._drawMode.lineDashed
 		);
 	}
 

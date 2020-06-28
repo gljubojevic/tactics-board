@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class SquareEdit extends Component {
 	render() {
-		const className = 'square pc' + this.props.color;
+		const className = (this.props.dashed ? 'square dashed pc' : 'square pc') + this.props.color;
 		return (
 			<g className={className}>
 				<rect x={this.props.x} y={this.props.y} width={this.props.width} height={this.props.height} data-ref={this.props.id} />
@@ -18,7 +18,8 @@ SquareEdit.defaultProps = {
 	x:0,
 	y:0,
 	width:0,
-	height:0
+	height:0,
+	dashed:false
 }
 
 SquareEdit.propTypes = {
@@ -28,6 +29,7 @@ SquareEdit.propTypes = {
 	y: PropTypes.number,
 	width: PropTypes.number,
 	height: PropTypes.number,
+	dashed: PropTypes.bool,
 }
 
 export default SquareEdit;

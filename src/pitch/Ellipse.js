@@ -1,5 +1,5 @@
 class Ellipse {
-	constructor(id="", color=0, x1=0, y1=0, rx=0, ry=0, rotation=0){
+	constructor(id="", color=0, x1=0, y1=0, rx=0, ry=0, rotation=0, dashed=false){
 		this._id = id;
 		this._color = color;
 		this._x1 = x1;
@@ -7,6 +7,7 @@ class Ellipse {
 		this._x2 = x1 + rx * 2;
 		this._y2 = y1 + ry * 2;
 		this._rotation = rotation;
+		this._dashed = dashed;
 	}
 
 	get id() {
@@ -72,6 +73,13 @@ class Ellipse {
 	}
 	set rotation(value) {
 		this._rotation = value;
+	}
+
+	get dashed() {
+		return this._dashed;
+	}
+	set dashed(value) {
+		this._dashed = value;
 	}
 
 }

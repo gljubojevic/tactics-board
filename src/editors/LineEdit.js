@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class LineEdit extends Component {
 	render() {
-		const className = 'line pc' + this.props.color;
+		const className = (this.props.dashed ? 'line dashed pc' : 'line pc') + this.props.color;
 		const markerStart = this.props.arrowStart ? "url(#arrowStart)" : "";
 		const markerEnd = this.props.arrowEnd ? "url(#arrowEnd)" : "";
 		return (
