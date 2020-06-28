@@ -32,12 +32,10 @@ class DrawMenu extends Component {
 		this.lineArrowsToggle = this.lineArrowsToggle.bind(this);
 		this.lineArrowEndToggle = this.lineArrowEndToggle.bind(this);
 		this.lineArrowStartToggle = this.lineArrowStartToggle.bind(this);
-		//this.lineArrowsIcon = this.lineArrowsIcon.bind(this);
 
 		this.linePatternToggle = this.linePatternToggle.bind(this);
 		this.lineDashedOn = this.lineDashedOn.bind(this);
 		this.lineDashedOff = this.lineDashedOff.bind(this);
-		//this.linePatternIcon = this.linePatternIcon.bind(this);
 	}
 
 	open() {
@@ -127,7 +125,7 @@ class DrawMenu extends Component {
 		const arrowsIcon = this.lineArrowsIcon();
 		const patternIcon = this.linePatternIcon();
 		return (
-		<Menu id="drawingMenu" anchorEl={this.props.anchorEl.current} keepMounted open={this.state.open} onClose={this.close}>
+		<Menu id="drawingMenu" anchorEl={this.props.anchorEl} keepMounted open={this.state.open} onClose={this.close}>
 			<MenuItem data-value="select" onClick={this.close}>
 				<ListItemIcon>
 					<CursorDefault />
@@ -226,7 +224,7 @@ DrawMenu.defaultProps = {
 }
 
 DrawMenu.propTypes = {
-	anchorEl: PropTypes.element,
+	anchorEl: PropTypes.func,
 	onClose: PropTypes.func,
 	drawMode: PropTypes.instanceOf(DrawMode)
 };

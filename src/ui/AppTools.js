@@ -45,6 +45,7 @@ class AppTools extends Component {
 		this._refDrawMenu = React.createRef();
 		this._refOpenDrawMenu = React.createRef();
 		this.drawingModeIcon = this.drawingModeIcon.bind(this);
+		this.drawMenuAnchorEl = this.drawMenuAnchorEl.bind(this);
 		this.drawMenuOpen = this.drawMenuOpen.bind(this);
 		this.drawMenuClose = this.drawMenuClose.bind(this);
 	}
@@ -61,6 +62,10 @@ class AppTools extends Component {
 
 	saveImage() {
 		this.props.pitchEditSaveImage();
+	}
+
+	drawMenuAnchorEl() {
+		return this._refOpenDrawMenu.current;
 	}
 
 	drawMenuOpen() {
@@ -139,7 +144,7 @@ class AppTools extends Component {
 						</List>
 					</Box>
 				</Drawer>
-				<DrawMenu ref={this._refDrawMenu} anchorEl={this._refOpenDrawMenu} onClose={this.drawMenuClose} drawMode={this.props.pitchFutsal.drawMode} />
+				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} onClose={this.drawMenuClose} drawMode={this.props.pitchFutsal.drawMode} />
 			</React.Fragment>
 		);
 	}
