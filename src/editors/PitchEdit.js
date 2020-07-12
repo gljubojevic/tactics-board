@@ -408,12 +408,13 @@ class PitchEdit extends Component {
 							<line x1="3000" x2="3000" y1="-48" y2="32" />
 						</g>
 						<g id="left">
+							<line x1="500" x2="500" y1="980" y2="1020" />
 							<line x1="600" x2="600" y1="842" y2="1158" />
 							<circle r="12" cx="600" cy="1000" fill="white" strokeWidth="0" />
 							<path fill="none" d="M0,242 a600,600 0 0,1 600,600" />
 							<path fill="none" d="M600,1158 a600,600 0 0,1 -600,600" />
-							<line x1="0" x2="-40" y1="500" y2="500" />
-							<line x1="0" x2="-40" y1="1500" y2="1500" />
+							<line x1="-20" x2="-60" y1="500" y2="500" />
+							<line x1="-20" x2="-60" y1="1500" y2="1500" />
 							<g id="goal-left">
 								<rect width="100" height="300" x="-100" y="850" fill="url(#goal-net)" stroke="#777777" strokeWidth="4" />
 								<line x1="0" x2="0" y1="850" y2="1150" />
@@ -426,12 +427,13 @@ class PitchEdit extends Component {
 							<rect width="16" height="16" x="992" y="1492" />
 						</g>
 						<g id="right">
+							<line x1="3500" x2="3500" y1="980" y2="1020" />
 							<line x1="3400" x2="3400" y1="842" y2="1158" />
 							<circle r="12" cx="3400" cy="1000" fill="white" strokeWidth="0" />
 							<path fill="none" d="M3400,842 a600,600 0 0,1 600,-600" />
 							<path fill="none" d="M3400,1158 a600,600 0 0,0 600,600" />
-							<line x1="4000" x2="4040" y1="500" y2="500" />
-							<line x1="4000" x2="4040" y1="1500" y2="1500" />
+							<line x1="4020" x2="4060" y1="500" y2="500" />
+							<line x1="4020" x2="4060" y1="1500" y2="1500" />
 							<g id="goal-right">
 								<rect width="100" height="300" x="4000" y="850" fill="url(#goal-net)" stroke="#777777" strokeWidth="4" />
 								<line x1="4000" x2="4000" y1="850" y2="1150" />
