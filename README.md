@@ -8,13 +8,13 @@ Project is using following technologies/libraries:
 
 Proposition for storage and sharing:
 - [Google Firebase](https://firebase.google.com/)
+
 This should enable following features:
 - saving tactics for each user separately
 - sharing saved tactics by link
 - collaborating on same tactics
 
 ## What needs to be done
----
 Here is list of what needs to be done in project.
 Reference for project is https://tactical-board.com/uk/mini-football
 
@@ -23,7 +23,6 @@ Project is required to have all features of reference project but for futsal onl
 **NOTE:** Functionality that is already done is ~~scratched~~ in description below.
 
 ## Image creation
----
 Base for editor and image creation is SVG.
 Tactics board is SVG image generated client side and displayed with [React](https://create-react-app.dev/)
 
@@ -42,7 +41,6 @@ SVG image is generated using metric centimeter (cm) as default unit.
 1 in SVG image equals 1cm in reality.
 
 ## Futsal pitch
----
 Main editing area is shown as default futsal pitch including all elements defined by [futsal rules](https://www.fifa.com/who-we-are/news/new-futsal-laws-of-the-game-approved-3073616)
 
 Pitch is created as SVG image and is is base for all editing.
@@ -59,7 +57,6 @@ Number of predefined shapes is available for placing on pitch.
 Predefined shapes are dragged on pitch to be placed on desired position.
 
 ## Drawing shapes
----
 - lines
   - ~~straight (should be replaced by b-spline)~~
   - b - spline (default drawing shape for lines)
@@ -81,7 +78,6 @@ Line options for shapes
 	- filled irregular shapes
 
 ## Editing shapes
----
 All shapes can be edited on pitch. Some of shapes have different edit options.
 
 Edit options:
@@ -92,7 +88,6 @@ Edit options:
 - ~~rename (players only)~~
 
 ## Overlays
----
 Sometimes futsal training is held on different pitch than original.
 For that purpose is is required to show overlay of:
 - exercises pitch (28mx20m)
@@ -102,7 +97,6 @@ For that purpose is is required to show overlay of:
 Overlay is shown as outline over original pitch as outline centered on pitch.
 
 ## Animation
----
 Animation is done using key frames.
 Adding new animation frame is done by copying positions and parameters of previous frame.
 Each shape that is moved on new key frame is moved on b-spline.
@@ -126,7 +120,6 @@ Animation is created by:
 - editing b-splines between previous and new position to define move path
 
 ## Sharing and collaboration
----
 Each tactic can be shared as link. Base for sharing should be saved document.
 For sharing link should be generated to open existing tactics setup.
 Sharing should have options:
@@ -140,10 +133,9 @@ Saving latest change can be done by any user during sharing session.
 Shared document is overwritten when any of users saves it.
 
 ## References
----
 https://create-react-app.dev/
 
-UI using:  
+UI using:
 https://material-ui.com/
 
 UI Icons additional:
