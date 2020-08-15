@@ -446,6 +446,13 @@ class PitchEdit extends Component {
 							<rect width="16" height="16" x="2992" y="1492" />
 						</g>
 					</g>
+					{/*
+					<g id="pitchOverlay" stroke="white" strokeWidth="8">
+						<rect width="2800" height="2000" fill="none" />
+						<rect width="2800" height="1500" fill="none" />
+						<rect width="1800" height="900" fill="none" />
+					</g>
+					*/}
 					<g id="ellipses">{ellipsesShow}</g>
 					<g id="squares">{squaresShow}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
