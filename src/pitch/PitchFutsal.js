@@ -31,6 +31,8 @@ class PitchFutsal {
 		this._textID = 0;
 		this._texts = [];
 
+		this._overlay = "none";
+
 		// init objects
 		this._initPlayers();
 		this._initBalls();
@@ -286,6 +288,25 @@ class PitchFutsal {
 		this._texts = value;
 	}
 
+	get overlay() {
+		return this._overlay;
+	}
+	set overlay(value) {
+		this._overlay = value;
+	}
+
+	overlaySize() {
+		switch (this._overlay) {
+			case "exercise":
+				return {width:2800, height:2000};
+			case "basketball":
+				return {width:2800, height:1500}
+			case "volleyball":
+				return {width:1800, height:900}
+			default:
+				return null;
+		}
+	}
 }
 
 export default PitchFutsal;

@@ -13,6 +13,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Switch from '@material-ui/core/Switch';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
 
 class DrawMenu extends Component {
@@ -25,6 +28,8 @@ class DrawMenu extends Component {
 			lineDashed: this.props.drawMode.lineDashed,
 			lineArrowStart: this.props.drawMode.lineArrowStart,
 			lineArrowEnd: this.props.drawMode.lineArrowEnd,
+			pitchOverlays: false,
+			pitchOverlay: this.props.drawMode.pitchOverlay
 		}
 		this.open = this.open.bind(this);
 		this.close = this.close.bind(this);
@@ -36,6 +41,9 @@ class DrawMenu extends Component {
 		this.linePatternToggle = this.linePatternToggle.bind(this);
 		this.lineDashedOn = this.lineDashedOn.bind(this);
 		this.lineDashedOff = this.lineDashedOff.bind(this);
+
+		this.pitchOverlaysToggle = this.pitchOverlaysToggle.bind(this); 
+		this.pitchOverlayOnChange = this.pitchOverlayOnChange.bind(this);
 	}
 
 	open() {
@@ -55,7 +63,9 @@ class DrawMenu extends Component {
 		// close
 		this.setState({
 			open:false,
-			lineArrows: false
+			lineArrows: false,
+			linePattern: false,
+			pitchOverlays: false
 		});
 	}
 
@@ -121,9 +131,33 @@ class DrawMenu extends Component {
 		return (<Minus />);
 	}
 
+	pitchOverlaysRender() {
+		return this.props.drawMode.pitchOverlayOptions.map((txt, index) => {
+			return (
+				<FormControlLabel control={<Radio />} label={txt} value={txt} />
+			);
+		});
+	}
+
+	pitchOverlaysToggle() {
+		this.setState({
+			pitchOverlays: !this.state.pitchOverlays
+		});
+	}
+
+	pitchOverlayOnChange(event) {
+		this.props.drawMode.pitchOverlay = event.target.value;
+		this.setState({
+			pitchOverlay: event.target.value,
+			pitchOverlays: false,
+			open: false
+		});
+	}
+
 	render() {
 		const arrowsIcon = this.lineArrowsIcon();
 		const patternIcon = this.linePatternIcon();
+		const overlaySelect = this.pitchOverlaysRender();
 		return (
 		<Menu id="drawingMenu" anchorEl={this.props.anchorEl} keepMounted open={this.state.open} onClose={this.close}>
 			<MenuItem data-value="select" onClick={this.close}>
@@ -132,6 +166,16 @@ class DrawMenu extends Component {
 				</ListItemIcon>
 				<ListItemText primary="Select / Move" />
 			</MenuItem>
+			<Divider />
+			<MenuItem onClick={this.pitchOverlaysToggle}>
+				<ListItemText primary="Pitch overlay" />
+				{this.state.pitchOverlays ? <ExpandLess /> : <ExpandMore />}
+			</MenuItem>
+			<Collapse in={this.state.pitchOverlays} timeout="auto" unmountOnExit>
+				<RadioGroup name="radio-pitch-overlays" value={this.state.pitchOverlay} onChange={this.pitchOverlayOnChange}>
+					{overlaySelect}
+				</RadioGroup>
+			</Collapse>
 			<Divider />
 			<MenuItem data-value="line" onClick={this.close}>
 				<ListItemIcon>
@@ -203,7 +247,7 @@ class DrawMenu extends Component {
 				<ListItemIcon>
 					<ShapeOvalPlus />
 				</ListItemIcon>
-				<ListItemText primary="Draw elipse" />
+				<ListItemText primary="Draw ellipse" />
 			</MenuItem>
 			<Divider />
 			<MenuItem data-value="text" onClick={this.close}>

@@ -21,9 +21,9 @@ class PitchEdit extends Component {
 
 	constructor(props) {
 		super(props);
-		this._editRef = React.createRef();	// refernece to editor container
+		this._editRef = React.createRef();	// reference to editor container
 		this._bgRef = React.createRef();	// background reference to get client size of pitch for editing
-		this._playerDialogRef = React.createRef(); // edit player dialog refernece
+		this._playerDialogRef = React.createRef(); // edit player dialog reference
 		this._orgWidth = this.props.viewBoxRight - this.props.viewBoxLeft;
 		this._orgHeight = this.props.viewBoxBottom - this.props.viewBoxTop;
 		this._pitch = this.props.pitch;
@@ -33,8 +33,13 @@ class PitchEdit extends Component {
 			squares: this._pitch.squares,
 			ellipses: this._pitch.ellipses,
 			texts: this._pitch.texts,
-			lines: this._pitch.lines
+			lines: this._pitch.lines,
+			overlay: this._pitch.overlay
 		};
+		
+		// overlay changes
+		this.overlayChanged = this.overlayChanged.bind(this);
+		this._pitch.drawMode.pitchOverlayCallback = this.overlayChanged;
 	
 		// mouse drag init
 		this._dragNode = null;
@@ -52,6 +57,14 @@ class PitchEdit extends Component {
 		this.playerEditDone = this.playerEditDone.bind(this);
 	}
 
+	overlayChanged(value) {
+		console.log("Overlay change", value, this.state.overlay);
+		this._pitch.overlay = value;
+		this.setState({
+			overlay: value
+		});
+	}
+
 	getScale() {
 		const box = this._bgRef.current.getBoundingClientRect();
 		return {
@@ -61,7 +74,7 @@ class PitchEdit extends Component {
 	}
 
 	getRealPosition(e) {
-		let scale = this.getScale();	// TODO: recosider scale
+		let scale = this.getScale();	// TODO: reconsider scale
 		let box = this._bgRef.current.getBoundingClientRect();
  		let x = e.clientX - box.left;	//x position within the element.
   		let y = e.clientY - box.top; 	//y position within the element.
@@ -320,6 +333,17 @@ class PitchEdit extends Component {
 		});
 	}
 
+	renderPitchOverlay(){
+		const o = this._pitch.overlaySize();
+		if (null === o) {
+			return null;
+		}
+		const posX = (this._orgWidth - o.width) / 2;
+		const posY = (this._orgHeight - o.height) / 2;
+		const transform = 'translate(' + posX + ' ' + posY + ')';
+		return (<rect width={o.width} height={o.height} transform={transform} fill="none" />);
+	}
+
 	render() {
 		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
 
@@ -328,11 +352,12 @@ class PitchEdit extends Component {
 		const squaresShow = this.renderSquares();
 		const ellipsesShow = this.renderEllipses();
 		const linesShow = this.renderLines();
+		const pitchOverlayShow = this.renderPitchOverlay();
 
-		// default class is full screen width and height with paading for menu height
+		// default class is full screen width and height with padding for menu height
 		const pitchClasses = "pitch " + this.props.classes.offset;
 
-		// Caclculate pitch position in viewBox
+		// Calculate pitch position in viewBox
 		const pitchLeft = (this._orgWidth - 4000) / 2; // Goals are relative to pitch no need to take them in calc
 		const pitchTop = (this._orgHeight - 2000) / 2;
 		const pitchTransform = 'translate(' + pitchLeft + ' ' + pitchTop + ')';
@@ -342,7 +367,7 @@ class PitchEdit extends Component {
 		const playersTop = pitchTop + 2000 + 50;
 		const playersTransform = 'translate(' + playersLeft + ' ' + playersTop + ')';
 
-		// calclulate balls position in viewBox
+		// calculate balls position in viewBox
 		const ballsLeft = pitchLeft + 1050
 		const ballsTop = pitchTop + 2000 + 100;
 		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"
@@ -446,13 +471,9 @@ class PitchEdit extends Component {
 							<rect width="16" height="16" x="2992" y="1492" />
 						</g>
 					</g>
-					{/*
 					<g id="pitchOverlay" stroke="white" strokeWidth="8">
-						<rect width="2800" height="2000" fill="none" />
-						<rect width="2800" height="1500" fill="none" />
-						<rect width="1800" height="900" fill="none" />
+						{pitchOverlayShow}
 					</g>
-					*/}
 					<g id="ellipses">{ellipsesShow}</g>
 					<g id="squares">{squaresShow}</g>
 					<g id="players" transform={playersTransform} fontSize="50">

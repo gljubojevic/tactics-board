@@ -46,7 +46,6 @@ Main editing area is shown as default futsal pitch including all elements define
 Pitch is created as SVG image and is is base for all editing.
 
 ## Predefined shapes
----
 Tactics board has number of predefined shapes:
 - ~~players~~
 - ~~cones~~

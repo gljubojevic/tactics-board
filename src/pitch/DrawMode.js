@@ -5,6 +5,8 @@ class DrawMode {
 		this._lineArrowEnd = lineArrowEnd;
 		this._lineDashed = lineDashed;
 		this._color = 0;
+		this._pitchOverlay = 'none';
+		this._pitchOverlayCallback = null;
 	}
 
 	get mode() {
@@ -55,6 +57,34 @@ class DrawMode {
 		this._color = value;
 	}
 
+	// default pitch overlay options
+	// 28x20, exercises pitch
+	// 28x15, basketball court
+	// 18x9, volleyball court
+	get pitchOverlayOptions(){
+		return ['none','exercise','basketball','volleyball'];
+	}
+
+	get pitchOverlay() {
+		return this._pitchOverlay;
+	}
+	set pitchOverlay(value) {
+		console.log("PitchOverlay", value);
+		if (value === this._pitchOverlay) {
+			return;
+		}
+		this._pitchOverlay = value;
+		if (null !== this._pitchOverlayCallback) {
+			this._pitchOverlayCallback(this._pitchOverlay);
+		}
+	}
+
+	get pitchOverlayCallback() {
+		return this._pitchOverlayCallback;
+	}
+	set pitchOverlayCallback(value) {
+		this._pitchOverlayCallback = value;
+	}
 }
 
 export default DrawMode;
