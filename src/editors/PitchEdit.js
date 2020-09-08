@@ -17,6 +17,20 @@ const styles = theme => ({
 	}
 })
 
+// define object types for mouse dragging
+const DragObject = {
+	None: -1,
+	Player: 0,
+	Ball: 1,
+	Cone: 2,
+	Goal: 3,
+	EditTopLeft: 4,
+	EditTopRight: 5,
+	EditBottomLeft: 6,
+	EditBottomRight: 7,
+	EditLine: 8
+}
+
 class PitchEdit extends Component {
 
 	constructor(props) {
@@ -43,7 +57,7 @@ class PitchEdit extends Component {
 	
 		// mouse drag init
 		this._dragNode = null;
-		this._dragObjectType = -1;
+		this._dragObjectType = DragObject.None;
 		this._mouseX = 0;
 		this._mouseY = 0;
 
@@ -101,8 +115,59 @@ class PitchEdit extends Component {
 			balls: this._pitch.ballMove(id, deltaX, deltaY)
 		});
 	}
+
+	editTopLeft(id, deltaX, deltaY) {
+		if (id.startsWith("sq")) {
+			this.setState({
+				squares: this._pitch.squareEdit("tl",id, deltaX, deltaY)
+			});
+		}
+		if (id.startsWith("el")) {
+			this.setState({
+				ellipses: this._pitch.ellipseEdit("tl",id, deltaX, deltaY)
+			});
+		}
+	}
 	
-	
+	editTopRight(id, deltaX, deltaY) {
+		if (id.startsWith("sq")) {
+			this.setState({
+				squares: this._pitch.squareEdit("tr",id, deltaX, deltaY)
+			});
+		}
+		if (id.startsWith("el")) {
+			this.setState({
+				ellipses: this._pitch.ellipseEdit("tr",id, deltaX, deltaY)
+			});
+		}
+	}
+
+	editBottomLeft(id, deltaX, deltaY) {
+		if (id.startsWith("sq")) {
+			this.setState({
+				squares: this._pitch.squareEdit("bl",id, deltaX, deltaY)
+			});
+		}
+		if (id.startsWith("el")) {
+			this.setState({
+				ellipses: this._pitch.ellipseEdit("bl",id, deltaX, deltaY)
+			});
+		}
+	}
+
+	editBottomRight(id, deltaX, deltaY) {
+		if (id.startsWith("sq")) {
+			this.setState({
+				squares: this._pitch.squareEdit("br",id, deltaX, deltaY)
+			});
+		}
+		if (id.startsWith("el")) {
+			this.setState({
+				ellipses: this._pitch.ellipseEdit("br",id, deltaX, deltaY)
+			});
+		}
+	}
+
 	isDragStarted(e) {
 		if (0 !== e.button) {
 			return false;
@@ -114,12 +179,28 @@ class PitchEdit extends Component {
 		if (null === this._dragNode) {
 			return false;
 		}
-		this._dragObjectType = -1;
+		this._dragObjectType = DragObject.None;
 		if (this._dragNode.startsWith("pl")) {
-			this._dragObjectType = 0;
+			this._dragObjectType = DragObject.Player;
 		}
 		if (this._dragNode.startsWith("bl")) {
-			this._dragObjectType = 1;
+			this._dragObjectType = DragObject.Ball;
+		}
+		if (this._dragNode.startsWith("edit-tl-")) {
+			this._dragObjectType = DragObject.EditTopLeft;
+			this._dragNode = this._dragNode.replace("edit-tl-","");
+		}
+		if (this._dragNode.startsWith("edit-tr-")) {
+			this._dragObjectType = DragObject.EditTopRight;
+			this._dragNode = this._dragNode.replace("edit-tr-","");
+		}
+		if (this._dragNode.startsWith("edit-bl-")) {
+			this._dragObjectType = DragObject.EditBottomLeft;
+			this._dragNode = this._dragNode.replace("edit-bl-","");
+		}
+		if (this._dragNode.startsWith("edit-br-")) {
+			this._dragObjectType = DragObject.EditBottomRight;
+			this._dragNode = this._dragNode.replace("edit-br-","");
 		}
 		this.resetMouseDrag(e);
 		return true;
@@ -137,6 +218,30 @@ class PitchEdit extends Component {
 		return true;
 	}
 
+	squareEditStarted(editNode) {
+		if (!editNode.startsWith("sq")) {
+			return false;
+		}
+		console.log("Square edit start", editNode);
+		return true;
+	}
+
+	ellipseEditStarted(editNode) {
+		if (!editNode.startsWith("el")) {
+			return false;
+		}
+		console.log("Ellipse edit start", editNode);
+		return true;
+	}
+
+	lineEditStarted(editNode) {
+		if (!editNode.startsWith("ln")) {
+			return false;
+		}
+		console.log("Line edit start", editNode);
+		return true;
+	}
+
 	// player edit dialog callback
 	playerEditDone(player) {
 		this.setState({
@@ -146,11 +251,23 @@ class PitchEdit extends Component {
 
 	objectDrag(deltaX, deltaY) {
 		switch (this._dragObjectType) {
-			case 0:
+			case DragObject.Player:
 				this.playerDrag(this._dragNode, deltaX, deltaY);
 				break;
-			case 1:
+			case DragObject.Ball:
 				this.ballDrag(this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditTopLeft:
+				this.editTopLeft(this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditTopRight:
+				this.editTopRight(this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditBottomLeft:
+				this.editBottomLeft(this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditBottomRight:
+				this.editBottomRight(this._dragNode, deltaX, deltaY);
 				break;
 			default:
 				console.log("Invalid drag object type", this._dragObjectType, this._dragNode);
@@ -159,12 +276,36 @@ class PitchEdit extends Component {
 	}
 
 	hContextMenu(e) {
+		if (this.props.pitch.drawMode.mode !== 'select') {
+			return;
+		}
 		let editNode = e.target.getAttribute("data-ref");
 		if (null === editNode) {
 			return;
 		}
 		if (this.playerEditStarted(editNode)) {
 			e.preventDefault();
+			return;
+		}
+		if (this.squareEditStarted(editNode)) {
+			e.preventDefault();
+			this.setState({
+				squares: this.props.pitch.squareEditStart(editNode)
+			});
+			return;
+		}
+		if (this.ellipseEditStarted(editNode)) {
+			e.preventDefault();
+			this.setState({
+				ellipses: this.props.pitch.ellipseEditStart(editNode)
+			});
+			return;
+		}
+		if (this.lineEditStarted(editNode)) {
+			e.preventDefault();
+			this.setState({
+				lines: this.props.pitch.lineEditStart(editNode)
+			});
 			return;
 		}
 	}
@@ -237,8 +378,16 @@ class PitchEdit extends Component {
 				this.objectDrag(deltaX, deltaY);
 				break;
 		}
+		// Reset editing
+		// TODO: Make better handling
+		if (0 === e.button && this._dragObjectType === DragObject.None) {
+			this.setState({
+				squares: this.props.pitch.squareEditEnd(),
+				ellipses: this.props.pitch.ellipsesEditEnd()
+			});
+		}
 		this._dragNode = null;
-		this._dragObjectType = -1;
+		this._dragObjectType = DragObject.None;
 	}
 
 	hMouseMove(e) {
@@ -312,7 +461,7 @@ class PitchEdit extends Component {
 	renderSquares(){
 		return this.state.squares.map((s, index) => {
 			return (
-				<SquareEdit key={index.toString()} id={s.id} color={s.color} x={s.x} y={s.y} width={s.width} height={s.height} dashed={s.dashed} />
+				<SquareEdit key={index.toString()} id={s.id} color={s.color} x={s.x} y={s.y} width={s.width} height={s.height} dashed={s.dashed} isEdit={s.isEdit} />
 			);
 		});
 	}
@@ -320,7 +469,7 @@ class PitchEdit extends Component {
 	renderEllipses(){
 		return this.state.ellipses.map((el, index) => {
 			return (
-				<EllipseEdit key={index.toString()} id={el.id} color={el.color} cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} dashed={el.dashed} />
+				<EllipseEdit key={index.toString()} id={el.id} color={el.color} cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} dashed={el.dashed} isEdit={el.isEdit} />
 			);
 		});
 	}
@@ -328,7 +477,7 @@ class PitchEdit extends Component {
 	renderLines(){
 		return this.state.lines.map((l, index) => {
 			return (
-				<LineEdit key={index.toString()} id={l.id} color={l.color} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} arrowStart={l.arrowStart} arrowEnd={l.arrowEnd} dashed={l.dashed} />
+				<LineEdit key={index.toString()} id={l.id} color={l.color} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} arrowStart={l.arrowStart} arrowEnd={l.arrowEnd} dashed={l.dashed} isEdit={l.isEdit} />
 			);
 		});
 	}
@@ -396,10 +545,12 @@ class PitchEdit extends Component {
 							'.player text { fill: black;	}',
 							'.player text.number { fill: white; }',
 							'.dashed { stroke-dasharray: 20; }',
-							'.square rect { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
-							'.ellipse ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
-							'.line line { stroke-width: 8; }',
-							'.draggable { cursor: move; pointer-events: all;}'
+							'.square { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
+							'.ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
+							'.line { stroke-width: 8; }',
+							'.draggable { cursor: move; pointer-events: all;}',
+							'.editBox { fill: none; stroke-width: 8; stroke-opacity: 1; }',
+							'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }'
 						]}
 					</style>
 					<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">

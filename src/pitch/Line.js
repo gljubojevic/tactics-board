@@ -1,5 +1,5 @@
 class Line {
-	constructor(id="", color=0, x1=0, y1=0, x2=0, y2=0, arrowStart=false, arrowEnd=false, dashed=false){
+	constructor(id="", color=0, x1=0, y1=0, x2=0, y2=0, arrowStart=false, arrowEnd=false, dashed=false, isEdit=false){
 		this._id = id;
 		this._color = color;
 		this._x1 = x1;
@@ -9,6 +9,7 @@ class Line {
 		this._arrowStart = arrowStart;
 		this._arrowEnd = arrowEnd;
 		this._dashed = dashed;
+		this._isEdit = isEdit;
 	}
 
 	get id() {
@@ -74,6 +75,12 @@ class Line {
 		this._dashed = value;
 	}
 
+	get isEdit() {
+		return this._isEdit;
+	}
+	set isEdit(value) {
+		this._isEdit = value;
+	}
 }
 
 export default Line;

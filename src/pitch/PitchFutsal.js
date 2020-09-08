@@ -155,7 +155,7 @@ class PitchFutsal {
 	}
 
 	lineCreate(x,y) {
-		let id = 'el'+this._lineID.toString();
+		let id = 'ln'+this._lineID.toString();
 		this._lineID += 1;
 		return new Line(
 			id, this._drawMode.color,
@@ -189,6 +189,16 @@ class PitchFutsal {
 		return this.lines;
 	}
 
+	lineEditStart(id) {
+		this.lines = this.lines.map(l => {
+			if (id === l.id) {
+				l.isEdit = true;
+			}
+			return l;
+		});
+		return this.lines;
+	}
+
 
 	get ellipses() {
 		return this._ellipses;
@@ -216,13 +226,17 @@ class PitchFutsal {
 	ellipseResize(id, x2, y2, proportional) {
 		this.ellipses = this.ellipses.map(el => {
 			if (id === el.id) {
-				el.x2 = x2;
-				if (!proportional) {
-					el.y2 = y2;
-				} else {
-					let szy = el.rx * (el.y1 < y2 ? 2 : -2);
-					el.y2 = el.y1 + szy;
-				}
+				el.resize(x2, y2, proportional);
+			}
+			return el;
+		});
+		return this.ellipses;
+	}
+
+	ellipseEdit(corner, id, deltaX, deltaY) {
+		this.ellipses = this.ellipses.map(el => {
+			if (id === el.id) {
+				el.edit(corner, deltaX, deltaY);
 			}
 			return el;
 		});
@@ -235,6 +249,23 @@ class PitchFutsal {
 		return this.ellipses;
 	}
 
+	ellipseEditStart(id) {
+		this.ellipses = this.ellipses.map(el => {
+			if (id === el.id) {
+				el.isEdit = true;
+			}
+			return el;
+		});
+		return this.ellipses;
+	}
+
+	ellipsesEditEnd() {
+		this.ellipses = this.ellipses.map(el => {
+			el.isEdit = false;
+			return el;
+		});
+		return this.ellipses;
+	}
 
 	get squares() {
 		return this._squares;
@@ -262,13 +293,17 @@ class PitchFutsal {
 	squareResize(id, x2, y2, proportional) {
 		this.squares = this.squares.map(sq => {
 			if (id === sq.id) {
-				sq.x2 = x2;
-				if (!proportional) {
-					sq.y2 = y2;
-				} else {
-					let szy = sq.width * (sq.y1 < y2 ? 1 : -1);
-					sq.y2 = sq.y1 + szy;
-				}
+				sq.resize(x2, y2, proportional);
+			}
+			return sq;
+		});
+		return this.squares;
+	}
+
+	squareEdit(corner, id, deltaX, deltaY) {
+		this.squares = this.squares.map(sq => {
+			if (id === sq.id) {
+				sq.edit(corner, deltaX, deltaY);
 			}
 			return sq;
 		});
@@ -278,6 +313,24 @@ class PitchFutsal {
 	// remove empty squares
 	squareCleanup() {
 		this.squares = this.squares.filter(sq => sq.width > 0 && sq.height > 0);
+		return this.squares;
+	}
+
+	squareEditStart(id) {
+		this.squares = this.squares.map(sq => {
+			if (id === sq.id) {
+				sq.isEdit = true;
+			}
+			return sq;
+		});
+		return this.squares;
+	}
+
+	squareEditEnd() {
+		this.squares = this.squares.map(sq => {
+			sq.isEdit = false;
+			return sq;
+		});
 		return this.squares;
 	}
 

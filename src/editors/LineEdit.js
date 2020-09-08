@@ -23,7 +23,8 @@ LineEdit.defaultProps = {
 	y2: 0,
 	arrowStart: false,
 	arrowEnd: false,
-	dashed: false
+	dashed: false,
+	isEdit: false
 }
 
 LineEdit.propTypes = {
@@ -35,7 +36,8 @@ LineEdit.propTypes = {
 	y2: PropTypes.number,
 	arrowStart: PropTypes.bool,
 	arrowEnd: PropTypes.bool,
-	dashed: PropTypes.bool
+	dashed: PropTypes.bool,
+	isEdit: PropTypes.bool
 }
 
 

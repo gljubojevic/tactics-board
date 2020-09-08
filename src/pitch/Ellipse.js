@@ -1,5 +1,5 @@
 class Ellipse {
-	constructor(id="", color=0, x1=0, y1=0, rx=0, ry=0, rotation=0, dashed=false){
+	constructor(id="", color=0, x1=0, y1=0, rx=0, ry=0, rotation=0, dashed=false, isEdit=false){
 		this._id = id;
 		this._color = color;
 		this._x1 = x1;
@@ -8,6 +8,7 @@ class Ellipse {
 		this._y2 = y1 + ry * 2;
 		this._rotation = rotation;
 		this._dashed = dashed;
+		this._isEdit = isEdit;
 	}
 
 	get id() {
@@ -82,6 +83,45 @@ class Ellipse {
 		this._dashed = value;
 	}
 
+	get isEdit() {
+		return this._isEdit;
+	}
+	set isEdit(value) {
+		this._isEdit = value;
+	}
+
+	resize(x2, y2, proportional) {
+		this.x2 = x2;
+		if (!proportional) {
+			this.y2 = y2;
+		} else {
+			let szy = this.rx * (this.y1 < y2 ? 2 : -2);
+			this.y2 = this.y1 + szy;
+		}
+	}
+
+	edit(corner, deltaX, deltaY) {
+		switch (corner) {
+			case "tl":
+				this.x1 += deltaX;
+				this.y1 += deltaY;
+				break;
+			case "tr":
+				this.x2 += deltaX;
+				this.y1 += deltaY;
+				break;
+			case "bl":
+				this.x1 += deltaX;
+				this.y2 += deltaY;
+				break;
+			case "br":
+				this.x2 += deltaX;
+				this.y2 += deltaY;
+				break;
+			default:
+				break;
+		}
+	}
 }
 
 export default Ellipse;
