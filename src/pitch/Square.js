@@ -1,3 +1,5 @@
+import Box from './Box';
+
 class Square {
 	constructor(id="", color=0, x1=0, y1=0, width=0, height=0, rotation=0, dashed=false, isEdit=false){
 		this._id = id;
@@ -51,6 +53,15 @@ class Square {
 	}
 	set y2(value) {
 		this._y2 = value;
+	}
+
+	get box() {
+		return new Box(
+			this.x,
+			this.y,
+			this.width,
+			this.height
+		);
 	}
 
 	get x() {

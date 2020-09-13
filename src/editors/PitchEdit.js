@@ -461,7 +461,7 @@ class PitchEdit extends Component {
 	renderSquares(){
 		return this.state.squares.map((s, index) => {
 			return (
-				<SquareEdit key={index.toString()} id={s.id} color={s.color} x={s.x} y={s.y} width={s.width} height={s.height} dashed={s.dashed} isEdit={s.isEdit} />
+				<SquareEdit key={index.toString()} square={s} />
 			);
 		});
 	}
