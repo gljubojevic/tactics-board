@@ -5,13 +5,12 @@ import Square from '../pitch/Square';
 
 class SquareEdit extends Component {
 
-	editBox() {
-		if (!this.props.square.isEdit) {
+	editBox(isEdit, box) {
+		if (!isEdit) {
 			return null;
 		}
-		const box = this.props.square.box;
 		return (
-			<EditBox x={box.x} y={box.y} width={box.width} height={box.height} id={this.props.square.id} showBox={false} />
+			<EditBox box={box} showBox={false} />
 		)
 	}
 
@@ -21,7 +20,7 @@ class SquareEdit extends Component {
 		return (
 			<g className={className}>
 				<rect x={sq.x} y={sq.y} width={sq.width} height={sq.height} data-ref={sq.id} />
-				{this.editBox()}
+				{this.editBox(sq.isEdit, sq.box)}
 			</g>
 		);
 	}

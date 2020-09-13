@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Box from '../pitch/Box';
 
 class EditBox extends Component {
 
@@ -12,8 +13,9 @@ class EditBox extends Component {
 		if (!this.props.showBox) {
 			return null;
 		}
+		const box = this.props.box;
 		return (
-			<rect className="editBox" x={this.props.x} y={this.props.y} width={this.props.width} height={this.props.height} />
+			<rect className="editBox" x={box.x} y={box.y} width={box.width} height={box.height} />
 		)
 	}
 
@@ -27,38 +29,31 @@ class EditBox extends Component {
 	}
 
 	render() {
-		const etl = this.cornerBox(this.props.x, this.props.y);
-		const etr = this.cornerBox(this.props.x + this.props.width, this.props.y);
-		const ebl = this.cornerBox(this.props.x, this.props.y + this.props.height);
-		const ebr = this.cornerBox(this.props.x + this.props.width, this.props.y + this.props.height);
+		const box = this.props.box;
+		const etl = this.cornerBox(box.x, box.y);
+		const etr = this.cornerBox(box.x + box.width, box.y);
+		const ebl = this.cornerBox(box.x, box.y + box.height);
+		const ebr = this.cornerBox(box.x + box.width, box.y + box.height);
 
 		return (
 			<g>
 				{this.mainBox()}
-				<rect className="editCorner draggable" x={etl.x} y={etl.y} width={etl.size} height={etl.size} data-ref={"edit-tl-" + this.props.id} />
-				<rect className="editCorner draggable" x={etr.x} y={etr.y} width={etr.size} height={etr.size} data-ref={"edit-tr-" + this.props.id} />
-				<rect className="editCorner draggable" x={ebl.x} y={ebl.y} width={ebl.size} height={ebl.size} data-ref={"edit-bl-" + this.props.id} />
-				<rect className="editCorner draggable" x={ebr.x} y={ebr.y} width={ebr.size} height={ebr.size} data-ref={"edit-br-" + this.props.id} />
+				<rect className="editCorner draggable" x={etl.x} y={etl.y} width={etl.size} height={etl.size} data-ref={"edit-tl-" + box.id} />
+				<rect className="editCorner draggable" x={etr.x} y={etr.y} width={etr.size} height={etr.size} data-ref={"edit-tr-" + box.id} />
+				<rect className="editCorner draggable" x={ebl.x} y={ebl.y} width={ebl.size} height={ebl.size} data-ref={"edit-bl-" + box.id} />
+				<rect className="editCorner draggable" x={ebr.x} y={ebr.y} width={ebr.size} height={ebr.size} data-ref={"edit-br-" + box.id} />
 			</g>
 		)
 	}
 }
 
 EditBox.defaultProps = {
-	id:"",
-	x:0,
-	y:0,
-	width:0,
-	height:0,
+	box: null,
 	showBox:false
 }
 
 EditBox.propTypes = {
-	id: PropTypes.string,
-	x: PropTypes.number,
-	y: PropTypes.number,
-	width: PropTypes.number,
-	height: PropTypes.number,
+	box: PropTypes.instanceOf(Box),
 	showBox: PropTypes.bool
 }
 

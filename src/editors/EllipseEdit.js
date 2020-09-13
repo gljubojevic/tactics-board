@@ -5,13 +5,12 @@ import Ellipse from '../pitch/Ellipse';
 
 class EllipseEdit extends Component {
 
-	editBox() {
-		if (!this.props.ellipse.isEdit) {
+	editBox(isEdit, box) {
+		if (!isEdit) {
 			return null;
 		}
-		const box = this.props.ellipse.box;
 		return (
-			<EditBox x={box.x} y={box.y} width={box.width} height={box.height} id={this.props.ellipse.id} showBox={true} />
+			<EditBox box={box} showBox={true} />
 		)
 	}
 
@@ -21,7 +20,7 @@ class EllipseEdit extends Component {
 		return (
 			<g className={className}>
 				<ellipse cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} data-ref={el.id} />
-				{this.editBox()}
+				{this.editBox(el.isEdit, el.box)}
 			</g>
 		)
 	}

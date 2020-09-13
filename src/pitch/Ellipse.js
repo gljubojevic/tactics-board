@@ -94,6 +94,7 @@ class Ellipse {
 
 	get box() {
 		return new Box(
+			this.id,
 			this.cx - this.rx,
 			this.cy - this.ry,
 			this.rx * 2,

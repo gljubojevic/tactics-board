@@ -57,6 +57,7 @@ class Square {
 
 	get box() {
 		return new Box(
+			this.id,
 			this.x,
 			this.y,
 			this.width,

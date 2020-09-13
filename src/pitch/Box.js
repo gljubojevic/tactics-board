@@ -1,9 +1,17 @@
 class Box {
-	constructor(x=0, y=0, width=0, height=0){
+	constructor(id="", x=0, y=0, width=0, height=0){
+		this._id = id;
 		this._x = x;
 		this._y = y;
 		this._width = width;
 		this._height = height;
+	}
+
+    get id() {
+		return this._id;
+	}
+	set id(value) {
+		this._id = value;
 	}
 
 	get x() {
