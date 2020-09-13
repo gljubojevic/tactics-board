@@ -469,7 +469,7 @@ class PitchEdit extends Component {
 	renderEllipses(){
 		return this.state.ellipses.map((el, index) => {
 			return (
-				<EllipseEdit key={index.toString()} id={el.id} color={el.color} cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} dashed={el.dashed} isEdit={el.isEdit} />
+				<EllipseEdit key={index.toString()} ellipse={el} />
 			);
 		});
 	}

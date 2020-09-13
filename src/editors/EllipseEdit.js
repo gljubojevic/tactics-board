@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import EditBox from './EditBox'
+import Ellipse from '../pitch/Ellipse';
 
 class EllipseEdit extends Component {
 
 	editBox() {
-		if (!this.props.isEdit) {
+		if (!this.props.ellipse.isEdit) {
 			return null;
 		}
-		const x = this.props.cx - this.props.rx;
-		const y = this.props.cy - this.props.ry;
-		const width = this.props.rx * 2;
-		const height = this.props.ry * 2;
+		const box = this.props.ellipse.box;
 		return (
-			<EditBox x={x} y={y} width={width} height={height} id={this.props.id} showBox={true} />
+			<EditBox x={box.x} y={box.y} width={box.width} height={box.height} id={this.props.ellipse.id} showBox={true} />
 		)
 	}
 
 	render() {
-		const className = (this.props.dashed ? 'ellipse dashed pc' : 'ellipse pc') + this.props.color;
+		const el = this.props.ellipse;
+		const className = (el.dashed ? 'ellipse dashed pc' : 'ellipse pc') + el.color;
 		return (
 			<g className={className}>
-				<ellipse cx={this.props.cx} cy={this.props.cy} rx={this.props.rx} ry={this.props.ry} data-ref={this.props.id} />
+				<ellipse cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} data-ref={el.id} />
 				{this.editBox()}
 			</g>
 		)
@@ -29,25 +28,11 @@ class EllipseEdit extends Component {
 }
 
 EllipseEdit.defaultProps = {
-	id:"",
-	color:0,
-	cx:0,
-	cy:0,
-	rx:0,
-	ry:0,
-	dashed:false,
-	isEdit:false
+	ellipse: null
 }
 
 EllipseEdit.propTypes = {
-	id: PropTypes.string,
-	color: PropTypes.number,
-	cx: PropTypes.number,
-	cy: PropTypes.number,
-	rx: PropTypes.number,
-	ry: PropTypes.number,
-	dashed: PropTypes.bool,
-	isEdit: PropTypes.bool
+	ellipse: PropTypes.instanceOf(Ellipse)
 }
 
 export default EllipseEdit;

@@ -1,3 +1,5 @@
+import Box from './Box';
+
 class Ellipse {
 	constructor(id="", color=0, x1=0, y1=0, rx=0, ry=0, rotation=0, dashed=false, isEdit=false){
 		this._id = id;
@@ -88,6 +90,15 @@ class Ellipse {
 	}
 	set isEdit(value) {
 		this._isEdit = value;
+	}
+
+	get box() {
+		return new Box(
+			this.cx - this.rx,
+			this.cy - this.ry,
+			this.rx * 2,
+			this.ry * 2
+		);
 	}
 
 	resize(x2, y2, proportional) {
