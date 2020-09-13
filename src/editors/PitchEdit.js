@@ -477,7 +477,7 @@ class PitchEdit extends Component {
 	renderLines(){
 		return this.state.lines.map((l, index) => {
 			return (
-				<LineEdit key={index.toString()} id={l.id} color={l.color} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} arrowStart={l.arrowStart} arrowEnd={l.arrowEnd} dashed={l.dashed} isEdit={l.isEdit} />
+				<LineEdit key={index.toString()} line={l} />
 			);
 		});
 	}
