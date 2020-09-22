@@ -28,7 +28,10 @@ const DragObject = {
 	EditTopRight: 5,
 	EditBottomLeft: 6,
 	EditBottomRight: 7,
-	EditLine: 8
+	EditLineP1: 8,
+	EditLineC1: 9,
+	EditLineC2: 10,
+	EditLineP2: 11
 }
 
 class PitchEdit extends Component {
@@ -168,6 +171,12 @@ class PitchEdit extends Component {
 		}
 	}
 
+	editLinePoint(pid, id, deltaX, deltaY) {
+		this.setState({
+			lines: this._pitch.lineEdit(pid, id, deltaX, deltaY)
+		});
+	}
+
 	isDragStarted(e) {
 		if (0 !== e.button) {
 			return false;
@@ -201,6 +210,22 @@ class PitchEdit extends Component {
 		if (this._dragNode.startsWith("edit-br-")) {
 			this._dragObjectType = DragObject.EditBottomRight;
 			this._dragNode = this._dragNode.replace("edit-br-","");
+		}
+		if (this._dragNode.startsWith("edit-l1-")) {
+			this._dragObjectType = DragObject.EditLineP1;
+			this._dragNode = this._dragNode.replace("edit-l1-","");
+		}
+		if (this._dragNode.startsWith("edit-l2-")) {
+			this._dragObjectType = DragObject.EditLineC1;
+			this._dragNode = this._dragNode.replace("edit-l2-","");
+		}
+		if (this._dragNode.startsWith("edit-l3-")) {
+			this._dragObjectType = DragObject.EditLineC2;
+			this._dragNode = this._dragNode.replace("edit-l3-","");
+		}
+		if (this._dragNode.startsWith("edit-l4-")) {
+			this._dragObjectType = DragObject.EditLineP2;
+			this._dragNode = this._dragNode.replace("edit-l4-","");
 		}
 		this.resetMouseDrag(e);
 		return true;
@@ -268,6 +293,18 @@ class PitchEdit extends Component {
 				break;
 			case DragObject.EditBottomRight:
 				this.editBottomRight(this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditLineP1:
+				this.editLinePoint("p1", this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditLineC1:
+				this.editLinePoint("c1", this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditLineC2:
+				this.editLinePoint("c2", this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditLineP2:
+				this.editLinePoint("p2", this._dragNode, deltaX, deltaY);
 				break;
 			default:
 				console.log("Invalid drag object type", this._dragObjectType, this._dragNode);
@@ -382,6 +419,7 @@ class PitchEdit extends Component {
 		// TODO: Make better handling
 		if (0 === e.button && this._dragObjectType === DragObject.None) {
 			this.setState({
+				lines: this.props.pitch.lineEditEnd(),
 				squares: this.props.pitch.squareEditEnd(),
 				ellipses: this.props.pitch.ellipsesEditEnd()
 			});
@@ -547,7 +585,8 @@ class PitchEdit extends Component {
 							'.dashed { stroke-dasharray: 20; }',
 							'.square { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
 							'.ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
-							'.line { stroke-width: 8; }',
+							'.line { stroke-width: 12; }',
+							'.line path { fill: none; stroke-width: 12; }',
 							'.draggable { cursor: move; pointer-events: all;}',
 							'.editBox { fill: none; stroke-width: 8; stroke-opacity: 1; }',
 							'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }'

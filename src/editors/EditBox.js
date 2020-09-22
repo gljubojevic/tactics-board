@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Box from '../pitch/Box';
+import Point from '../pitch/Point';
+import DragHandle from './DragHandle';
 
 class EditBox extends Component {
-
-	constructor(props) {
-		super(props);
-		this._handleSize = 50; // default handle size
-	}
 
 	mainBox() {
 		if (!this.props.showBox) {
@@ -19,29 +16,20 @@ class EditBox extends Component {
 		)
 	}
 
-	cornerBox(x, y) {
-		const half = this._handleSize / 2;
-		return { 
-			x: x - half, 
-			y: y - half,
-			size: this._handleSize
-		}
-	}
-
 	render() {
 		const box = this.props.box;
-		const etl = this.cornerBox(box.x, box.y);
-		const etr = this.cornerBox(box.x + box.width, box.y);
-		const ebl = this.cornerBox(box.x, box.y + box.height);
-		const ebr = this.cornerBox(box.x + box.width, box.y + box.height);
+		const tl = new Point(box.x, box.y);
+		const tr = new Point(box.x + box.width, box.y);
+		const bl = new Point(box.x, box.y + box.height);
+		const br = new Point(box.x + box.width, box.y + box.height);
 
 		return (
 			<g>
 				{this.mainBox()}
-				<rect className="editCorner draggable" x={etl.x} y={etl.y} width={etl.size} height={etl.size} data-ref={"edit-tl-" + box.id} />
-				<rect className="editCorner draggable" x={etr.x} y={etr.y} width={etr.size} height={etr.size} data-ref={"edit-tr-" + box.id} />
-				<rect className="editCorner draggable" x={ebl.x} y={ebl.y} width={ebl.size} height={ebl.size} data-ref={"edit-bl-" + box.id} />
-				<rect className="editCorner draggable" x={ebr.x} y={ebr.y} width={ebr.size} height={ebr.size} data-ref={"edit-br-" + box.id} />
+				<DragHandle id={"edit-tl-" + box.id} position={tl} />
+				<DragHandle id={"edit-tr-" + box.id} position={tr} />
+				<DragHandle id={"edit-bl-" + box.id} position={bl} />
+				<DragHandle id={"edit-br-" + box.id} position={br} />
 			</g>
 		)
 	}

@@ -4,6 +4,7 @@ import DrawMode from "./DrawMode";
 import Square from "./Square";
 import Ellipse from "./Ellipse";
 import Line from "./Line";
+import Point from "./Point";
 
 class PitchFutsal {
 	constructor(noPlayers = 0, noPlayerColors=0, playerSize=1, noBalls=0, noBallColors=0, ballSize=1) {
@@ -159,7 +160,10 @@ class PitchFutsal {
 		this._lineID += 1;
 		return new Line(
 			id, this._drawMode.color,
-			x,y,x,y,
+			new Point(x,y),
+			new Point(x,y),
+			new Point(x,y),
+			new Point(x,y),
 			this._drawMode.lineArrowStart,
 			this._drawMode.lineArrowEnd,
 			this._drawMode.lineDashed
@@ -175,8 +179,17 @@ class PitchFutsal {
 	lineResize(id, x2, y2) {
 		this.lines = this.lines.map(l => {
 			if (id === l.id) {
-				l.x2 = x2;
-				l.y2 = y2;
+				l.resize(x2,y2);
+			}
+			return l;
+		});
+		return this.lines;
+	}
+
+	lineEdit(pid, id, deltaX, deltaY) {
+		this.lines = this.lines.map(l => {
+			if (id === l.id) {
+				l.edit(pid, deltaX, deltaY);
 			}
 			return l;
 		});
@@ -185,7 +198,7 @@ class PitchFutsal {
 
 	// remove empty lines
 	lineCleanup() {
-		this.lines = this.lines.filter(l => l.x1 !== l.x2 && l.y1 !== l.y2);
+		this.lines = this.lines.filter(l => !l.empty());
 		return this.lines;
 	}
 
@@ -194,6 +207,14 @@ class PitchFutsal {
 			if (id === l.id) {
 				l.isEdit = true;
 			}
+			return l;
+		});
+		return this.lines;
+	}
+
+	lineEditEnd() {
+		this.lines = this.lines.map(l => {
+			l.isEdit = false;
 			return l;
 		});
 		return this.lines;

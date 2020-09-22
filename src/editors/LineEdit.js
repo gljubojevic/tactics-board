@@ -1,16 +1,41 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Line from '../pitch/Line';
+import DragHandle from './DragHandle';
 
 class LineEdit extends Component {
+
+	editHandles(l) {
+		if (!l.isEdit) {
+			return null;
+		}
+		return (
+			<React.Fragment>
+				<DragHandle id={"edit-l1-" + l.id} position={l.p1} />
+				<DragHandle id={"edit-l2-" + l.id} position={l.c1} />
+				<DragHandle id={"edit-l3-" + l.id} position={l.c2} />
+				<DragHandle id={"edit-l4-" + l.id} position={l.p2} />
+			</React.Fragment>
+		);
+	}
+
+	renderPath(p) {
+		const d = "M " + p.p1.x + " " + p.p1.y + " C " + p.c1.x + " " + p.c1.y + " " + p.c2.x + " " + p.c2.y + " " + p.p2.x + " " + p.p2.y;
+		const markerStart = p.arrowStart ? "url(#arrowStart)" : "";
+		const markerEnd = p.arrowEnd ? "url(#arrowEnd)" : "";
+		return (
+			<path d={d} data-ref={p.id} markerStart={markerStart} markerEnd={markerEnd} />
+		);
+	}
+
 	render() {
 		const l = this.props.line;
 		const className = (l.dashed ? 'line dashed pc' : 'line pc') + l.color;
-		const markerStart = l.arrowStart ? "url(#arrowStart)" : "";
-		const markerEnd = l.arrowEnd ? "url(#arrowEnd)" : "";
+		const allPaths = l.paths().map(p => this.renderPath(p));
 		return (
 			<g className={className}>
-				<line x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} markerStart={markerStart} markerEnd={markerEnd} data-ref={l.id} />
+				{allPaths}
+				{this.editHandles(l)}
 			</g>
 		);
 	}
