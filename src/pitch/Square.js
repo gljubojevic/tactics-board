@@ -81,6 +81,14 @@ class Square {
 		return this._y1 < this._y2 ? this._y2 - this._y1 : this._y1 - this._y2;
 	}
 
+	get cx() {
+		return this.x + this.width / 2;
+	}
+
+	get cy() {
+		return this.y + this.height / 2;
+	}
+
 	get rotation() {
 		return this._rotation;
 	}
@@ -133,6 +141,20 @@ class Square {
 			default:
 				break;
 		}
+	}
+
+	rotate(posX, posY, snap) {
+		let vx = posX - this.cx;
+		let vy = posY - this.cy;
+		let angle = Math.atan2(vy, vx) * 180 / Math.PI;
+		angle += 90;
+		if (angle < 0) {
+			angle += 360;
+		}
+		if (snap) {
+			angle = Math.floor(angle / 45) * 45;
+		}
+		this.rotation = angle;
 	}
 }
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Box from '../pitch/Box';
 import Point from '../pitch/Point';
 import DragHandle from './DragHandle';
+import RotateHandle from './RotateHandle';
 
 class EditBox extends Component {
 
@@ -30,6 +31,7 @@ class EditBox extends Component {
 				<DragHandle id={"edit-tr-" + box.id} position={tr} />
 				<DragHandle id={"edit-bl-" + box.id} position={bl} />
 				<DragHandle id={"edit-br-" + box.id} position={br} />
+				<RotateHandle box={box} />
 			</g>
 		)
 	}

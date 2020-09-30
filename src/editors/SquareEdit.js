@@ -17,8 +17,9 @@ class SquareEdit extends Component {
 	render() {
 		const sq = this.props.square;
 		const className = (sq.dashed ? 'square dashed pc' : 'square pc') + sq.color;
+		const transform = 'rotate('+ sq.rotation + ',' + sq.cx + ',' + sq.cy + ')';
 		return (
-			<g className={className}>
+			<g className={className} transform={transform}>
 				<rect x={sq.x} y={sq.y} width={sq.width} height={sq.height} data-ref={sq.id} />
 				{this.editBox(sq.isEdit, sq.box)}
 			</g>

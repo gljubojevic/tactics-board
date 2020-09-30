@@ -264,6 +264,16 @@ class PitchFutsal {
 		return this.ellipses;
 	}
 
+	ellipseRotate(id, posX, posY, snap) {
+		this.ellipses = this.ellipses.map(el => {
+			if (id === el.id) {
+				el.rotate(posX, posY, snap);
+			}
+			return el;
+		});
+		return this.ellipses;
+	}
+
 	// remove empty ellipses
 	ellipseCleanup() {
 		this.ellipses = this.ellipses.filter(el => el.rx > 0 && el.ry > 0);
@@ -325,6 +335,16 @@ class PitchFutsal {
 		this.squares = this.squares.map(sq => {
 			if (id === sq.id) {
 				sq.edit(corner, deltaX, deltaY);
+			}
+			return sq;
+		});
+		return this.squares;
+	}
+
+	squareRotate(id, posX, posY, snap) {
+		this.squares = this.squares.map(sq => {
+			if (id === sq.id) {
+				sq.rotate(posX, posY, snap);
 			}
 			return sq;
 		});

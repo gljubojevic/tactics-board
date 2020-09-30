@@ -17,8 +17,9 @@ class EllipseEdit extends Component {
 	render() {
 		const el = this.props.ellipse;
 		const className = (el.dashed ? 'ellipse dashed pc' : 'ellipse pc') + el.color;
+		const transform = 'rotate('+ el.rotation + ',' + el.cx + ',' + el.cy + ')';
 		return (
-			<g className={className}>
+			<g className={className} transform={transform}>
 				<ellipse cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} data-ref={el.id} />
 				{this.editBox(el.isEdit, el.box)}
 			</g>
