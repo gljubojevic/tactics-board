@@ -58,7 +58,7 @@ Predefined shapes are dragged on pitch to be placed on desired position.
 ## Drawing shapes
 - lines
   - ~~straight (should be replaced by b-spline)~~
-  - b - spline (default drawing shape for lines)
+  - ~~b - spline (default drawing shape for lines)~~
 - ~~rectangles~~
 - ~~ellipses~~
 - filled irregular shapes
@@ -70,7 +70,7 @@ All the shapes can be drawn with one of 6 colors.
 Line options for shapes
 - arrows at start, end or both for
 	- ~~lines~~
-	- b-splines
+	- ~~b-splines~~
 - line pattern filled or dashed for
 	- ~~rectangles~~
 	- ~~ellipses~~
@@ -81,17 +81,17 @@ All shapes can be edited on pitch. Some of shapes have different edit options.
 
 Edit options:
 - drag (for placement)
-- rotate (all shapes)
-- resize (all except for predefined shapes e.g. players, goals etc..)
+- ~~rotate (all shapes)~~
+- ~~resize (all except for predefined shapes e.g. players, goals etc..)~~
 - ~~remove (return to default pool only for predefined shapes)~~
 - ~~rename (players only)~~
 
 ## Overlays
 Sometimes futsal training is held on different pitch than original.
 For that purpose is is required to show overlay of:
-- exercises pitch (28mx20m)
-- basketball pitch (28mx15m)
-- volleyball pitch (18mx9m)
+- ~~exercises pitch (28mx20m)~~
+- ~~basketball pitch (28mx15m)~~
+- ~~volleyball pitch (18mx9m)~~
 
 Overlay is shown as outline over original pitch as outline centered on pitch.
 
