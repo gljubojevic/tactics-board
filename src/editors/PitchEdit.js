@@ -28,11 +28,12 @@ const DragObject = {
 	EditTopRight: 5,
 	EditBottomLeft: 6,
 	EditBottomRight: 7,
-	EditRotate: 8,
-	EditLineP1: 9,
-	EditLineC1: 10,
-	EditLineC2: 11,
-	EditLineP2: 12
+	EditMove: 8,
+	EditRotate: 9,
+	EditLineP1: 10,
+	EditLineC1: 11,
+	EditLineC2: 12,
+	EditLineP2: 13
 }
 
 class PitchEdit extends Component {
@@ -172,6 +173,19 @@ class PitchEdit extends Component {
 		}
 	}
 
+	editMove(id, deltaX, deltaY) {
+		if (id.startsWith("sq")) {
+			this.setState({
+				squares: this._pitch.squareEdit("mv",id, deltaX, deltaY)
+			});
+		}
+		if (id.startsWith("el")) {
+			this.setState({
+				ellipses: this._pitch.ellipseEdit("mv",id, deltaX, deltaY)
+			});
+		}
+	}
+
 	editRotate(id, posX, posY, snap) {
 		if (id.startsWith("sq")) {
 			this.setState({
@@ -224,6 +238,10 @@ class PitchEdit extends Component {
 		if (this._dragNode.startsWith("edit-br-")) {
 			this._dragObjectType = DragObject.EditBottomRight;
 			this._dragNode = this._dragNode.replace("edit-br-","");
+		}
+		if (this._dragNode.startsWith("edit-mv-")) {
+			this._dragObjectType = DragObject.EditMove;
+			this._dragNode = this._dragNode.replace("edit-mv-","");
 		}
 		if (this._dragNode.startsWith("edit-rt-")) {
 			this._dragObjectType = DragObject.EditRotate;
@@ -311,6 +329,9 @@ class PitchEdit extends Component {
 				break;
 			case DragObject.EditBottomRight:
 				this.editBottomRight(this._dragNode, deltaX, deltaY);
+				break;
+			case DragObject.EditMove:
+				this.editMove(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditRotate:
 				this.editRotate(this._dragNode, posX, posY, snap);
@@ -613,6 +634,7 @@ class PitchEdit extends Component {
 							'.line path { fill: none; stroke-width: 12; }',
 							'.draggable { cursor: move; pointer-events: all;}',
 							'.editBox { fill: none; stroke-width: 8; stroke-opacity: 1; }',
+							'.editTransparent { fill: none; stroke-width: 0; }',
 							'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }'
 						]}
 					</style>

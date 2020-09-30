@@ -138,6 +138,11 @@ class Square {
 				this.x2 += deltaX;
 				this.y2 += deltaY;
 				break;
+			case "mv":
+				this.x1 += deltaX;
+				this.y1 += deltaY;
+				this.x2 += deltaX;
+				this.y2 += deltaY;
 			default:
 				break;
 		}
