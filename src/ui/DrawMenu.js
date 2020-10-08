@@ -134,7 +134,7 @@ class DrawMenu extends Component {
 	pitchOverlaysRender() {
 		return this.props.drawMode.pitchOverlayOptions.map((txt, index) => {
 			return (
-				<FormControlLabel control={<Radio />} label={txt} value={txt} />
+				<FormControlLabel key={index} control={<Radio />} label={txt} value={txt} />
 			);
 		});
 	}

@@ -48,16 +48,31 @@ class AppTools extends Component {
 		this.drawMenuAnchorEl = this.drawMenuAnchorEl.bind(this);
 		this.drawMenuOpen = this.drawMenuOpen.bind(this);
 		this.drawMenuClose = this.drawMenuClose.bind(this);
+		this.createNewScheme = this.createNewScheme.bind(this);
+		this.createNewAnimation = this.createNewAnimation.bind(this);
+	}
+
+	setDrawer(isOpen) {
+		this.setState({
+			drawerOpen:isOpen
+		});
 	}
 
 	toggleDrawer(e) {
 		if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
 			return;
 		}
-		const isOpen = !this.state.drawerOpen;
-		this.setState({
-			drawerOpen:isOpen
-		});
+		this.setDrawer(!this.state.drawerOpen);
+	}
+
+	createNewScheme() {
+		this.setDrawer(false);
+		this.props.createNewScheme();
+	}
+
+	createNewAnimation() {
+		this.setDrawer(false);
+		this.props.createNewAnimation();
 	}
 
 	saveImage() {
@@ -129,13 +144,13 @@ class AppTools extends Component {
 						<Typography variant="h4" component="h2">Tactics board</Typography>
 						<Divider />
 						<List component="nav" aria-label="main mailbox folders">
-							<ListItem button>
+							<ListItem button onClick={this.createNewScheme}>
 								<ListItemIcon>
 									<OpenInNewIcon />
 								</ListItemIcon>
 								<ListItemText primary="Create new scheme" />
 							</ListItem>
-							<ListItem button>
+							<ListItem button onClick={this.createNewAnimation}>
 								<ListItemIcon>
 									<MovieCreationIcon />
 								</ListItemIcon>
@@ -152,12 +167,16 @@ class AppTools extends Component {
 
 AppTools.defaultProps = {
 	pitchFutsal: null,
-	pitchEditSaveImage: null
+	pitchEditSaveImage: null,
+	createNewScheme: null,
+	createNewAnimation: null
 }
 
 AppTools.propTypes = {
 	pitchFutsal: PropTypes.instanceOf(PitchFutsal),
 	pitchEditSaveImage: PropTypes.func,
+	createNewScheme: PropTypes.func,
+	createNewAnimation: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);
