@@ -48,7 +48,7 @@ class PlayerDialog extends Component {
 			id: this.state.player.id,
 			remove: false,
 			name: this._refName.current.value,
-			no: this._refNumber.current.value
+			no: Number.parseInt(this._refNumber.current.value)
 		})
 	}
 
