@@ -38,6 +38,8 @@ class PitchFutsal {
 		this._initPlayers();
 		this._initBalls();
 		this._drawMode = new DrawMode();
+
+		this._isModified = false;
 	}
 
 	_initPlayers() {
@@ -71,6 +73,10 @@ class PitchFutsal {
 		}
 	}
 
+	get isModified() {
+		return this._isModified;
+	}
+
 	get drawMode() {
 		return this._drawMode;
 	}
@@ -93,6 +99,7 @@ class PitchFutsal {
 			}
 			return p;
 		});
+		this._isModified = true;
 		return this.players;
 	}
 
@@ -127,6 +134,7 @@ class PitchFutsal {
 			}
 			return p;
 		});
+		this._isModified = true;
 		return this.players;
 	}
 
@@ -145,6 +153,7 @@ class PitchFutsal {
 			}
 			return b;
 		});
+		this._isModified = true;
 		return this.balls;
 	}
 
@@ -173,6 +182,7 @@ class PitchFutsal {
 	lineAdd(l) {
 		this.lines = this.lines.map((lx) => lx);
 		this.lines.push(l);
+		this._isModified = true;
 		return this.lines;
 	}
 
@@ -183,6 +193,7 @@ class PitchFutsal {
 			}
 			return l;
 		});
+		this._isModified = true;
 		return this.lines;
 	}
 
@@ -193,6 +204,7 @@ class PitchFutsal {
 			}
 			return l;
 		});
+		this._isModified = true;
 		return this.lines;
 	}
 
@@ -241,6 +253,7 @@ class PitchFutsal {
 	ellipseAdd(el) {
 		this.ellipses = this.ellipses.map((e) => e);
 		this.ellipses.push(el);
+		this._isModified = true;
 		return this.ellipses;
 	}
 
@@ -251,6 +264,7 @@ class PitchFutsal {
 			}
 			return el;
 		});
+		this._isModified = true;
 		return this.ellipses;
 	}
 
@@ -261,6 +275,7 @@ class PitchFutsal {
 			}
 			return el;
 		});
+		this._isModified = true;
 		return this.ellipses;
 	}
 
@@ -271,6 +286,7 @@ class PitchFutsal {
 			}
 			return el;
 		});
+		this._isModified = true;
 		return this.ellipses;
 	}
 
@@ -318,6 +334,7 @@ class PitchFutsal {
 	squareAdd(sq) {
 		this.squares = this.squares.map((s) => s);
 		this.squares.push(sq);
+		this._isModified = true;
 		return this.squares;
 	}
 
@@ -328,6 +345,7 @@ class PitchFutsal {
 			}
 			return sq;
 		});
+		this._isModified = true;
 		return this.squares;
 	}
 
@@ -338,6 +356,7 @@ class PitchFutsal {
 			}
 			return sq;
 		});
+		this._isModified = true;
 		return this.squares;
 	}
 
@@ -348,6 +367,7 @@ class PitchFutsal {
 			}
 			return sq;
 		});
+		this._isModified = true;
 		return this.squares;
 	}
 

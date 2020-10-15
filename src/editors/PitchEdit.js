@@ -55,7 +55,7 @@ class PitchEdit extends Component {
 			lines: this._pitch.lines,
 			overlay: this._pitch.overlay
 		};
-		
+
 		// overlay changes
 		this.overlayChanged = this.overlayChanged.bind(this);
 		this._pitch.drawMode.pitchOverlayCallback = this.overlayChanged;

@@ -60,7 +60,7 @@ class DrawMenu extends Component {
 				this.props.onClose();
 			}
 		}
-		// close
+		// close sub menus
 		this.setState({
 			open:false,
 			lineArrows: false,

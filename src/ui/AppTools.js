@@ -36,7 +36,7 @@ class AppTools extends Component {
 		super(props);
 		this.state = {
 			drawerOpen: false,
-			drawingMode: this.props.pitchFutsal.drawMode.mode,
+			drawingMode: this.props.pitch.drawMode.mode,
 		}
 		this.toggleDrawer = this.toggleDrawer.bind(this);
 		this.saveImage = this.saveImage.bind(this);
@@ -89,7 +89,7 @@ class AppTools extends Component {
 
 	drawMenuClose() {
 		this.setState({
-			drawingMode: this.props.pitchFutsal.drawMode.mode
+			drawingMode: this.props.pitch.drawMode.mode
 		});
 	}
 
@@ -159,21 +159,21 @@ class AppTools extends Component {
 						</List>
 					</Box>
 				</Drawer>
-				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} onClose={this.drawMenuClose} drawMode={this.props.pitchFutsal.drawMode} />
+				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} onClose={this.drawMenuClose} drawMode={this.props.pitch.drawMode} />
 			</React.Fragment>
 		);
 	}
 }
 
 AppTools.defaultProps = {
-	pitchFutsal: null,
+	pitch: null,
 	pitchEditSaveImage: null,
 	createNewScheme: null,
 	createNewAnimation: null
 }
 
 AppTools.propTypes = {
-	pitchFutsal: PropTypes.instanceOf(PitchFutsal),
+	pitch: PropTypes.instanceOf(PitchFutsal),
 	pitchEditSaveImage: PropTypes.func,
 	createNewScheme: PropTypes.func,
 	createNewAnimation: PropTypes.func

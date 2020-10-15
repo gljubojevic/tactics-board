@@ -3,25 +3,28 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PitchEdit from './editors/PitchEdit'
 import SvgToImg from './editors/SvgToImg'
 import AppTools from './ui/AppTools'
+import ConfirmDialog from './ui/ConfirmDialog'
 import PitchFutsal from './pitch/PitchFutsal'
 import './App.css';
 
 class App extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			pitch: this.DefaultPitch()
+		}
 		// application Material-UI theme
 		this.appTheme = createMuiTheme();
-		// references for saving images
+		// references
+		this.refAppTools = React.createRef();
 		this.refPitchEdit = React.createRef();
 		this.refSvgToImg = React.createRef();
-		// initial state
-		this.state = {
-			pitchFutsal: this.DefaultPitch()
-		};
+		this.refConfirmDialog = React.createRef();
 		// event handlers
 		this.SaveImage = this.SaveImage.bind(this);
 		this.CreateNewScheme = this.CreateNewScheme.bind(this);
 		this.CreateNewAnimation = this.CreateNewAnimation.bind(this);
+		this.PitchReset = this.PitchReset.bind(this);
 	}
 	
 	DefaultPitch() {
@@ -31,15 +34,28 @@ class App extends Component {
 		);
 	}
 
-	CreateNewScheme() {
-		console.log("Create new scheme");
+	PitchReset() {
+		console.log("Pitch reset");
 		this.setState({
-			pitchFutsal: this.DefaultPitch()
+			pitch: this.DefaultPitch()
 		});
 	}
 
+	CreateNewScheme() {
+		if (!this.state.pitch.isModified) {
+			return;
+		}
+		this.refConfirmDialog.current.Show(
+			"Create new scheme", "Pitch is modified, are you sure you want to discard changes?",
+			this.PitchReset
+		);
+	}
+
 	CreateNewAnimation() {
-		console.log("Create new animation");
+		this.refConfirmDialog.current.Show(
+			"Create new animation", "Are you sure you want to create new animation?",
+			null
+		);
 	}
 
 	SaveImage() {
@@ -53,12 +69,12 @@ class App extends Component {
 	}
 
 	render() {
-		const pitchFutsal = this.state.pitchFutsal;
 		return (
 			<React.Fragment>
 				<ThemeProvider theme={this.appTheme}>
-					<AppTools pitchFutsal={pitchFutsal} pitchEditSaveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} />
-					<PitchEdit ref={this.refPitchEdit} pitch={pitchFutsal} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+					<AppTools ref={this.refAppTools} pitch={this.state.pitch} pitchEditSaveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} />
+					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+					<ConfirmDialog ref={this.refConfirmDialog} />
 					<SvgToImg ref={this.refSvgToImg} />
 				</ThemeProvider>
 			</React.Fragment>
