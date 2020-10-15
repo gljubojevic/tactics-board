@@ -5,86 +5,16 @@ class Line {
 	// For line spline with control points see https://www.particleincell.com/2012/bezier-splines/
 	// Line iz created as straight line with 2 spline segments
 	constructor(id="", color=0, p1=new Point(0,0), p2=new Point(0,0), c1=new Point(0,0), c2=new Point(0,0), arrowStart=false, arrowEnd=false, dashed=false, isEdit=false){
-		this._id = id;
-		this._color = color;
-		this._p1 = p1;
-		this._p2 = p2;
-		this._c1 = c1;
-		this._c2 = c2;
-		this._arrowStart = arrowStart;
-		this._arrowEnd = arrowEnd;
-		this._dashed = dashed;
-		this._isEdit = isEdit;
-	}
-
-	get id() {
-		return this._id;
-	}
-	set id(value) {
-		this._id = value;
-	}
-
-	get color() {
-		return this._color;
-	}
-	set color(value) {
-		this._color = value;
-	}
-
-	get p1() {
-		return this._p1;
-	}
-	set p1(value) {
-		this._p1 = value;
-	}
-
-	get p2() {
-		return this._p2;
-	}
-	set p2(value) {
-		this._p2 = value;
-	}
-
-	get c1() {
-		return this._c1;
-	}
-	set c1(value) {
-		this._c1 = value;
-	}
-
-	get c2() {
-		return this._c2;
-	}
-	set c2(value) {
-		this._c2 = value;
-	}
-
-	get arrowStart() {
-		return this._arrowStart;
-	}
-	set arrowStart(value) {
-		this._arrowStart = value;
-	}
-
-	get arrowEnd() {
-		return this._arrowEnd;
-	}
-	set arrowEnd(value) {
-		this._arrowEnd = value;
-	}
-
-	get dashed() {
-		return this._dashed;
-	}
-	set dashed(value) {
-		this._dashed = value;
-	}
-
-	get isEdit() {
-		return this._isEdit;
-	}
-	set isEdit(value) {
-		this._isEdit = value;
+		this.id = id;
+		this.color = color;
+		this.p1 = p1;
+		this.p2 = p2;
+		this.c1 = c1;
+		this.c2 = c2;
+		this.arrowStart = arrowStart;
+		this.arrowEnd = arrowEnd;
+		this.dashed = dashed;
+		this.isEdit = isEdit;
 	}
 
 	empty() {
@@ -110,7 +40,6 @@ class Line {
 	edit(pid, deltaX, deltaY) {
 		switch (pid) {
 			case "p1":
-				console.log(deltaX, deltaY);
 				this.p1.move(deltaX, deltaY);
 				break;
 			case "c1":
