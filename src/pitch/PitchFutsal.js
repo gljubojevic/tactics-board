@@ -12,35 +12,40 @@ class PitchFutsal {
 		this._noPlayers = noPlayers;
 		this._noPlayerColors = noPlayerColors;
 		this._playerSize = playerSize;
-		this._players = [];
+		this.players = [];
 
 		this._ballsIdPrefix = "bl";
 		this._noBalls = noBalls;
 		this._noBallColors = noBallColors;
 		this._ballSize = ballSize;
-		this._balls = [];
+		this.balls = [];
 
 		this._squareID = 0;
-		this._squares = [];
+		this.squares = [];
 
 		this._ellipseID = 0;
-		this._ellipses = [];
+		this.ellipses = [];
 		
 		this._lineID = 0;
-		this._lines = [];
+		this.lines = [];
 
 		this._textID = 0;
-		this._texts = [];
+		this.texts = [];
 
-		this._overlay = "none";
+		this.overlay = "none";
 
 		// init objects
 		this._initPlayers();
 		this._initBalls();
-		this._drawMode = new DrawMode();
+		this.drawMode = new DrawMode();
 
 		this._isModified = false;
 	}
+
+	get isModified() {
+		return this._isModified;
+	}
+
 
 	_initPlayers() {
 		//console.log("Create players noPlayers:", this._noPlayers);
@@ -55,7 +60,7 @@ class PitchFutsal {
 				color * this._playerSize, 0,
 				number
 			);
-			this._players.push(player);
+			this.players.push(player);
 		}
 	}
 
@@ -69,27 +74,10 @@ class PitchFutsal {
 				color * this._ballSize,0,
 				color * this._ballSize,0
 			);
-			this._balls.push(ball);
+			this.balls.push(ball);
 		}
 	}
 
-	get isModified() {
-		return this._isModified;
-	}
-
-	get drawMode() {
-		return this._drawMode;
-	}
-	set drawMode(value) {
-		this._drawMode = value;
-	}
-
-	get players() {
-		return this._players;
-	}
-	set players(value) {
-		this._players = value;
-	}
 
 	playerMove(id, deltaX, deltaY) {
 		this.players = this.players.map(p => {
@@ -138,12 +126,6 @@ class PitchFutsal {
 		return this.players;
 	}
 
-	get balls() {
-		return this._balls;
-	}
-	set balls(value) {
-		this._balls = value;
-	}
 
 	ballMove(id, deltaX, deltaY) {
 		this.balls = this.balls.map(b => {
@@ -157,25 +139,19 @@ class PitchFutsal {
 		return this.balls;
 	}
 
-	get lines() {
-		return this._lines;
-	}
-	set lines(value) {
-		this._lines = value;
-	}
 
 	lineCreate(x,y) {
 		let id = 'ln'+this._lineID.toString();
 		this._lineID += 1;
 		return new Line(
-			id, this._drawMode.color,
+			id, this.drawMode.color,
 			new Point(x,y),
 			new Point(x,y),
 			new Point(x,y),
 			new Point(x,y),
-			this._drawMode.lineArrowStart,
-			this._drawMode.lineArrowEnd,
-			this._drawMode.lineDashed
+			this.drawMode.lineArrowStart,
+			this.drawMode.lineArrowEnd,
+			this.drawMode.lineDashed
 		);
 	}
 
@@ -233,20 +209,13 @@ class PitchFutsal {
 	}
 
 
-	get ellipses() {
-		return this._ellipses;
-	}
-	set ellipses(value) {
-		this._ellipses = value;
-	}
-
 	ellipseCreate(x,y) {
 		let id = 'el'+this._ellipseID.toString();
 		this._ellipseID += 1;
 		return new Ellipse(
-			id, this._drawMode.color,
+			id, this.drawMode.color,
 			x,y,0,0,0,
-			this._drawMode.lineDashed
+			this.drawMode.lineDashed
 		);
 	}
 
@@ -314,20 +283,14 @@ class PitchFutsal {
 		return this.ellipses;
 	}
 
-	get squares() {
-		return this._squares;
-	}
-	set squares(value) {
-		this._squares = value;
-	}
 
 	squareCreate(x,y) {
 		let id = 'sq'+this._squareID.toString();
 		this._squareID += 1;
 		return new Square(
-			id, this._drawMode.color,
+			id, this.drawMode.color,
 			x,y,0,0,0,
-			this._drawMode.lineDashed
+			this.drawMode.lineDashed
 		);
 	}
 
@@ -395,22 +358,9 @@ class PitchFutsal {
 		return this.squares;
 	}
 
-	get texts() {
-		return this._texts;
-	}
-	set texts(value) {
-		this._texts = value;
-	}
-
-	get overlay() {
-		return this._overlay;
-	}
-	set overlay(value) {
-		this._overlay = value;
-	}
 
 	overlaySize() {
-		switch (this._overlay) {
+		switch (this.overlay) {
 			case "exercise":
 				return {width:2800, height:2000};
 			case "basketball":
