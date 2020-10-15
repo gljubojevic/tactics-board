@@ -1,20 +1,14 @@
 class DrawMode {
 	constructor(mode='select', lineArrowStart=false, lineArrowEnd=false, lineDashed=false) {
-		this._mode=mode;
-		this._lineArrowStart = lineArrowStart;
-		this._lineArrowEnd = lineArrowEnd;
-		this._lineDashed = lineDashed;
-		this._color = 0;
+		this.mode=mode;
+		this.lineArrowStart = lineArrowStart;
+		this.lineArrowEnd = lineArrowEnd;
+		this.lineDashed = lineDashed;
+		this.color = 0;
 		this._pitchOverlay = 'none';
-		this._pitchOverlayCallback = null;
+		this.pitchOverlayCallback = null;
 	}
 
-	get mode() {
-		return this._mode;
-	}
-	set mode(value) {
-		this._mode = value;
-	}
 	// default modes
 	// select	- select / move
 	// line		- draw lines
@@ -23,38 +17,6 @@ class DrawMode {
 	// text		- draw text
 	get modeOptions(){
 		return ['select','line','square','ellipse','text'];
-	}
-
-	get lineArrowStart() {
-		return this._lineArrowStart;
-	}
-	set lineArrowStart(value) {
-		console.log("Line Arrow Start", value);
-		this._lineArrowStart = value;
-	}
-
-	get lineArrowEnd() {
-		return this._lineArrowEnd;
-	}
-	set lineArrowEnd(value) {
-		console.log("Line Arrow End", value);
-		this._lineArrowEnd = value;
-	}
-
-	get lineDashed() {
-		return this._lineDashed;
-	}
-	set lineDashed(value) {
-		console.log("Line Dashed", value);
-		this._lineDashed = value;
-	}
-
-	get color() {
-		return this._color;
-	}
-	set color(value) {
-		console.log("Color", value);
-		this._color = value;
 	}
 
 	// default pitch overlay options
@@ -74,16 +36,9 @@ class DrawMode {
 			return;
 		}
 		this._pitchOverlay = value;
-		if (null !== this._pitchOverlayCallback) {
-			this._pitchOverlayCallback(this._pitchOverlay);
+		if (null !== this.pitchOverlayCallback) {
+			this.pitchOverlayCallback(this._pitchOverlay);
 		}
-	}
-
-	get pitchOverlayCallback() {
-		return this._pitchOverlayCallback;
-	}
-	set pitchOverlayCallback(value) {
-		this._pitchOverlayCallback = value;
 	}
 }
 
