@@ -7,77 +7,79 @@ import Line from "./Line";
 import Point from "./Point";
 
 class PitchFutsal {
-	constructor(noPlayers = 0, noPlayerColors=0, playerSize=1, noBalls=0, noBallColors=0, ballSize=1) {
-		this._playersIdPrefix = "pl";
-		this._noPlayers = noPlayers;
-		this._noPlayerColors = noPlayerColors;
-		this._playerSize = playerSize;
+	constructor() {
 		this.players = [];
-
-		this._ballsIdPrefix = "bl";
-		this._noBalls = noBalls;
-		this._noBallColors = noBallColors;
-		this._ballSize = ballSize;
 		this.balls = [];
 
-		this._squareID = 0;
+		this.squareID = 0;
 		this.squares = [];
-
-		this._ellipseID = 0;
+		this.ellipseID = 0;
 		this.ellipses = [];
-		
-		this._lineID = 0;
+		this.lineID = 0;
 		this.lines = [];
-
-		this._textID = 0;
+		this.textID = 0;
 		this.texts = [];
 
 		this.overlay = "none";
 
-		// init objects
-		this._initPlayers();
-		this._initBalls();
+		this.isModified = false;
+		this.onModified = null;
+	}
+
+	initDefault(noPlayers, noPlayerColors, playerSize, noBalls, noBallColors, ballSize) {
+		this._initPlayers(noPlayers, noPlayerColors, playerSize);
+		this._initBalls(noBalls, noBallColors, ballSize);
 		this.drawMode = new DrawMode();
-
-		this._isModified = false;
 	}
 
-	get isModified() {
-		return this._isModified;
-	}
-
-
-	_initPlayers() {
-		//console.log("Create players noPlayers:", this._noPlayers);
-		let groupSize = Math.floor(this._noPlayers / this._noPlayerColors);
-		for (var i = 0; i < this._noPlayers; i++) {
+	_initPlayers(noPlayers, noPlayerColors, playerSize) {
+		let groupSize = Math.floor(noPlayers / noPlayerColors);
+		for (var i = 0; i < noPlayers; i++) {
 			let color = Math.floor(i / groupSize);
 			let number = groupSize - (i % groupSize);
 			let player = new Player(
-				this._playersIdPrefix+i.toString(), number, "", color,
-				color * this._playerSize, 0,
+				"pl"+i.toString(), number, "", color,
+				color * playerSize, 0,
 				0,
-				color * this._playerSize, 0,
+				color * playerSize, 0,
 				number
 			);
 			this.players.push(player);
 		}
 	}
 
-	_initBalls() {
-		//console.log("Create balls noBalls:", this._noBalls);
-		let groupSize = Math.floor(this._noBalls / this._noBallColors);
-		for (var i = 0; i < this._noBalls; i++) {
+	_initBalls(noBalls, noBallColors, ballSize) {
+		let groupSize = Math.floor(noBalls / noBallColors);
+		for (var i = 0; i < noBalls; i++) {
 			let color = Math.floor(i / groupSize);
 			let ball = new Ball(
-				this._ballsIdPrefix+i.toString(), color,
-				color * this._ballSize,0,
-				color * this._ballSize,0
+				"bl"+i.toString(), color,
+				color * ballSize,0,
+				color * ballSize,0
 			);
 			this.balls.push(ball);
 		}
 	}
 
+	_modified() {
+		this.isModified = true;
+		let cp = new PitchFutsal();
+		cp.players = this.players;
+		cp.balls = this.balls;
+		cp.squareID = this.squareID;
+		cp.squares = this.squares;
+		cp.ellipseID = this.ellipseID;
+		cp.ellipses = this.ellipses;
+		cp.lineID = this.lineID;
+		cp.lines = this.lines;
+		cp.textID = this.textID;
+		cp.texts = this.texts;
+		cp.overlay = this.overlay;
+		cp.drawMode = this.drawMode;
+		if (null !== this.onModified) {
+			this.onModified(cp);
+		}
+	}
 
 	playerMove(id, deltaX, deltaY) {
 		this.players = this.players.map(p => {
@@ -87,7 +89,7 @@ class PitchFutsal {
 			}
 			return p;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.players;
 	}
 
@@ -122,7 +124,7 @@ class PitchFutsal {
 			}
 			return p;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.players;
 	}
 
@@ -135,14 +137,14 @@ class PitchFutsal {
 			}
 			return b;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.balls;
 	}
 
 
 	lineCreate(x,y) {
-		let id = 'ln'+this._lineID.toString();
-		this._lineID += 1;
+		let id = 'ln'+this.lineID.toString();
+		this.lineID += 1;
 		return new Line(
 			id, this.drawMode.color,
 			new Point(x,y),
@@ -158,7 +160,7 @@ class PitchFutsal {
 	lineAdd(l) {
 		this.lines = this.lines.map((lx) => lx);
 		this.lines.push(l);
-		this._isModified = true;
+		this._modified();
 		return this.lines;
 	}
 
@@ -169,7 +171,7 @@ class PitchFutsal {
 			}
 			return l;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.lines;
 	}
 
@@ -180,7 +182,7 @@ class PitchFutsal {
 			}
 			return l;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.lines;
 	}
 
@@ -210,8 +212,8 @@ class PitchFutsal {
 
 
 	ellipseCreate(x,y) {
-		let id = 'el'+this._ellipseID.toString();
-		this._ellipseID += 1;
+		let id = 'el'+this.ellipseID.toString();
+		this.ellipseID += 1;
 		return new Ellipse(
 			id, this.drawMode.color,
 			x,y,0,0,0,
@@ -222,7 +224,7 @@ class PitchFutsal {
 	ellipseAdd(el) {
 		this.ellipses = this.ellipses.map((e) => e);
 		this.ellipses.push(el);
-		this._isModified = true;
+		this._modified();
 		return this.ellipses;
 	}
 
@@ -233,7 +235,7 @@ class PitchFutsal {
 			}
 			return el;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.ellipses;
 	}
 
@@ -244,7 +246,7 @@ class PitchFutsal {
 			}
 			return el;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.ellipses;
 	}
 
@@ -255,7 +257,7 @@ class PitchFutsal {
 			}
 			return el;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.ellipses;
 	}
 
@@ -285,8 +287,8 @@ class PitchFutsal {
 
 
 	squareCreate(x,y) {
-		let id = 'sq'+this._squareID.toString();
-		this._squareID += 1;
+		let id = 'sq'+this.squareID.toString();
+		this.squareID += 1;
 		return new Square(
 			id, this.drawMode.color,
 			x,y,0,0,0,
@@ -297,7 +299,7 @@ class PitchFutsal {
 	squareAdd(sq) {
 		this.squares = this.squares.map((s) => s);
 		this.squares.push(sq);
-		this._isModified = true;
+		this._modified();
 		return this.squares;
 	}
 
@@ -308,7 +310,7 @@ class PitchFutsal {
 			}
 			return sq;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.squares;
 	}
 
@@ -319,7 +321,7 @@ class PitchFutsal {
 			}
 			return sq;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.squares;
 	}
 
@@ -330,7 +332,7 @@ class PitchFutsal {
 			}
 			return sq;
 		});
-		this._isModified = true;
+		this._modified();
 		return this.squares;
 	}
 

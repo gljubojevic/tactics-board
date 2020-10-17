@@ -10,9 +10,6 @@ import './App.css';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			pitch: this.DefaultPitch()
-		}
 		// application Material-UI theme
 		this.appTheme = createMuiTheme();
 		// references
@@ -25,19 +22,41 @@ class App extends Component {
 		this.CreateNewScheme = this.CreateNewScheme.bind(this);
 		this.CreateNewAnimation = this.CreateNewAnimation.bind(this);
 		this.PitchReset = this.PitchReset.bind(this);
+		this.OnPitchModified = this.OnPitchModified.bind(this);
+
+		// init default state
+		this.pitch = this.DefaultPitch();
+		this.pitch.onModified = this.OnPitchModified;
+		this.state = {
+			pitch: this.pitch
+		}
 	}
 	
 	DefaultPitch() {
-		return new PitchFutsal(
+		let pitch = new PitchFutsal();
+		pitch.initDefault(
 			200, 8, 120, 
 			100, 5, 80
 		);
+		return pitch;
 	}
 
 	PitchReset() {
 		console.log("Pitch reset");
+		this.pitch.onModified = null;
+		this.pitch = this.DefaultPitch();
+		this.pitch.onModified = this.OnPitchModified;
 		this.setState({
-			pitch: this.DefaultPitch()
+			pitch: this.pitch
+		});
+	}
+
+	OnPitchModified(newPitch) {
+		this.pitch.onModified = null;
+		this.pitch = newPitch;
+		this.pitch.onModified = this.OnPitchModified;
+		this.setState({
+			pitch: this.pitch
 		});
 	}
 
