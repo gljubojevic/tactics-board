@@ -7,6 +7,7 @@ import Line from "./Line";
 import Point from "./Point";
 
 class PitchFutsal {
+
 	constructor() {
 		this.players = [];
 		this.balls = [];
@@ -62,8 +63,8 @@ class PitchFutsal {
 	}
 
 	_modified() {
-		this.isModified = true;
 		let cp = new PitchFutsal();
+		cp.isModified = true;
 		cp.players = this.players;
 		cp.balls = this.balls;
 		cp.squareID = this.squareID;
@@ -76,6 +77,7 @@ class PitchFutsal {
 		cp.texts = this.texts;
 		cp.overlay = this.overlay;
 		cp.drawMode = this.drawMode;
+		// trigger event modified
 		if (null !== this.onModified) {
 			this.onModified(cp);
 		}
@@ -90,7 +92,6 @@ class PitchFutsal {
 			return p;
 		});
 		this._modified();
-		return this.players;
 	}
 
 	playerEditStart(id) {
@@ -125,7 +126,6 @@ class PitchFutsal {
 			return p;
 		});
 		this._modified();
-		return this.players;
 	}
 
 
@@ -138,7 +138,6 @@ class PitchFutsal {
 			return b;
 		});
 		this._modified();
-		return this.balls;
 	}
 
 
@@ -161,7 +160,6 @@ class PitchFutsal {
 		this.lines = this.lines.map((lx) => lx);
 		this.lines.push(l);
 		this._modified();
-		return this.lines;
 	}
 
 	lineResize(id, x2, y2) {
@@ -172,7 +170,6 @@ class PitchFutsal {
 			return l;
 		});
 		this._modified();
-		return this.lines;
 	}
 
 	lineEdit(pid, id, deltaX, deltaY) {
@@ -183,13 +180,12 @@ class PitchFutsal {
 			return l;
 		});
 		this._modified();
-		return this.lines;
 	}
 
 	// remove empty lines
 	lineCleanup() {
 		this.lines = this.lines.filter(l => !l.empty());
-		return this.lines;
+		this._modified();
 	}
 
 	lineEditStart(id) {
@@ -199,7 +195,7 @@ class PitchFutsal {
 			}
 			return l;
 		});
-		return this.lines;
+		this._modified();
 	}
 
 	lineEditEnd() {
@@ -207,7 +203,7 @@ class PitchFutsal {
 			l.isEdit = false;
 			return l;
 		});
-		return this.lines;
+		this._modified();
 	}
 
 
@@ -225,7 +221,6 @@ class PitchFutsal {
 		this.ellipses = this.ellipses.map((e) => e);
 		this.ellipses.push(el);
 		this._modified();
-		return this.ellipses;
 	}
 
 	ellipseResize(id, x2, y2, proportional) {
@@ -236,7 +231,6 @@ class PitchFutsal {
 			return el;
 		});
 		this._modified();
-		return this.ellipses;
 	}
 
 	ellipseEdit(corner, id, deltaX, deltaY) {
@@ -247,7 +241,6 @@ class PitchFutsal {
 			return el;
 		});
 		this._modified();
-		return this.ellipses;
 	}
 
 	ellipseRotate(id, posX, posY, snap) {
@@ -258,13 +251,12 @@ class PitchFutsal {
 			return el;
 		});
 		this._modified();
-		return this.ellipses;
 	}
 
 	// remove empty ellipses
 	ellipseCleanup() {
 		this.ellipses = this.ellipses.filter(el => el.rx > 0 && el.ry > 0);
-		return this.ellipses;
+		this._modified();
 	}
 
 	ellipseEditStart(id) {
@@ -274,7 +266,7 @@ class PitchFutsal {
 			}
 			return el;
 		});
-		return this.ellipses;
+		this._modified();
 	}
 
 	ellipsesEditEnd() {
@@ -282,7 +274,6 @@ class PitchFutsal {
 			el.isEdit = false;
 			return el;
 		});
-		return this.ellipses;
 	}
 
 
@@ -300,7 +291,6 @@ class PitchFutsal {
 		this.squares = this.squares.map((s) => s);
 		this.squares.push(sq);
 		this._modified();
-		return this.squares;
 	}
 
 	squareResize(id, x2, y2, proportional) {
@@ -311,7 +301,6 @@ class PitchFutsal {
 			return sq;
 		});
 		this._modified();
-		return this.squares;
 	}
 
 	squareEdit(corner, id, deltaX, deltaY) {
@@ -333,13 +322,12 @@ class PitchFutsal {
 			return sq;
 		});
 		this._modified();
-		return this.squares;
 	}
 
 	// remove empty squares
 	squareCleanup() {
 		this.squares = this.squares.filter(sq => sq.width > 0 && sq.height > 0);
-		return this.squares;
+		this._modified();
 	}
 
 	squareEditStart(id) {
@@ -349,7 +337,7 @@ class PitchFutsal {
 			}
 			return sq;
 		});
-		return this.squares;
+		this._modified();
 	}
 
 	squareEditEnd() {
@@ -357,9 +345,14 @@ class PitchFutsal {
 			sq.isEdit = false;
 			return sq;
 		});
-		return this.squares;
 	}
 
+	endAllEdits() {
+		this.lineEditEnd();
+		this.squareEditEnd();
+		this.ellipsesEditEnd();
+		this._modified();
+	}
 
 	overlaySize() {
 		switch (this.overlay) {

@@ -46,15 +46,6 @@ class PitchEdit extends Component {
 		this._orgWidth = this.props.viewBoxRight - this.props.viewBoxLeft;
 		this._orgHeight = this.props.viewBoxBottom - this.props.viewBoxTop;
 		this._pitch = this.props.pitch;
-		this.state = {
-			players: this._pitch.players,
-			balls: this._pitch.balls,
-			squares: this._pitch.squares,
-			ellipses: this._pitch.ellipses,
-			texts: this._pitch.texts,
-			lines: this._pitch.lines,
-			overlay: this._pitch.overlay
-		};
 
 		// overlay changes
 		this.overlayChanged = this.overlayChanged.bind(this);
@@ -110,99 +101,69 @@ class PitchEdit extends Component {
 	}
 
 	playerDrag(id, deltaX, deltaY) {
-		this.setState({
-			players: this._pitch.playerMove(id, deltaX, deltaY)
-		});
+		this.props.pitch.playerMove(id, deltaX, deltaY);
 	}
 
 	ballDrag(id, deltaX, deltaY) {
-		this.setState({
-			balls: this._pitch.ballMove(id, deltaX, deltaY)
-		});
+		this.props.pitch.ballMove(id, deltaX, deltaY);
 	}
 
 	editTopLeft(id, deltaX, deltaY) {
 		if (id.startsWith("sq")) {
-			this.setState({
-				squares: this._pitch.squareEdit("tl",id, deltaX, deltaY)
-			});
+			this.props.pitch.squareEdit("tl",id, deltaX, deltaY);
 		}
 		if (id.startsWith("el")) {
-			this.setState({
-				ellipses: this._pitch.ellipseEdit("tl",id, deltaX, deltaY)
-			});
+			this.props.pitch.ellipseEdit("tl",id, deltaX, deltaY);
 		}
 	}
 	
 	editTopRight(id, deltaX, deltaY) {
 		if (id.startsWith("sq")) {
-			this.setState({
-				squares: this._pitch.squareEdit("tr",id, deltaX, deltaY)
-			});
+			this.props.pitch.squareEdit("tr",id, deltaX, deltaY);
 		}
 		if (id.startsWith("el")) {
-			this.setState({
-				ellipses: this._pitch.ellipseEdit("tr",id, deltaX, deltaY)
-			});
+			this.props.pitch.ellipseEdit("tr",id, deltaX, deltaY);
 		}
 	}
 
 	editBottomLeft(id, deltaX, deltaY) {
 		if (id.startsWith("sq")) {
-			this.setState({
-				squares: this._pitch.squareEdit("bl",id, deltaX, deltaY)
-			});
+			this.props.pitch.squareEdit("bl",id, deltaX, deltaY);
 		}
 		if (id.startsWith("el")) {
-			this.setState({
-				ellipses: this._pitch.ellipseEdit("bl",id, deltaX, deltaY)
-			});
+			this.props.pitch.ellipseEdit("bl",id, deltaX, deltaY);
 		}
 	}
 
 	editBottomRight(id, deltaX, deltaY) {
 		if (id.startsWith("sq")) {
-			this.setState({
-				squares: this._pitch.squareEdit("br",id, deltaX, deltaY)
-			});
+			this.props.pitch.squareEdit("br",id, deltaX, deltaY);
 		}
 		if (id.startsWith("el")) {
-			this.setState({
-				ellipses: this._pitch.ellipseEdit("br",id, deltaX, deltaY)
-			});
+			this.props.pitch.ellipseEdit("br",id, deltaX, deltaY);
 		}
 	}
 
 	editMove(id, deltaX, deltaY) {
 		if (id.startsWith("sq")) {
-			this.setState({
-				squares: this._pitch.squareEdit("mv",id, deltaX, deltaY)
-			});
+			this.props.pitch.squareEdit("mv",id, deltaX, deltaY);
 		}
 		if (id.startsWith("el")) {
-			this.setState({
-				ellipses: this._pitch.ellipseEdit("mv",id, deltaX, deltaY)
-			});
+			this.props.pitch.ellipseEdit("mv",id, deltaX, deltaY);
 		}
 	}
 
 	editRotate(id, posX, posY, snap) {
 		if (id.startsWith("sq")) {
-			this.setState({
-				squares: this._pitch.squareRotate(id, posX, posY, snap)
-			});
+			this.props.pitch.squareRotate(id, posX, posY, snap);
 		}
 		if (id.startsWith("el")) {
-			this.setState({
-				ellipses: this._pitch.ellipseRotate(id, posX, posY, snap)
-			});
+			this.props.pitch.ellipseRotate(id, posX, posY, snap);
 		}
 	}
 
 	editLinePoint(pid, id, deltaX, deltaY) {
-		this.setState({
-			lines: this._pitch.lineEdit(pid, id, deltaX, deltaY)
-		});
+		this.props.pitch.lineEdit(pid, id, deltaX, deltaY);
 	}
 
 	isDragStarted(e) {
@@ -271,7 +232,7 @@ class PitchEdit extends Component {
 		if (!editNode.startsWith("pl")) {
 			return false;
 		}
-		const editPlayer = this._pitch.playerEditStart(editNode);
+		const editPlayer = this.props.pitch.playerEditStart(editNode);
 		if (null === editPlayer) {
 			return false;
 		}
@@ -305,9 +266,7 @@ class PitchEdit extends Component {
 
 	// player edit dialog callback
 	playerEditDone(player) {
-		this.setState({
-			players: this._pitch.playerEditDone(player)
-		});
+		this.props.pitch.playerEditDone(player);
 	}
 
 	objectDrag(posX, posY, deltaX, deltaY, snap) {
@@ -368,23 +327,17 @@ class PitchEdit extends Component {
 		}
 		if (this.squareEditStarted(editNode)) {
 			e.preventDefault();
-			this.setState({
-				squares: this.props.pitch.squareEditStart(editNode)
-			});
+			this.props.pitch.squareEditStart(editNode);
 			return;
 		}
 		if (this.ellipseEditStarted(editNode)) {
 			e.preventDefault();
-			this.setState({
-				ellipses: this.props.pitch.ellipseEditStart(editNode)
-			});
+			this.props.pitch.ellipseEditStart(editNode);
 			return;
 		}
 		if (this.lineEditStarted(editNode)) {
 			e.preventDefault();
-			this.setState({
-				lines: this.props.pitch.lineEditStart(editNode)
-			});
+			this.props.pitch.lineEditStart(editNode);
 			return;
 		}
 	}
@@ -396,25 +349,19 @@ class PitchEdit extends Component {
 				e.preventDefault();
 				let l = this.props.pitch.lineCreate(pos.X, pos.Y);
 				this._dragNode = l.id;
-				this.setState({
-					lines: this.props.pitch.lineAdd(l)
-				});
+				this.props.pitch.lineAdd(l);
 				break;
 			case 'square':
 				e.preventDefault();
 				let sq = this.props.pitch.squareCreate(pos.X, pos.Y);
 				this._dragNode = sq.id;
-				this.setState({
-					squares: this.props.pitch.squareAdd(sq)
-				});
+				this.props.pitch.squareAdd(sq);
 				break;
 			case 'ellipse':
 				e.preventDefault();
 				let el = this.props.pitch.ellipseCreate(pos.X, pos.Y);
 				this._dragNode = el.id;
-				this.setState({
-					ellipses: this.props.pitch.ellipseAdd(el)
-				});
+				this.props.pitch.ellipseAdd(el);
 				break;
 			case 'text':
 				break;
@@ -434,19 +381,13 @@ class PitchEdit extends Component {
 		let isShift = e.getModifierState("Shift");
 		switch (this.props.pitch.drawMode.mode) {
 			case 'line':
-				this.setState({
-					lines: this.props.pitch.lineCleanup()
-				});
+				this.props.pitch.lineCleanup();
 				break;
 			case 'square':
-				this.setState({
-					squares: this.props.pitch.squareCleanup()
-				});
+				this.props.pitch.squareCleanup();
 				break;
 			case 'ellipse':
-				this.setState({
-					ellipses: this.props.pitch.ellipseCleanup()
-				});
+				this.props.pitch.ellipseCleanup();
 				break;
 			case 'text':
 				break;
@@ -460,13 +401,8 @@ class PitchEdit extends Component {
 				break;
 		}
 		// Reset editing
-		// TODO: Make better handling
 		if (0 === e.button && this._dragObjectType === DragObject.None) {
-			this.setState({
-				lines: this.props.pitch.lineEditEnd(),
-				squares: this.props.pitch.squareEditEnd(),
-				ellipses: this.props.pitch.ellipsesEditEnd()
-			});
+			this.props.pitch.endAllEdits();
 		}
 		this._dragNode = null;
 		this._dragObjectType = DragObject.None;
@@ -482,25 +418,13 @@ class PitchEdit extends Component {
 		let isShift = e.getModifierState("Shift");
 		switch (this.props.pitch.drawMode.mode) {
 			case 'line':
-				this.setState({
-					lines: this.props.pitch.lineResize(
-						this._dragNode, pos.X, pos.Y
-					)
-				});
+				this.props.pitch.lineResize(this._dragNode, pos.X, pos.Y);
 				break;
 			case 'square':
-				this.setState({
-					squares: this.props.pitch.squareResize(
-						this._dragNode, pos.X, pos.Y, isShift
-					)
-				});
+				this.props.pitch.squareResize(this._dragNode, pos.X, pos.Y, isShift);
 				break;
 			case 'ellipse':
-				this.setState({
-					ellipses: this.props.pitch.ellipseResize(
-						this._dragNode, pos.X, pos.Y, isShift
-					)
-				});
+				this.props.pitch.ellipseResize(this._dragNode, pos.X, pos.Y, isShift);
 				break;
 			case 'text':
 				break;
@@ -526,7 +450,7 @@ class PitchEdit extends Component {
 	}
 
 	renderPlayers() {
-		return this.state.players.map((pl, index) => {
+		return this.props.pitch.players.map((pl, index) => {
 			return (
 				<PlayerEdit key={index.toString()} id={pl.id} x={pl.x} y={pl.y} no={pl.no} name={pl.name} color={pl.color} />
 			);
@@ -534,7 +458,7 @@ class PitchEdit extends Component {
 	}
 
 	renderBalls(){
-		return this.state.balls.map((b, index) => {
+		return this.props.pitch.balls.map((b, index) => {
 			return (
 				<BallEdit key={index.toString()} id={b.id} x={b.x} y={b.y} color={b.color} />
 			);
@@ -542,7 +466,7 @@ class PitchEdit extends Component {
 	}
 
 	renderSquares(){
-		return this.state.squares.map((s, index) => {
+		return this.props.pitch.squares.map((s, index) => {
 			return (
 				<SquareEdit key={index.toString()} square={s} />
 			);
@@ -550,7 +474,7 @@ class PitchEdit extends Component {
 	}
 
 	renderEllipses(){
-		return this.state.ellipses.map((el, index) => {
+		return this.props.pitch.ellipses.map((el, index) => {
 			return (
 				<EllipseEdit key={index.toString()} ellipse={el} />
 			);
@@ -558,7 +482,7 @@ class PitchEdit extends Component {
 	}
 
 	renderLines(){
-		return this.state.lines.map((l, index) => {
+		return this.props.pitch.lines.map((l, index) => {
 			return (
 				<LineEdit key={index.toString()} line={l} />
 			);
@@ -566,7 +490,7 @@ class PitchEdit extends Component {
 	}
 
 	renderPitchOverlay(){
-		const o = this._pitch.overlaySize();
+		const o = this.props.pitch.overlaySize();
 		if (null === o) {
 			return null;
 		}
