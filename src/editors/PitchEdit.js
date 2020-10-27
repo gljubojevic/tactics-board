@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PitchFutsal from '../pitch/PitchFutsal';
+import DrawMode from '../pitch/DrawMode';
 import { withStyles } from '@material-ui/core/styles';
 import PlayerEdit from './PlayerEdit'
 import BallEdit from './BallEdit'
@@ -47,10 +48,6 @@ class PitchEdit extends Component {
 		this._orgHeight = this.props.viewBoxBottom - this.props.viewBoxTop;
 		this._pitch = this.props.pitch;
 
-		// overlay changes
-		this.overlayChanged = this.overlayChanged.bind(this);
-		this._pitch.drawMode.pitchOverlayCallback = this.overlayChanged;
-	
 		// mouse drag init
 		this._dragNode = null;
 		this._dragObjectType = DragObject.None;
@@ -65,14 +62,6 @@ class PitchEdit extends Component {
 		
 		// callbacks
 		this.playerEditDone = this.playerEditDone.bind(this);
-	}
-
-	overlayChanged(value) {
-		console.log("Overlay change", value, this.state.overlay);
-		this._pitch.overlay = value;
-		this.setState({
-			overlay: value
-		});
 	}
 
 	getScale() {
@@ -314,7 +303,7 @@ class PitchEdit extends Component {
 	}
 
 	hContextMenu(e) {
-		if (this.props.pitch.drawMode.mode !== 'select') {
+		if (this.props.drawMode.mode !== 'select') {
 			return;
 		}
 		let editNode = e.target.getAttribute("data-ref");
@@ -344,22 +333,29 @@ class PitchEdit extends Component {
 
 	hMouseDown(e) {
 		let pos = this.getRealPosition(e);
-		switch (this.props.pitch.drawMode.mode) {
+		const dm = this.props.drawMode;
+		switch (dm.mode) {
 			case 'line':
 				e.preventDefault();
-				let l = this.props.pitch.lineCreate(pos.X, pos.Y);
+				let l = this.props.pitch.lineCreate(
+					pos.X, pos.Y, dm.color, dm.lineArrowStart, dm.lineArrowEnd, dm.lineDashed
+				);
 				this._dragNode = l.id;
 				this.props.pitch.lineAdd(l);
 				break;
 			case 'square':
 				e.preventDefault();
-				let sq = this.props.pitch.squareCreate(pos.X, pos.Y);
+				let sq = this.props.pitch.squareCreate(
+					pos.X, pos.Y, dm.color, dm.lineDashed
+				);
 				this._dragNode = sq.id;
 				this.props.pitch.squareAdd(sq);
 				break;
 			case 'ellipse':
 				e.preventDefault();
-				let el = this.props.pitch.ellipseCreate(pos.X, pos.Y);
+				let el = this.props.pitch.ellipseCreate(
+					pos.X, pos.Y, dm.color, dm.lineDashed
+				);
 				this._dragNode = el.id;
 				this.props.pitch.ellipseAdd(el);
 				break;
@@ -379,7 +375,7 @@ class PitchEdit extends Component {
 		e.preventDefault();
 		let pos = this.getRealPosition(e);
 		let isShift = e.getModifierState("Shift");
-		switch (this.props.pitch.drawMode.mode) {
+		switch (this.props.drawMode.mode) {
 			case 'line':
 				this.props.pitch.lineCleanup();
 				break;
@@ -416,7 +412,7 @@ class PitchEdit extends Component {
 
 		let pos = this.getRealPosition(e);
 		let isShift = e.getModifierState("Shift");
-		switch (this.props.pitch.drawMode.mode) {
+		switch (this.props.drawMode.mode) {
 			case 'line':
 				this.props.pitch.lineResize(this._dragNode, pos.X, pos.Y);
 				break;
@@ -654,6 +650,7 @@ class PitchEdit extends Component {
 
 PitchEdit.defaultProps = {
 	pitch: null,
+	drawMode: null,
 	viewBoxLeft: 0,
 	viewBoxTop: 0,
 	viewBoxRight: 4500,
@@ -662,6 +659,7 @@ PitchEdit.defaultProps = {
 
 PitchEdit.propTypes = {
 	pitch: PropTypes.instanceOf(PitchFutsal),
+	drawMode: PropTypes.instanceOf(DrawMode),
 	viewBoxLeft: PropTypes.number,
 	viewBoxTop: PropTypes.number,
 	viewBoxRight: PropTypes.number,

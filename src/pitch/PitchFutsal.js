@@ -1,6 +1,5 @@
 import Ball from "./Ball";
 import Player from "./Player";
-import DrawMode from "./DrawMode";
 import Square from "./Square";
 import Ellipse from "./Ellipse";
 import Line from "./Line";
@@ -21,7 +20,7 @@ class PitchFutsal {
 		this.textID = 0;
 		this.texts = [];
 
-		this.overlay = "none";
+		this._overlay = "none";
 
 		this.isModified = false;
 		this.onModified = null;
@@ -30,7 +29,6 @@ class PitchFutsal {
 	initDefault(noPlayers, noPlayerColors, playerSize, noBalls, noBallColors, ballSize) {
 		this._initPlayers(noPlayers, noPlayerColors, playerSize);
 		this._initBalls(noBalls, noBallColors, ballSize);
-		this.drawMode = new DrawMode();
 	}
 
 	_initPlayers(noPlayers, noPlayerColors, playerSize) {
@@ -75,8 +73,7 @@ class PitchFutsal {
 		cp.lines = this.lines;
 		cp.textID = this.textID;
 		cp.texts = this.texts;
-		cp.overlay = this.overlay;
-		cp.drawMode = this.drawMode;
+		cp._overlay = this.overlay;
 		// trigger event modified
 		if (null !== this.onModified) {
 			this.onModified(cp);
@@ -141,18 +138,18 @@ class PitchFutsal {
 	}
 
 
-	lineCreate(x,y) {
+	lineCreate(x,y, color, arrowStart, arrowEnd, isDashed) {
 		let id = 'ln'+this.lineID.toString();
 		this.lineID += 1;
 		return new Line(
-			id, this.drawMode.color,
+			id, color,
 			new Point(x,y),
 			new Point(x,y),
 			new Point(x,y),
 			new Point(x,y),
-			this.drawMode.lineArrowStart,
-			this.drawMode.lineArrowEnd,
-			this.drawMode.lineDashed
+			arrowStart,
+			arrowEnd,
+			isDashed
 		);
 	}
 
@@ -207,13 +204,13 @@ class PitchFutsal {
 	}
 
 
-	ellipseCreate(x,y) {
+	ellipseCreate(x, y, color, isDashed) {
 		let id = 'el'+this.ellipseID.toString();
 		this.ellipseID += 1;
 		return new Ellipse(
-			id, this.drawMode.color,
+			id, color,
 			x,y,0,0,0,
-			this.drawMode.lineDashed
+			isDashed
 		);
 	}
 
@@ -277,13 +274,13 @@ class PitchFutsal {
 	}
 
 
-	squareCreate(x,y) {
+	squareCreate(x, y, color, isDashed) {
 		let id = 'sq'+this.squareID.toString();
 		this.squareID += 1;
 		return new Square(
-			id, this.drawMode.color,
+			id, color,
 			x,y,0,0,0,
-			this.drawMode.lineDashed
+			isDashed
 		);
 	}
 
@@ -351,6 +348,18 @@ class PitchFutsal {
 		this.lineEditEnd();
 		this.squareEditEnd();
 		this.ellipsesEditEnd();
+		this._modified();
+	}
+
+	get overlay() {
+		return this._overlay;
+	}
+
+	set overlay(value) {
+		if (this._overlay === value) {
+			return;
+		}
+		this._overlay = value;
 		this._modified();
 	}
 

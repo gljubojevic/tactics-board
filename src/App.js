@@ -5,6 +5,7 @@ import SvgToImg from './editors/SvgToImg'
 import AppTools from './ui/AppTools'
 import ConfirmDialog from './ui/ConfirmDialog'
 import PitchFutsal from './pitch/PitchFutsal'
+import DrawMode from './pitch/DrawMode'
 import './App.css';
 
 class App extends Component {
@@ -23,12 +24,16 @@ class App extends Component {
 		this.CreateNewAnimation = this.CreateNewAnimation.bind(this);
 		this.PitchReset = this.PitchReset.bind(this);
 		this.OnPitchModified = this.OnPitchModified.bind(this);
+		this.OnDrawModeModified = this.OnDrawModeModified.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
 		this.pitch.onModified = this.OnPitchModified;
+		this.drawMode = new DrawMode();
+		this.drawMode.onModified = this.OnDrawModeModified;
 		this.state = {
-			pitch: this.pitch
+			pitch: this.pitch,
+			drawMode: this.drawMode
 		}
 	}
 	
@@ -46,18 +51,36 @@ class App extends Component {
 		this.pitch.onModified = null;
 		this.pitch = this.DefaultPitch();
 		this.pitch.onModified = this.OnPitchModified;
+		this.drawMode.onModified = null;
+		this.drawMode = new DrawMode();
+		this.drawMode.onModified = this.OnDrawModeModified;
 		this.setState({
-			pitch: this.pitch
+			pitch: this.pitch,
+			drawMode: this.drawMode
 		});
 	}
 
 	OnPitchModified(newPitch) {
+		console.log("Pitch modified");
 		this.pitch.onModified = null;
 		this.pitch = newPitch;
 		this.pitch.onModified = this.OnPitchModified;
 		this.setState({
 			pitch: this.pitch
 		});
+	}
+
+	OnDrawModeModified(newDrawMode) {
+		console.log("DrawMode modified");
+		this.drawMode.onModified = null;
+		this.drawMode = newDrawMode;
+		this.drawMode.onModified = this.OnDrawModeModified;
+		this.setState({
+			drawMode: this.drawMode
+		});
+		// update pitch overlay
+		// TODO: reconsider this
+		this.pitch.overlay = this.drawMode.pitchOverlay;
 	}
 
 	CreateNewScheme() {
@@ -91,8 +114,8 @@ class App extends Component {
 		return (
 			<React.Fragment>
 				<ThemeProvider theme={this.appTheme}>
-					<AppTools ref={this.refAppTools} pitch={this.state.pitch} pitchEditSaveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} />
-					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+					<AppTools ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} />
+					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<SvgToImg ref={this.refSvgToImg} />
 				</ThemeProvider>

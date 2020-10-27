@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PitchFutsal from '../pitch/PitchFutsal';
+import DrawMode from '../pitch/DrawMode';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -35,11 +35,9 @@ class AppTools extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			drawerOpen: false,
-			drawingMode: this.props.pitch.drawMode.mode,
+			drawerOpen: false
 		}
 		this.toggleDrawer = this.toggleDrawer.bind(this);
-		this.saveImage = this.saveImage.bind(this);
 
 		// Drawing menu
 		this._refDrawMenu = React.createRef();
@@ -47,7 +45,6 @@ class AppTools extends Component {
 		this.drawingModeIcon = this.drawingModeIcon.bind(this);
 		this.drawMenuAnchorEl = this.drawMenuAnchorEl.bind(this);
 		this.drawMenuOpen = this.drawMenuOpen.bind(this);
-		this.drawMenuClose = this.drawMenuClose.bind(this);
 		this.createNewScheme = this.createNewScheme.bind(this);
 		this.createNewAnimation = this.createNewAnimation.bind(this);
 	}
@@ -75,10 +72,6 @@ class AppTools extends Component {
 		this.props.createNewAnimation();
 	}
 
-	saveImage() {
-		this.props.pitchEditSaveImage();
-	}
-
 	drawMenuAnchorEl() {
 		return this._refOpenDrawMenu.current;
 	}
@@ -87,14 +80,8 @@ class AppTools extends Component {
 		this._refDrawMenu.current.open();
 	}
 
-	drawMenuClose() {
-		this.setState({
-			drawingMode: this.props.pitch.drawMode.mode
-		});
-	}
-
 	drawingModeIcon() {
-		switch (this.state.drawingMode) {
+		switch (this.props.drawMode.mode) {
 			case 'line':
 				return (<VectorLine />);
 			case 'square':
@@ -127,7 +114,7 @@ class AppTools extends Component {
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Save picture">
-							<IconButton aria-label="Save picture" color="inherit" onClick={this.saveImage}>
+							<IconButton aria-label="Save picture" color="inherit" onClick={this.props.saveImage}>
 								<GetAppIcon />
 							</IconButton>
 						</Tooltip>
@@ -159,22 +146,22 @@ class AppTools extends Component {
 						</List>
 					</Box>
 				</Drawer>
-				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} onClose={this.drawMenuClose} drawMode={this.props.pitch.drawMode} />
+				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} />
 			</React.Fragment>
 		);
 	}
 }
 
 AppTools.defaultProps = {
-	pitch: null,
-	pitchEditSaveImage: null,
+	drawMode: null,
+	saveImage: null,
 	createNewScheme: null,
 	createNewAnimation: null
 }
 
 AppTools.propTypes = {
-	pitch: PropTypes.instanceOf(PitchFutsal),
-	pitchEditSaveImage: PropTypes.func,
+	drawMode: PropTypes.instanceOf(DrawMode),
+	saveImage: PropTypes.func,
 	createNewScheme: PropTypes.func,
 	createNewAnimation: PropTypes.func
 }

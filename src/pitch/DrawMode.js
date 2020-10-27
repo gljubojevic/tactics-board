@@ -1,12 +1,26 @@
 class DrawMode {
-	constructor(mode='select', lineArrowStart=false, lineArrowEnd=false, lineDashed=false) {
-		this.mode=mode;
-		this.lineArrowStart = lineArrowStart;
-		this.lineArrowEnd = lineArrowEnd;
-		this.lineDashed = lineDashed;
-		this.color = 0;
+	constructor() {
+		this._mode='select';
+		this._lineArrowStart = false;
+		this._lineArrowEnd = false;
+		this._lineDashed = false;
+		this._color = 0;
 		this._pitchOverlay = 'none';
-		this.pitchOverlayCallback = null;
+		this.onModified = null;
+	}
+
+	_modified() {
+		let dm = new DrawMode();
+		dm._mode = this.mode;
+		dm._lineArrowStart = this.lineArrowStart;
+		dm._lineArrowEnd = this.lineArrowEnd;
+		dm._lineDashed = this.lineDashed;
+		dm._color = this.color;
+		dm._pitchOverlay = this.pitchOverlay;
+		// trigger event modified
+		if (null !== this.onModified) {
+			this.onModified(dm);
+		}
 	}
 
 	// default modes
@@ -17,6 +31,51 @@ class DrawMode {
 	// text		- draw text
 	get modeOptions(){
 		return ['select','line','square','ellipse','text'];
+	}
+
+	get mode() {
+		return this._mode;
+	}
+
+	set mode(value) {
+		this._mode = value;
+		this._modified();
+	}
+
+	get lineArrowStart() {
+		return this._lineArrowStart;
+	}
+
+	set lineArrowStart(value) {
+		this._lineArrowStart = value;
+		this._modified();
+	}
+
+	get lineArrowEnd() {
+		return this._lineArrowEnd;
+	}
+
+	set lineArrowEnd(value) {
+		this._lineArrowEnd = value;
+		this._modified();
+	}
+
+	get lineDashed() {
+		return this._lineDashed;
+	}
+
+	set lineDashed(value) {
+		this._lineDashed = value;
+		this._modified();
+	}
+
+	get color() {
+		return this._color;
+	}
+
+	set color(value) {
+		this._color = value;
+		this._modified();
 	}
 
 	// default pitch overlay options
@@ -31,14 +90,8 @@ class DrawMode {
 		return this._pitchOverlay;
 	}
 	set pitchOverlay(value) {
-		console.log("PitchOverlay", value);
-		if (value === this._pitchOverlay) {
-			return;
-		}
 		this._pitchOverlay = value;
-		if (null !== this.pitchOverlayCallback) {
-			this.pitchOverlayCallback(this._pitchOverlay);
-		}
+		this._modified();
 	}
 }
 

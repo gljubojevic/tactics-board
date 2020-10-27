@@ -25,11 +25,7 @@ class DrawMenu extends Component {
 			open: false,
 			lineArrows: false,
 			linePattern: false,
-			lineDashed: this.props.drawMode.lineDashed,
-			lineArrowStart: this.props.drawMode.lineArrowStart,
-			lineArrowEnd: this.props.drawMode.lineArrowEnd,
-			pitchOverlays: false,
-			pitchOverlay: this.props.drawMode.pitchOverlay
+			pitchOverlays: false
 		}
 		this.open = this.open.bind(this);
 		this.close = this.close.bind(this);
@@ -55,10 +51,6 @@ class DrawMenu extends Component {
 		let mode = e.currentTarget.dataset.value;
 		if (mode) {
 			this.props.drawMode.mode = mode;
-			// trigger callback
-			if (null !== this.props.onClose) {
-				this.props.onClose();
-			}
 		}
 		// close sub menus
 		this.setState({
@@ -77,26 +69,21 @@ class DrawMenu extends Component {
 
 	lineArrowStartToggle() {
 		this.props.drawMode.lineArrowStart = !this.props.drawMode.lineArrowStart
-		this.setState({
-			lineArrowStart: this.props.drawMode.lineArrowStart
-		});
 	}
 
 	lineArrowEndToggle() {
 		this.props.drawMode.lineArrowEnd = !this.props.drawMode.lineArrowEnd
-		this.setState({
-			lineArrowEnd: this.props.drawMode.lineArrowEnd
-		});
 	}
 
 	lineArrowsIcon() {
-		if (this.state.lineArrowStart && this.state.lineArrowEnd) {
+		const dm = this.props.drawMode;
+		if (dm.lineArrowStart && dm.lineArrowEnd) {
 			return (<ArrowLeftRight />);
 		}
-		if (!this.state.lineArrowStart && this.state.lineArrowEnd) {
+		if (!dm.lineArrowStart && dm.lineArrowEnd) {
 			return (<ArrowRight />);
 		}
-		if (this.state.lineArrowStart && !this.state.lineArrowEnd) {
+		if (dm.lineArrowStart && !dm.lineArrowEnd) {
 			return (<ArrowLeft />);
 		}
 		return (<Minus />);
@@ -111,7 +98,6 @@ class DrawMenu extends Component {
 	lineDashedOn() {
 		this.props.drawMode.lineDashed = true;
 		this.setState({
-			lineDashed: this.props.drawMode.lineDashed,
 			linePattern: false
 		});
 	}
@@ -119,13 +105,12 @@ class DrawMenu extends Component {
 	lineDashedOff() {
 		this.props.drawMode.lineDashed = false;
 		this.setState({
-			lineDashed: this.props.drawMode.lineDashed,
 			linePattern: false
 		});
 	}
 
 	linePatternIcon() {
-		if (this.state.lineDashed) {
+		if (this.props.drawMode.lineDashed) {
 			return (<DotsHorizontal />);
 		}
 		return (<Minus />);
@@ -148,7 +133,6 @@ class DrawMenu extends Component {
 	pitchOverlayOnChange(event) {
 		this.props.drawMode.pitchOverlay = event.target.value;
 		this.setState({
-			pitchOverlay: event.target.value,
 			pitchOverlays: false,
 			open: false
 		});
@@ -172,7 +156,7 @@ class DrawMenu extends Component {
 				{this.state.pitchOverlays ? <ExpandLess /> : <ExpandMore />}
 			</MenuItem>
 			<Collapse in={this.state.pitchOverlays} timeout="auto" unmountOnExit>
-				<RadioGroup name="radio-pitch-overlays" value={this.state.pitchOverlay} onChange={this.pitchOverlayOnChange}>
+				<RadioGroup name="radio-pitch-overlays" value={this.props.drawMode.pitchOverlay} onChange={this.pitchOverlayOnChange}>
 					{overlaySelect}
 				</RadioGroup>
 			</Collapse>
@@ -198,7 +182,7 @@ class DrawMenu extends Component {
 						</ListItemIcon>
 						<ListItemText primary="End" />
 						<ListItemSecondaryAction>
-							<Switch edge="end" onChange={this.lineArrowEndToggle} checked={this.state.lineArrowEnd} />
+							<Switch edge="end" onChange={this.lineArrowEndToggle} checked={this.props.drawMode.lineArrowEnd} />
 						</ListItemSecondaryAction>
 					</MenuItem>
 					<MenuItem onClick={this.lineArrowStartToggle}>
@@ -207,7 +191,7 @@ class DrawMenu extends Component {
 						</ListItemIcon>
 						<ListItemText primary="Start" />
 						<ListItemSecondaryAction>
-							<Switch edge="end" onChange={this.lineArrowStartToggle} checked={this.state.lineArrowStart} />
+							<Switch edge="end" onChange={this.lineArrowStartToggle} checked={this.props.drawMode.lineArrowStart} />
 						</ListItemSecondaryAction>
 					</MenuItem>
 				</List>
@@ -263,13 +247,11 @@ class DrawMenu extends Component {
 
 DrawMenu.defaultProps = {
 	anchorEl: null,
-	onClose: null,
 	drawMode: null
 }
 
 DrawMenu.propTypes = {
 	anchorEl: PropTypes.func,
-	onClose: PropTypes.func,
 	drawMode: PropTypes.instanceOf(DrawMode)
 };
 
