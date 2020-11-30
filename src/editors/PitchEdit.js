@@ -10,7 +10,6 @@ import EllipseEdit from './EllipseEdit'
 import LineEdit from './LineEdit'
 import TextEdit from './TextEdit'
 import PlayerDialog from './PlayerDialog'
-// import './PitchEdit.css';	// embedded to svg for now
 
 // this is for offset from toolbar and default class
 const styles = theme => ({
