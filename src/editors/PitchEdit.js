@@ -8,6 +8,7 @@ import BallEdit from './BallEdit'
 import SquareEdit from './SquareEdit'
 import EllipseEdit from './EllipseEdit'
 import LineEdit from './LineEdit'
+import TextEdit from './TextEdit'
 import PlayerDialog from './PlayerDialog'
 // import './PitchEdit.css';	// embedded to svg for now
 
@@ -59,6 +60,7 @@ class PitchEdit extends Component {
 		this.hMouseDown = this.hMouseDown.bind(this);
 		this.hMouseUp = this.hMouseUp.bind(this);
 		this.hMouseMove = this.hMouseMove.bind(this);
+		this.textEditDone = this.textEditDone.bind(this);
 		
 		// callbacks
 		this.playerEditDone = this.playerEditDone.bind(this);
@@ -360,6 +362,11 @@ class PitchEdit extends Component {
 				this.props.pitch.ellipseAdd(el);
 				break;
 			case 'text':
+				let tx = this.props.pitch.textCreate(
+					pos.X, pos.Y, dm.color, dm.textSize
+				);
+				this._dragNode = tx.id;
+				this.props.pitch.textAdd(tx);
 				break;
 			case 'select':
 			default:
@@ -435,6 +442,10 @@ class PitchEdit extends Component {
 		}
 	}
 
+	textEditDone(id, text) {
+		this.props.pitch.textEditDone(id, text);
+	}
+
 	// return current SVG in editor
 	// TODO: Cleanup unused players and balls
 	getSVG() {
@@ -485,6 +496,14 @@ class PitchEdit extends Component {
 		});
 	}
 
+	renderTexts(){
+		return this.props.pitch.texts.map((tx, index) => {
+			return (
+				<TextEdit key={index.toString()} text={tx} onEditDone={this.textEditDone} />
+			);
+		});
+	}
+
 	renderPitchOverlay(){
 		const o = this.props.pitch.overlaySize();
 		if (null === o) {
@@ -504,6 +523,7 @@ class PitchEdit extends Component {
 		const squaresShow = this.renderSquares();
 		const ellipsesShow = this.renderEllipses();
 		const linesShow = this.renderLines();
+		const textsShow = this.renderTexts();
 		const pitchOverlayShow = this.renderPitchOverlay();
 
 		// default class is full screen width and height with padding for menu height
@@ -544,8 +564,13 @@ class PitchEdit extends Component {
 							'.bc3 { fill: #0000ff; }',
 							'.bc4 { fill: #ffffff; }',
 							'.bc4 svg { fill: #000000; }',
+							'#texts text { font-family: "sans-serif"; font-size: 10em; }',
+							'.txt0 text { font-size: 1em; }',
+							'.txt1 text { font-size: 1.5em; }',
+							'.txt2 text { font-size: 2em; }',
+							'.txt3 text { font-size: 2.5em; }',
 							'.player { pointer-events: none; }',
-							'.player text { fill: black;	}',
+							'.player text { fill: black; }',
 							'.player text.number { fill: white; }',
 							'.dashed { stroke-dasharray: 20; }',
 							'.square { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
@@ -639,7 +664,7 @@ class PitchEdit extends Component {
 						{ballsShow}
 					</g>
 					<g id="lines">{linesShow}</g>
-					<g id="texts"></g>
+					<g id="texts">{textsShow}</g>
 				</svg>
 			</div>
 			<PlayerDialog ref={this._playerDialogRef} onEditDone={this.playerEditDone} />

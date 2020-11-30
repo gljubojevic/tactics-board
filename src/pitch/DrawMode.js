@@ -5,6 +5,7 @@ class DrawMode {
 		this._lineArrowEnd = false;
 		this._lineDashed = false;
 		this._color = 0;
+		this._textSize = 0;
 		this._pitchOverlay = 'none';
 		this.onModified = null;
 	}
@@ -16,6 +17,7 @@ class DrawMode {
 		dm._lineArrowEnd = this.lineArrowEnd;
 		dm._lineDashed = this.lineDashed;
 		dm._color = this.color;
+		dm._textSize = this.textSize;
 		dm._pitchOverlay = this.pitchOverlay;
 		// trigger event modified
 		if (null !== this.onModified) {
@@ -75,6 +77,15 @@ class DrawMode {
 
 	set color(value) {
 		this._color = value;
+		this._modified();
+	}
+
+	get textSize() {
+		return this._textSize;
+	}
+
+	set textSize(value) {
+		this._textSize = value;
 		this._modified();
 	}
 

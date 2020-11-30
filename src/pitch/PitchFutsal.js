@@ -4,6 +4,7 @@ import Square from "./Square";
 import Ellipse from "./Ellipse";
 import Line from "./Line";
 import Point from "./Point";
+import Text from "./Text";
 
 class PitchFutsal {
 
@@ -342,6 +343,38 @@ class PitchFutsal {
 			sq.isEdit = false;
 			return sq;
 		});
+	}
+
+	textCreate(x, y, color, size) {
+		let id = 'txt'+this.textID.toString();
+		this.textID += 1;
+		return new Text(
+			id, color, size, "",
+			x,y,0,
+			false, true
+		);
+	}
+
+	textAdd(tx) {
+		this.texts = this.texts.map((t) => t);
+		this.texts.push(tx);
+		this._modified();
+	}
+
+	textEditDone(id, text, bx, by, bwidth, bheight) {
+		this.texts = this.texts.map(t => {
+			if (id === t.id) {
+				t.isEdit = false;
+				t.isTextEdit = false;
+				t.text = text;
+				t.bx = bx;
+				t.by = by;
+				t.bwidth = bwidth;
+				t.bheight = bheight;
+			}
+			return t;
+		});
+		this._modified();
 	}
 
 	endAllEdits() {
