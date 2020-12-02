@@ -16,6 +16,7 @@ import TextFieldsIcon from '@material-ui/icons/TextFields';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import PaletteIcon from '@material-ui/icons/Palette';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
 
 class DrawMenu extends Component {
@@ -25,8 +26,10 @@ class DrawMenu extends Component {
 			open: false,
 			lineArrows: false,
 			linePattern: false,
-			pitchOverlays: false
+			pitchOverlays: false,
+			color:false
 		}
+
 		this.open = this.open.bind(this);
 		this.close = this.close.bind(this);
 
@@ -40,6 +43,9 @@ class DrawMenu extends Component {
 
 		this.pitchOverlaysToggle = this.pitchOverlaysToggle.bind(this); 
 		this.pitchOverlayOnChange = this.pitchOverlayOnChange.bind(this);
+
+		this.colorToggle = this.colorToggle.bind(this);
+		this.colorSelected = this.colorSelected.bind(this);
 	}
 
 	open() {
@@ -57,7 +63,8 @@ class DrawMenu extends Component {
 			open:false,
 			lineArrows: false,
 			linePattern: false,
-			pitchOverlays: false
+			pitchOverlays: false,
+			color:false
 		});
 	}
 
@@ -138,10 +145,44 @@ class DrawMenu extends Component {
 		});
 	}
 
+	colorToggle() {
+		this.setState({
+			color: !this.state.color
+		});
+	}
+
+	colorSelected(e) {
+		// read from "data-value" attribute
+		let col = e.currentTarget.dataset.value;
+		if (col) {
+			this.props.drawMode.color = col;
+		}
+		this.colorToggle();
+	}
+
+	colorItemsRender(allColors) {
+		return allColors.map((col, index) => {
+			const colName = "Color " + index;
+			return (
+				<MenuItem key={index} data-value={index} onClick={this.colorSelected}>
+					<ListItemIcon>
+						<PaletteIcon style={{ color: col }} />
+					</ListItemIcon>
+					<ListItemText primary={colName} />
+				</MenuItem>
+			);
+		});
+	}
+
 	render() {
 		const arrowsIcon = this.lineArrowsIcon();
 		const patternIcon = this.linePatternIcon();
 		const overlaySelect = this.pitchOverlaysRender();
+
+		const allColors = this.props.drawMode.colorOptions;
+		const colorSelected = allColors[this.props.drawMode.color];
+		const colorNameSelected = "Color " + this.props.drawMode.color;
+
 		return (
 		<Menu id="drawingMenu" anchorEl={this.props.anchorEl} keepMounted open={this.state.open} onClose={this.close}>
 			<MenuItem data-value="select" onClick={this.close}>
@@ -159,6 +200,19 @@ class DrawMenu extends Component {
 				<RadioGroup name="radio-pitch-overlays" value={this.props.drawMode.pitchOverlay} onChange={this.pitchOverlayOnChange}>
 					{overlaySelect}
 				</RadioGroup>
+			</Collapse>
+			<Divider />
+			<MenuItem onClick={this.colorToggle}>
+				<ListItemIcon>
+					<PaletteIcon style={{ color: colorSelected }} />
+				</ListItemIcon>
+				<ListItemText primary={colorNameSelected} />
+				{this.state.color ? <ExpandLess /> : <ExpandMore />}
+			</MenuItem>
+			<Collapse in={this.state.color} timeout="auto" unmountOnExit>
+				<List component="div" disablePadding>
+					{this.colorItemsRender(allColors)}
+				</List>
 			</Collapse>
 			<Divider />
 			<MenuItem data-value="line" onClick={this.close}>

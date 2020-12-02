@@ -533,6 +533,38 @@ class PitchEdit extends Component {
 		return (<rect width={o.width} height={o.height} transform={transform} fill="none" />);
 	}
 
+	generatePicthStyles() {
+		const colors = this.props.drawMode.colorOptions.map((col, index) => {
+			return '.pc'+ index +' { fill: '+col+'; stroke: '+ col +'; }';
+		});
+
+		return colors.concat([
+			'.bc0 { fill: #ffa500; }',
+			'.bc1 { fill: #cc3333; }',
+			'.bc2 { fill: #222333; }',
+			'.bc3 { fill: #0000ff; }',
+			'.bc4 { fill: #ffffff; }',
+			'.bc4 svg { fill: #000000; }',
+			'#texts text { font-family: "sans-serif"; font-size: 10em; cursor: default; user-select: none; }',
+			'.txt0 text { font-size: 1em; }',
+			'.txt1 text { font-size: 1.5em; }',
+			'.txt2 text { font-size: 2em; }',
+			'.txt3 text { font-size: 2.5em; }',
+			'.player { pointer-events: none; }',
+			'.player text { fill: black; }',
+			'.player text.number { fill: white; }',
+			'.dashed { stroke-dasharray: 20; }',
+			'.square { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
+			'.ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
+			'.line { stroke-width: 12; }',
+			'.line path { fill: none; stroke-width: 12; }',
+			'.draggable { cursor: move; pointer-events: all;}',
+			'.editBox { fill: none; stroke-width: 8; stroke-opacity: 1; }',
+			'.editTransparent { fill: none; stroke-width: 0; }',
+			'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }'
+		]);
+	}
+
 	render() {
 		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
 
@@ -567,39 +599,7 @@ class PitchEdit extends Component {
 			<div ref={this._editRef} className={pitchClasses}>
 				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onContextMenu={this.hContextMenu} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
 					<style>
-						{[
-							'.pc0 {	fill: #8b2323; stroke: #8b2323; }',
-							'.pc1 {	fill: #e7e739; stroke: #e7e739; }',
-							'.pc2 {	fill: #912cee; stroke: #912cee; }',
-							'.pc3 {	fill: #04b804; stroke: #04b804; }',
-							'.pc4 {	fill: #1d4ba0; stroke: #1d4ba0; }',
-							'.pc5 {	fill: #ee2c2c; stroke: #ee2c2c; }',
-							'.pc6 {	fill: #ff7f50; stroke: #ff7f50; }',
-							'.pc7 {	fill: #56c6eb; stroke: #56c6eb; }',
-							'.bc0 { fill: #ffa500; }',
-							'.bc1 { fill: #cc3333; }',
-							'.bc2 { fill: #222333; }',
-							'.bc3 { fill: #0000ff; }',
-							'.bc4 { fill: #ffffff; }',
-							'.bc4 svg { fill: #000000; }',
-							'#texts text { font-family: "sans-serif"; font-size: 10em; cursor: default; user-select: none; }',
-							'.txt0 text { font-size: 1em; }',
-							'.txt1 text { font-size: 1.5em; }',
-							'.txt2 text { font-size: 2em; }',
-							'.txt3 text { font-size: 2.5em; }',
-							'.player { pointer-events: none; }',
-							'.player text { fill: black; }',
-							'.player text.number { fill: white; }',
-							'.dashed { stroke-dasharray: 20; }',
-							'.square { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
-							'.ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
-							'.line { stroke-width: 12; }',
-							'.line path { fill: none; stroke-width: 12; }',
-							'.draggable { cursor: move; pointer-events: all;}',
-							'.editBox { fill: none; stroke-width: 8; stroke-opacity: 1; }',
-							'.editTransparent { fill: none; stroke-width: 0; }',
-							'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }'
-						]}
+						{this.generatePicthStyles()}
 					</style>
 					<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">
 						<line x1="0" x2="20" y1="0" y2="20" />

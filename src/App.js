@@ -71,7 +71,6 @@ class App extends Component {
 	}
 
 	OnDrawModeModified(newDrawMode) {
-		console.log("DrawMode modified");
 		this.drawMode.onModified = null;
 		this.drawMode = newDrawMode;
 		this.drawMode.onModified = this.OnDrawModeModified;

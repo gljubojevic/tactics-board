@@ -80,6 +80,10 @@ class DrawMode {
 		this._modified();
 	}
 
+	get colorOptions() {
+		return ['#8b2323','#e7e739','#912cee','#04b804','#1d4ba0','#ee2c2c','#ff7f50','#56c6eb'];
+	}
+
 	get textSize() {
 		return this._textSize;
 	}
