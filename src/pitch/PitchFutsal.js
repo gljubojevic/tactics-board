@@ -377,10 +377,41 @@ class PitchFutsal {
 		this._modified();
 	}
 
+	textEditStart(id) {
+		this.texts = this.texts.map(tx => {
+			if (id === tx.id) {
+				tx.isEdit = true;
+			}
+			return tx;
+		});
+		this._modified();
+	}
+
+	textMove(id, deltaX, deltaY) {
+		this.texts = this.texts.map(tx => {
+			if (id === tx.id) {
+				tx.move(deltaX, deltaY);
+			}
+			return tx;
+		});
+		this._modified();
+	}
+
+	textRotate(id, posX, posY, snap) {
+		this.texts = this.texts.map(tx => {
+			if (id === tx.id) {
+				tx.rotate(posX, posY, snap);
+			}
+			return tx;
+		});
+		this._modified();
+	}
+
 	endAllEdits() {
 		this.lineEditEnd();
 		this.squareEditEnd();
 		this.ellipsesEditEnd();
+		// TODO: Text end editing
 		this._modified();
 	}
 

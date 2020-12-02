@@ -141,6 +141,9 @@ class PitchEdit extends Component {
 		if (id.startsWith("el")) {
 			this.props.pitch.ellipseEdit("mv",id, deltaX, deltaY);
 		}
+		if (id.startsWith("txt")) {
+			this.props.pitch.textMove(id, deltaX, deltaY);
+		}
 	}
 
 	editRotate(id, posX, posY, snap) {
@@ -149,6 +152,9 @@ class PitchEdit extends Component {
 		}
 		if (id.startsWith("el")) {
 			this.props.pitch.ellipseRotate(id, posX, posY, snap);
+		}
+		if (id.startsWith("txt")) {
+			this.props.pitch.textRotate(id, posX, posY, snap);
 		}
 	}
 
@@ -254,6 +260,14 @@ class PitchEdit extends Component {
 		return true;
 	}
 
+	textEditStarted(editNode) {
+		if (!editNode.startsWith("txt")) {
+			return false;
+		}
+		console.log("Text edit start", editNode);
+		return true;
+	}
+
 	// player edit dialog callback
 	playerEditDone(player) {
 		this.props.pitch.playerEditDone(player);
@@ -328,6 +342,11 @@ class PitchEdit extends Component {
 		if (this.lineEditStarted(editNode)) {
 			e.preventDefault();
 			this.props.pitch.lineEditStart(editNode);
+			return;
+		}
+		if (this.textEditStarted(editNode)) {
+			e.preventDefault();
+			this.props.pitch.textEditStart(editNode);
 			return;
 		}
 	}
@@ -441,8 +460,8 @@ class PitchEdit extends Component {
 		}
 	}
 
-	textEditDone(id, text) {
-		this.props.pitch.textEditDone(id, text);
+	textEditDone(id, text, bx, by, bwidth, bheight) {
+		this.props.pitch.textEditDone(id, text, bx, by, bwidth, bheight);
 	}
 
 	// return current SVG in editor
@@ -563,7 +582,7 @@ class PitchEdit extends Component {
 							'.bc3 { fill: #0000ff; }',
 							'.bc4 { fill: #ffffff; }',
 							'.bc4 svg { fill: #000000; }',
-							'#texts text { font-family: "sans-serif"; font-size: 10em; }',
+							'#texts text { font-family: "sans-serif"; font-size: 10em; cursor: default; user-select: none; }',
 							'.txt0 text { font-size: 1em; }',
 							'.txt1 text { font-size: 1.5em; }',
 							'.txt2 text { font-size: 2em; }',

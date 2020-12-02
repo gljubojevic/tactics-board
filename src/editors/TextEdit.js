@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Text from '../pitch/Text';
+import EditBox from './EditBox'
 
 class TextEdit extends Component {
 	constructor(props) {
@@ -109,14 +110,24 @@ class TextEdit extends Component {
 		if (null === this.props.onEditDone) {
 			return;
 		}
-        this.removeText();
         let tx = this._editRef.current.value.trim();
-        var bb = this._textRef.current.getBBox();
+		var bb = this._textRef.current.getBBox();
+		console.log(bb);
+        this.removeText();
 		this.props.onEditDone(
 			this.props.text.id, tx, 
 			bb.x, bb.y,
 			bb.width, bb.height
 		);
+	}
+
+	editBox(isEdit, box) {
+		if (!isEdit) {
+			return null;
+		}
+		return (
+			<EditBox box={box} showBox={true} showResize={false} />
+		)
 	}
 
 	editor(tx) {
@@ -142,7 +153,7 @@ class TextEdit extends Component {
 		let lines = tx.text.split("\n");
 		return lines.map((ln, index) => {
 			return (
-				<tspan key={index} x="0" dy="1.2em">{ln}</tspan>
+				<tspan key={index} data-ref={tx.id} x="0" dy="1.2em">{ln}</tspan>
 			);
 		});
 	}
@@ -162,6 +173,7 @@ class TextEdit extends Component {
 					{this.renderLines(tx)}
 				</text>
 				{this.editor(tx)}
+				{this.editBox(tx.isEdit, tx.box)}
 			</g>
 		);
 	}
