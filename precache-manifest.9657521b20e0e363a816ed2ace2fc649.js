@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b34eb9ab3d688ecf9d0bd93613aff075",
+    "revision": "b185251a132cce69d634e2c1c17f5c30",
     "url": "/tactics-board/index.html"
   },
   {
-    "revision": "f88e7743047cd4148236",
+    "revision": "b64fd55b1666f9627138",
     "url": "/tactics-board/static/css/main.e2120b8b.chunk.css"
   },
   {
-    "revision": "9583a162a40d3934343b",
-    "url": "/tactics-board/static/js/2.ab06860c.chunk.js"
+    "revision": "ea5cf4be1f119738370a",
+    "url": "/tactics-board/static/js/2.06dcac60.chunk.js"
   },
   {
-    "revision": "199d11a477d713ce9ad1fc5e5ea9a036",
-    "url": "/tactics-board/static/js/2.ab06860c.chunk.js.LICENSE.txt"
+    "revision": "5b91e07c7535d4248946ac6cc793f2b2",
+    "url": "/tactics-board/static/js/2.06dcac60.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "f88e7743047cd4148236",
-    "url": "/tactics-board/static/js/main.56142130.chunk.js"
+    "revision": "b64fd55b1666f9627138",
+    "url": "/tactics-board/static/js/main.8a93a9ea.chunk.js"
   },
   {
     "revision": "df3b02b3976989acdc8d",
