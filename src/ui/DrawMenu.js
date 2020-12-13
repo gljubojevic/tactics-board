@@ -17,7 +17,6 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PaletteIcon from '@material-ui/icons/Palette';
-import PaletteDialog from './PaletteDialog';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
 
 class DrawMenu extends Component {
@@ -27,7 +26,8 @@ class DrawMenu extends Component {
 			open: false,
 			lineArrows: false,
 			linePattern: false,
-			pitchOverlays: false
+			pitchOverlays: false,
+			textSizes: false
 		}
 
 		this.open = this.open.bind(this);
@@ -45,6 +45,9 @@ class DrawMenu extends Component {
 		this.pitchOverlayOnChange = this.pitchOverlayOnChange.bind(this);
 
 		this.colorSelect = this.colorSelect.bind(this);
+
+		this.textSizesToggle = this.textSizesToggle.bind(this);
+		this.textSizeSelected = this.textSizeSelected.bind(this);
 	}
 
 	open() {
@@ -62,7 +65,8 @@ class DrawMenu extends Component {
 			open:false,
 			lineArrows: false,
 			linePattern: false,
-			pitchOverlays: false
+			pitchOverlays: false,
+			textSizes: false
 		});
 	}
 
@@ -124,7 +128,7 @@ class DrawMenu extends Component {
 	pitchOverlaysRender() {
 		return this.props.drawMode.pitchOverlayOptions.map((txt, index) => {
 			return (
-				<FormControlLabel key={index} control={<Radio />} label={txt} value={txt} />
+				<FormControlLabel key={index} control={<Radio />} label={txt} value={txt} style={{marginLeft:0}} />
 			);
 		});
 	}
@@ -148,10 +152,31 @@ class DrawMenu extends Component {
 		this.props.paletteDialogRef().Show();
 	}
 
+	textSizesToggle() {
+		this.setState({
+			textSizes: !this.state.textSizes
+		});
+	}
+
+	textSizeSelected(e) {
+		let sz = e.target.value;
+		if (sz) {
+			this.props.drawMode.textSize = parseInt(sz);
+		}
+		this.textSizesToggle();
+	}
+
+	textSizeItemsRender() {
+		return this.props.drawMode.textSizeOptions.map((txt, index) => {
+			return (
+				<FormControlLabel key={index} control={<Radio />} label={txt} value={index} style={{marginLeft:0}} />
+			);
+		});
+	}
+
 	render() {
 		const arrowsIcon = this.lineArrowsIcon();
 		const patternIcon = this.linePatternIcon();
-		const overlaySelect = this.pitchOverlaysRender();
 
 		const allColors = this.props.drawMode.colorOptions;
 		const colorSelected = allColors[this.props.drawMode.color];
@@ -172,7 +197,7 @@ class DrawMenu extends Component {
 			</MenuItem>
 			<Collapse in={this.state.pitchOverlays} timeout="auto" unmountOnExit>
 				<RadioGroup name="radio-pitch-overlays" value={this.props.drawMode.pitchOverlay} onChange={this.pitchOverlayOnChange}>
-					{overlaySelect}
+					{this.pitchOverlaysRender()}
 				</RadioGroup>
 			</Collapse>
 			<Divider />
@@ -262,6 +287,15 @@ class DrawMenu extends Component {
 				</ListItemIcon>
 				<ListItemText primary="Write text" />
 			</MenuItem>
+			<MenuItem onClick={this.textSizesToggle}>
+				<ListItemText primary="Text size" />
+				{this.state.textSizes ? <ExpandLess /> : <ExpandMore />}
+			</MenuItem>
+			<Collapse in={this.state.textSizes} timeout="auto" unmountOnExit>
+				<RadioGroup name="radio-pitch-textSize" value={this.props.drawMode.textSize} onChange={this.textSizeSelected}>
+					{this.textSizeItemsRender()}
+				</RadioGroup>
+			</Collapse>
 		</Menu>
 		);
 	}

@@ -5,7 +5,7 @@ class DrawMode {
 		this._lineArrowEnd = false;
 		this._lineDashed = false;
 		this._color = 0;
-		this._textSize = 0;
+		this._textSize = 2;
 		this._pitchOverlay = 'none';
 		this.onModified = null;
 	}
@@ -71,6 +71,10 @@ class DrawMode {
 		this._modified();
 	}
 
+	get colorOptions() {
+		return ['#8b2323','#e7e739','#912cee','#04b804','#1d4ba0','#ee2c2c','#ff7f50','#56c6eb'];
+	}
+
 	get color() {
 		return this._color;
 	}
@@ -80,8 +84,8 @@ class DrawMode {
 		this._modified();
 	}
 
-	get colorOptions() {
-		return ['#8b2323','#e7e739','#912cee','#04b804','#1d4ba0','#ee2c2c','#ff7f50','#56c6eb'];
+	get textSizeOptions() {
+		return ["Extra small","Small","Normal","Large","Extra large"];
 	}
 
 	get textSize() {
