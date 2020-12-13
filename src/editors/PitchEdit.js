@@ -240,7 +240,6 @@ class PitchEdit extends Component {
 		if (!editNode.startsWith("sq")) {
 			return false;
 		}
-		console.log("Square edit start", editNode);
 		return true;
 	}
 
@@ -248,7 +247,6 @@ class PitchEdit extends Component {
 		if (!editNode.startsWith("el")) {
 			return false;
 		}
-		console.log("Ellipse edit start", editNode);
 		return true;
 	}
 
@@ -256,7 +254,6 @@ class PitchEdit extends Component {
 		if (!editNode.startsWith("ln")) {
 			return false;
 		}
-		console.log("Line edit start", editNode);
 		return true;
 	}
 
@@ -264,7 +261,6 @@ class PitchEdit extends Component {
 		if (!editNode.startsWith("txt")) {
 			return false;
 		}
-		console.log("Text edit start", editNode);
 		return true;
 	}
 
@@ -357,34 +353,26 @@ class PitchEdit extends Component {
 		switch (dm.mode) {
 			case 'line':
 				e.preventDefault();
-				let l = this.props.pitch.lineCreate(
+				this._dragNode = this.props.pitch.lineCreate(
 					pos.X, pos.Y, dm.color, dm.lineArrowStart, dm.lineArrowEnd, dm.lineDashed
 				);
-				this._dragNode = l.id;
-				this.props.pitch.lineAdd(l);
 				break;
 			case 'square':
 				e.preventDefault();
-				let sq = this.props.pitch.squareCreate(
+				this._dragNode = this.props.pitch.squareCreate(
 					pos.X, pos.Y, dm.color, dm.lineDashed
 				);
-				this._dragNode = sq.id;
-				this.props.pitch.squareAdd(sq);
 				break;
 			case 'ellipse':
 				e.preventDefault();
-				let el = this.props.pitch.ellipseCreate(
+				this._dragNode = this.props.pitch.ellipseCreate(
 					pos.X, pos.Y, dm.color, dm.lineDashed
 				);
-				this._dragNode = el.id;
-				this.props.pitch.ellipseAdd(el);
 				break;
 			case 'text':
-				let tx = this.props.pitch.textCreate(
+				this._dragNode = this.props.pitch.textCreate(
 					pos.X, pos.Y, dm.color, dm.textSize
 				);
-				this._dragNode = tx.id;
-				this.props.pitch.textAdd(tx);
 				break;
 			case 'select':
 			default:

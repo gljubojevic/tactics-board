@@ -142,7 +142,7 @@ class PitchFutsal {
 	lineCreate(x,y, color, arrowStart, arrowEnd, isDashed) {
 		let id = 'ln'+this.lineID.toString();
 		this.lineID += 1;
-		return new Line(
+		let l = new Line(
 			id, color,
 			new Point(x,y),
 			new Point(x,y),
@@ -152,6 +152,8 @@ class PitchFutsal {
 			arrowEnd,
 			isDashed
 		);
+		this.lineAdd(l);
+		return l.id;
 	}
 
 	lineAdd(l) {
@@ -208,11 +210,13 @@ class PitchFutsal {
 	ellipseCreate(x, y, color, isDashed) {
 		let id = 'el'+this.ellipseID.toString();
 		this.ellipseID += 1;
-		return new Ellipse(
+		let el = new Ellipse(
 			id, color,
 			x,y,0,0,0,
 			isDashed
 		);
+		this.ellipseAdd(el);
+		return el.id;
 	}
 
 	ellipseAdd(el) {
@@ -278,11 +282,13 @@ class PitchFutsal {
 	squareCreate(x, y, color, isDashed) {
 		let id = 'sq'+this.squareID.toString();
 		this.squareID += 1;
-		return new Square(
+		let sq = new Square(
 			id, color,
 			x,y,0,0,0,
 			isDashed
 		);
+		this.squareAdd(sq);
+		return sq.id;
 	}
 
 	squareAdd(sq) {
@@ -348,11 +354,13 @@ class PitchFutsal {
 	textCreate(x, y, color, size) {
 		let id = 'txt'+this.textID.toString();
 		this.textID += 1;
-		return new Text(
+		let tx = new Text(
 			id, color, size, "",
 			x,y,0,
 			false, true
 		);
+		this.textAdd(tx);
+		return tx.id;
 	}
 
 	textAdd(tx) {
