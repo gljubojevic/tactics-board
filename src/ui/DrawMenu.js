@@ -17,6 +17,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PaletteIcon from '@material-ui/icons/Palette';
+import PaletteDialog from './PaletteDialog';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
 
 class DrawMenu extends Component {
@@ -26,8 +27,7 @@ class DrawMenu extends Component {
 			open: false,
 			lineArrows: false,
 			linePattern: false,
-			pitchOverlays: false,
-			color:false
+			pitchOverlays: false
 		}
 
 		this.open = this.open.bind(this);
@@ -44,8 +44,7 @@ class DrawMenu extends Component {
 		this.pitchOverlaysToggle = this.pitchOverlaysToggle.bind(this); 
 		this.pitchOverlayOnChange = this.pitchOverlayOnChange.bind(this);
 
-		this.colorToggle = this.colorToggle.bind(this);
-		this.colorSelected = this.colorSelected.bind(this);
+		this.colorSelect = this.colorSelect.bind(this);
 	}
 
 	open() {
@@ -63,8 +62,7 @@ class DrawMenu extends Component {
 			open:false,
 			lineArrows: false,
 			linePattern: false,
-			pitchOverlays: false,
-			color:false
+			pitchOverlays: false
 		});
 	}
 
@@ -145,33 +143,9 @@ class DrawMenu extends Component {
 		});
 	}
 
-	colorToggle() {
-		this.setState({
-			color: !this.state.color
-		});
-	}
-
-	colorSelected(e) {
-		// read from "data-value" attribute
-		let col = e.currentTarget.dataset.value;
-		if (col) {
-			this.props.drawMode.color = col;
-		}
-		this.colorToggle();
-	}
-
-	colorItemsRender(allColors) {
-		return allColors.map((col, index) => {
-			const colName = "Color " + index;
-			return (
-				<MenuItem key={index} data-value={index} onClick={this.colorSelected}>
-					<ListItemIcon>
-						<PaletteIcon style={{ color: col }} />
-					</ListItemIcon>
-					<ListItemText primary={colName} />
-				</MenuItem>
-			);
-		});
+	colorSelect(e) {
+		this.close(e);
+		this.props.paletteDialogRef().Show();
 	}
 
 	render() {
@@ -202,18 +176,12 @@ class DrawMenu extends Component {
 				</RadioGroup>
 			</Collapse>
 			<Divider />
-			<MenuItem onClick={this.colorToggle}>
+			<MenuItem onClick={this.colorSelect}>
 				<ListItemIcon>
 					<PaletteIcon style={{ color: colorSelected }} />
 				</ListItemIcon>
 				<ListItemText primary={colorNameSelected} />
-				{this.state.color ? <ExpandLess /> : <ExpandMore />}
 			</MenuItem>
-			<Collapse in={this.state.color} timeout="auto" unmountOnExit>
-				<List component="div" disablePadding>
-					{this.colorItemsRender(allColors)}
-				</List>
-			</Collapse>
 			<Divider />
 			<MenuItem data-value="line" onClick={this.close}>
 				<ListItemIcon>
@@ -301,12 +269,14 @@ class DrawMenu extends Component {
 
 DrawMenu.defaultProps = {
 	anchorEl: null,
-	drawMode: null
+	drawMode: null,
+	paletteDialogRef: null
 }
 
 DrawMenu.propTypes = {
 	anchorEl: PropTypes.func,
-	drawMode: PropTypes.instanceOf(DrawMode)
+	drawMode: PropTypes.instanceOf(DrawMode),
+	paletteDialogRef: PropTypes.func
 };
 
 export default DrawMenu;

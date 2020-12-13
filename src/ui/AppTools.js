@@ -20,9 +20,10 @@ import MovieCreationIcon from '@material-ui/icons/MovieCreation';
 import LinkIcon from '@material-ui/icons/Link';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
-import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui'
+import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui';
 import DrawMenu from './DrawMenu';
-import FullscreenToggle from './FullscreenToggle'
+import PaletteDialog from './PaletteDialog';
+import FullscreenToggle from './FullscreenToggle';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -47,6 +48,10 @@ class AppTools extends Component {
 		this.drawMenuOpen = this.drawMenuOpen.bind(this);
 		this.createNewScheme = this.createNewScheme.bind(this);
 		this.createNewAnimation = this.createNewAnimation.bind(this);
+
+		// palette dialog
+		this._refPaletteDialog = React.createRef();
+		this.paletteDialogRef = this.paletteDialogRef.bind(this);
 	}
 
 	setDrawer(isOpen) {
@@ -96,6 +101,10 @@ class AppTools extends Component {
 		}
 	}
 
+	paletteDialogRef() {
+		return this._refPaletteDialog.current;
+	}
+
 	render() {
 		const drawingModeIcon = this.drawingModeIcon();
 
@@ -109,7 +118,7 @@ class AppTools extends Component {
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
-							<IconButton  ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
+							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
 								{drawingModeIcon}
 							</IconButton>
 						</Tooltip>
@@ -146,7 +155,8 @@ class AppTools extends Component {
 						</List>
 					</Box>
 				</Drawer>
-				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} />
+				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} />
+				<PaletteDialog ref={this._refPaletteDialog} drawMode={this.props.drawMode} />
 			</React.Fragment>
 		);
 	}
