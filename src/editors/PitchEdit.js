@@ -35,7 +35,24 @@ const DragObject = {
 	EditLineC1: 11,
 	EditLineC2: 12,
 	EditLineP2: 13
-}
+};
+
+// defines way to check draggable object
+const DragObjectCheck = [
+	{prefix: "pl", removePrefix: false, typ:  DragObject.Player},
+	{prefix: "bl", removePrefix: false, typ:  DragObject.Ball},
+	{prefix: "edit-tl-", removePrefix: true, typ:  DragObject.EditTopLeft},
+	{prefix: "edit-tr-", removePrefix: true, typ:  DragObject.EditTopRight},
+	{prefix: "edit-bl-", removePrefix: true, typ:  DragObject.EditBottomLeft},
+	{prefix: "edit-br-", removePrefix: true, typ:  DragObject.EditBottomRight},
+	{prefix: "edit-mv-", removePrefix: true, typ:  DragObject.EditMove},
+	{prefix: "edit-rt-", removePrefix: true, typ:  DragObject.EditRotate},
+	{prefix: "edit-l1-", removePrefix: true, typ:  DragObject.EditLineP1},
+	{prefix: "edit-l2-", removePrefix: true, typ:  DragObject.EditLineC1},
+	{prefix: "edit-l3-", removePrefix: true, typ:  DragObject.EditLineC2},
+	{prefix: "edit-l4-", removePrefix: true, typ:  DragObject.EditLineP2}
+];
+
 
 class PitchEdit extends Component {
 
@@ -173,55 +190,21 @@ class PitchEdit extends Component {
 		if (null === this._dragNode) {
 			return false;
 		}
-		this._dragObjectType = DragObject.None;
-		if (this._dragNode.startsWith("pl")) {
-			this._dragObjectType = DragObject.Player;
-		}
-		if (this._dragNode.startsWith("bl")) {
-			this._dragObjectType = DragObject.Ball;
-		}
-		if (this._dragNode.startsWith("edit-tl-")) {
-			this._dragObjectType = DragObject.EditTopLeft;
-			this._dragNode = this._dragNode.replace("edit-tl-","");
-		}
-		if (this._dragNode.startsWith("edit-tr-")) {
-			this._dragObjectType = DragObject.EditTopRight;
-			this._dragNode = this._dragNode.replace("edit-tr-","");
-		}
-		if (this._dragNode.startsWith("edit-bl-")) {
-			this._dragObjectType = DragObject.EditBottomLeft;
-			this._dragNode = this._dragNode.replace("edit-bl-","");
-		}
-		if (this._dragNode.startsWith("edit-br-")) {
-			this._dragObjectType = DragObject.EditBottomRight;
-			this._dragNode = this._dragNode.replace("edit-br-","");
-		}
-		if (this._dragNode.startsWith("edit-mv-")) {
-			this._dragObjectType = DragObject.EditMove;
-			this._dragNode = this._dragNode.replace("edit-mv-","");
-		}
-		if (this._dragNode.startsWith("edit-rt-")) {
-			this._dragObjectType = DragObject.EditRotate;
-			this._dragNode = this._dragNode.replace("edit-rt-","");
-		}
-		if (this._dragNode.startsWith("edit-l1-")) {
-			this._dragObjectType = DragObject.EditLineP1;
-			this._dragNode = this._dragNode.replace("edit-l1-","");
-		}
-		if (this._dragNode.startsWith("edit-l2-")) {
-			this._dragObjectType = DragObject.EditLineC1;
-			this._dragNode = this._dragNode.replace("edit-l2-","");
-		}
-		if (this._dragNode.startsWith("edit-l3-")) {
-			this._dragObjectType = DragObject.EditLineC2;
-			this._dragNode = this._dragNode.replace("edit-l3-","");
-		}
-		if (this._dragNode.startsWith("edit-l4-")) {
-			this._dragObjectType = DragObject.EditLineP2;
-			this._dragNode = this._dragNode.replace("edit-l4-","");
-		}
 		this.resetMouseDrag(e);
-		return true;
+
+		// get drag object
+		this._dragObjectType = DragObject.None;
+		for (const chk of DragObjectCheck ) {
+			if (!this._dragNode.startsWith(chk.prefix)) {
+				continue;
+			}
+			this._dragObjectType = chk.typ;
+			if (chk.removePrefix) {
+				this._dragNode = this._dragNode.replace(chk.prefix,"");
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	playerEditStarted(editNode) {
