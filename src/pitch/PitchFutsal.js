@@ -6,19 +6,28 @@ import Line from "./Line";
 import Point from "./Point";
 import Text from "./Text";
 
+const ElementIDPrefix = {
+	Ball: 'bl',
+	Player: 'pl',
+	Square: 'sq',
+	Ellipse: 'el',
+	Line: 'ln',
+	Text: 'txt'
+}
+
 class PitchFutsal {
 
 	constructor() {
 		this.players = [];
 		this.balls = [];
 
-		this.squareID = 0;
+		this.squareID = -1;
 		this.squares = [];
-		this.ellipseID = 0;
+		this.ellipseID = -1;
 		this.ellipses = [];
-		this.lineID = 0;
+		this.lineID = -1;
 		this.lines = [];
-		this.textID = 0;
+		this.textID = -1;
 		this.texts = [];
 
 		this._overlay = "none";
@@ -38,7 +47,7 @@ class PitchFutsal {
 			let color = Math.floor(i / groupSize);
 			let number = groupSize - (i % groupSize);
 			let player = new Player(
-				"pl"+i.toString(), number, "", color,
+				ElementIDPrefix.Player + i, number, "", color,
 				color * playerSize, 0,
 				0,
 				color * playerSize, 0,
@@ -53,7 +62,7 @@ class PitchFutsal {
 		for (var i = 0; i < noBalls; i++) {
 			let color = Math.floor(i / groupSize);
 			let ball = new Ball(
-				"bl"+i.toString(), color,
+				ElementIDPrefix.Ball + i, color,
 				color * ballSize,0,
 				color * ballSize,0
 			);
@@ -93,7 +102,7 @@ class PitchFutsal {
 	}
 
 	playerEditStart(id) {
-		if (!id.startsWith("pl")) {
+		if (!id.startsWith(ElementIDPrefix.Player)) {
 			return null;
 		}
 		// Edit player data
@@ -138,12 +147,14 @@ class PitchFutsal {
 		this._modified();
 	}
 
+	lineNewID() {
+		this.lineID += 1;
+		return ElementIDPrefix.Line + this.lineID;
+	}
 
 	lineCreate(x,y, color, arrowStart, arrowEnd, isDashed) {
-		let id = 'ln'+this.lineID.toString();
-		this.lineID += 1;
 		let l = new Line(
-			id, color,
+			this.lineNewID(), color,
 			new Point(x,y),
 			new Point(x,y),
 			new Point(x,y),
@@ -152,14 +163,10 @@ class PitchFutsal {
 			arrowEnd,
 			isDashed
 		);
-		this.lineAdd(l);
-		return l.id;
-	}
-
-	lineAdd(l) {
 		this.lines = this.lines.map((lx) => lx);
 		this.lines.push(l);
 		this._modified();
+		return l.id;
 	}
 
 	lineResize(id, x2, y2) {
@@ -189,6 +196,9 @@ class PitchFutsal {
 	}
 
 	lineEditStart(id) {
+		if (!id.startsWith(ElementIDPrefix.Line)) {
+			return false;
+		}
 		this.lines = this.lines.map(l => {
 			if (id === l.id) {
 				l.isEdit = true;
@@ -196,6 +206,7 @@ class PitchFutsal {
 			return l;
 		});
 		this._modified();
+		return true;
 	}
 
 	lineEditEnd() {
@@ -206,23 +217,21 @@ class PitchFutsal {
 		this._modified();
 	}
 
+	ellipseNewID() {
+		this.ellipseID += 1;
+		return ElementIDPrefix.Ellipse + this.ellipseID;
+	}
 
 	ellipseCreate(x, y, color, isDashed) {
-		let id = 'el'+this.ellipseID.toString();
-		this.ellipseID += 1;
 		let el = new Ellipse(
-			id, color,
+			this.ellipseNewID(), color,
 			x,y,0,0,0,
 			isDashed
 		);
-		this.ellipseAdd(el);
-		return el.id;
-	}
-
-	ellipseAdd(el) {
 		this.ellipses = this.ellipses.map((e) => e);
 		this.ellipses.push(el);
 		this._modified();
+		return el.id;
 	}
 
 	ellipseResize(id, x2, y2, proportional) {
@@ -236,6 +245,9 @@ class PitchFutsal {
 	}
 
 	ellipseEdit(corner, id, deltaX, deltaY) {
+		if (!id.startsWith(ElementIDPrefix.Ellipse)) {
+			return;
+		}
 		this.ellipses = this.ellipses.map(el => {
 			if (id === el.id) {
 				el.edit(corner, deltaX, deltaY);
@@ -246,6 +258,9 @@ class PitchFutsal {
 	}
 
 	ellipseRotate(id, posX, posY, snap) {
+		if (!id.startsWith(ElementIDPrefix.Ellipse)) {
+			return;
+		}
 		this.ellipses = this.ellipses.map(el => {
 			if (id === el.id) {
 				el.rotate(posX, posY, snap);
@@ -262,6 +277,9 @@ class PitchFutsal {
 	}
 
 	ellipseEditStart(id) {
+		if (!id.startsWith(ElementIDPrefix.Ellipse)) {
+			return false;
+		}
 		this.ellipses = this.ellipses.map(el => {
 			if (id === el.id) {
 				el.isEdit = true;
@@ -269,6 +287,7 @@ class PitchFutsal {
 			return el;
 		});
 		this._modified();
+		return true;
 	}
 
 	ellipsesEditEnd() {
@@ -278,23 +297,21 @@ class PitchFutsal {
 		});
 	}
 
+	squareNewID() {
+		this.squareID += 1;
+		return ElementIDPrefix.Square + this.squareID;
+	}
 
 	squareCreate(x, y, color, isDashed) {
-		let id = 'sq'+this.squareID.toString();
-		this.squareID += 1;
 		let sq = new Square(
-			id, color,
+			this.squareNewID(), color,
 			x,y,0,0,0,
 			isDashed
 		);
-		this.squareAdd(sq);
-		return sq.id;
-	}
-
-	squareAdd(sq) {
 		this.squares = this.squares.map((s) => s);
 		this.squares.push(sq);
 		this._modified();
+		return sq.id;
 	}
 
 	squareResize(id, x2, y2, proportional) {
@@ -308,6 +325,9 @@ class PitchFutsal {
 	}
 
 	squareEdit(corner, id, deltaX, deltaY) {
+		if (!id.startsWith(ElementIDPrefix.Square)) {
+			return;
+		}
 		this.squares = this.squares.map(sq => {
 			if (id === sq.id) {
 				sq.edit(corner, deltaX, deltaY);
@@ -319,6 +339,9 @@ class PitchFutsal {
 	}
 
 	squareRotate(id, posX, posY, snap) {
+		if (!id.startsWith(ElementIDPrefix.Square)) {
+			return;
+		}
 		this.squares = this.squares.map(sq => {
 			if (id === sq.id) {
 				sq.rotate(posX, posY, snap);
@@ -335,6 +358,9 @@ class PitchFutsal {
 	}
 
 	squareEditStart(id) {
+		if (!id.startsWith(ElementIDPrefix.Square)) {
+			return false;
+		}
 		this.squares = this.squares.map(sq => {
 			if (id === sq.id) {
 				sq.isEdit = true;
@@ -342,6 +368,7 @@ class PitchFutsal {
 			return sq;
 		});
 		this._modified();
+		return true;
 	}
 
 	squareEditEnd() {
@@ -351,22 +378,21 @@ class PitchFutsal {
 		});
 	}
 
-	textCreate(x, y, color, size) {
-		let id = 'txt'+this.textID.toString();
+	textNewID() {
 		this.textID += 1;
+		return ElementIDPrefix.Text + this.textID;
+	}
+
+	textCreate(x, y, color, size) {
 		let tx = new Text(
-			id, color, size, "",
+			this.textNewID(), color, size, "",
 			x,y,0,
 			false, true
 		);
-		this.textAdd(tx);
-		return tx.id;
-	}
-
-	textAdd(tx) {
 		this.texts = this.texts.map((t) => t);
 		this.texts.push(tx);
 		this._modified();
+		return tx.id;
 	}
 
 	textEditDone(id, text, bx, by, bwidth, bheight) {
@@ -386,6 +412,9 @@ class PitchFutsal {
 	}
 
 	textEditStart(id) {
+		if (!id.startsWith(ElementIDPrefix.Text)) {
+			return false;
+		}
 		this.texts = this.texts.map(tx => {
 			if (id === tx.id) {
 				tx.isEdit = true;
@@ -393,9 +422,13 @@ class PitchFutsal {
 			return tx;
 		});
 		this._modified();
+		return true;
 	}
 
 	textMove(id, deltaX, deltaY) {
+		if (!id.startsWith(ElementIDPrefix.Text)) {
+			return;
+		}
 		this.texts = this.texts.map(tx => {
 			if (id === tx.id) {
 				tx.move(deltaX, deltaY);
@@ -406,6 +439,9 @@ class PitchFutsal {
 	}
 
 	textRotate(id, posX, posY, snap) {
+		if (!id.startsWith(ElementIDPrefix.Text)) {
+			return;
+		}
 		this.texts = this.texts.map(tx => {
 			if (id === tx.id) {
 				tx.rotate(posX, posY, snap);
@@ -413,6 +449,38 @@ class PitchFutsal {
 			return tx;
 		});
 		this._modified();
+	}
+
+	editTopLeft(id, deltaX, deltaY) {
+		this.squareEdit("tl",id, deltaX, deltaY);
+		this.ellipseEdit("tl",id, deltaX, deltaY);
+	}
+	
+	editTopRight(id, deltaX, deltaY) {
+		this.squareEdit("tr",id, deltaX, deltaY);
+		this.ellipseEdit("tr",id, deltaX, deltaY);
+	}
+
+	editBottomLeft(id, deltaX, deltaY) {
+		this.squareEdit("bl",id, deltaX, deltaY);
+		this.ellipseEdit("bl",id, deltaX, deltaY);
+	}
+
+	editBottomRight(id, deltaX, deltaY) {
+		this.squareEdit("br",id, deltaX, deltaY);
+		this.ellipseEdit("br",id, deltaX, deltaY);
+	}
+
+	editMove(id, deltaX, deltaY) {
+		this.squareEdit("mv",id, deltaX, deltaY);
+		this.ellipseEdit("mv",id, deltaX, deltaY);
+		this.textMove(id, deltaX, deltaY);
+	}
+
+	editRotate(id, posX, posY, snap) {
+		this.squareRotate(id, posX, posY, snap);
+		this.ellipseRotate(id, posX, posY, snap);
+		this.textRotate(id, posX, posY, snap);
 	}
 
 	endAllEdits() {

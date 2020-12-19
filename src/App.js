@@ -61,7 +61,6 @@ class App extends Component {
 	}
 
 	OnPitchModified(newPitch) {
-		console.log("Pitch modified");
 		this.pitch.onModified = null;
 		this.pitch = newPitch;
 		this.pitch.onModified = this.OnPitchModified;

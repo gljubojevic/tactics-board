@@ -106,79 +106,7 @@ class PitchEdit extends Component {
 		this._mouseX = e.clientX;
 		this._mouseY = e.clientY;
 	}
-
-	playerDrag(id, deltaX, deltaY) {
-		this.props.pitch.playerMove(id, deltaX, deltaY);
-	}
-
-	ballDrag(id, deltaX, deltaY) {
-		this.props.pitch.ballMove(id, deltaX, deltaY);
-	}
-
-	editTopLeft(id, deltaX, deltaY) {
-		if (id.startsWith("sq")) {
-			this.props.pitch.squareEdit("tl",id, deltaX, deltaY);
-		}
-		if (id.startsWith("el")) {
-			this.props.pitch.ellipseEdit("tl",id, deltaX, deltaY);
-		}
-	}
 	
-	editTopRight(id, deltaX, deltaY) {
-		if (id.startsWith("sq")) {
-			this.props.pitch.squareEdit("tr",id, deltaX, deltaY);
-		}
-		if (id.startsWith("el")) {
-			this.props.pitch.ellipseEdit("tr",id, deltaX, deltaY);
-		}
-	}
-
-	editBottomLeft(id, deltaX, deltaY) {
-		if (id.startsWith("sq")) {
-			this.props.pitch.squareEdit("bl",id, deltaX, deltaY);
-		}
-		if (id.startsWith("el")) {
-			this.props.pitch.ellipseEdit("bl",id, deltaX, deltaY);
-		}
-	}
-
-	editBottomRight(id, deltaX, deltaY) {
-		if (id.startsWith("sq")) {
-			this.props.pitch.squareEdit("br",id, deltaX, deltaY);
-		}
-		if (id.startsWith("el")) {
-			this.props.pitch.ellipseEdit("br",id, deltaX, deltaY);
-		}
-	}
-
-	editMove(id, deltaX, deltaY) {
-		if (id.startsWith("sq")) {
-			this.props.pitch.squareEdit("mv",id, deltaX, deltaY);
-		}
-		if (id.startsWith("el")) {
-			this.props.pitch.ellipseEdit("mv",id, deltaX, deltaY);
-		}
-		if (id.startsWith("txt")) {
-			this.props.pitch.textMove(id, deltaX, deltaY);
-		}
-	}
-
-	editRotate(id, posX, posY, snap) {
-		if (id.startsWith("sq")) {
-			this.props.pitch.squareRotate(id, posX, posY, snap);
-		}
-		if (id.startsWith("el")) {
-			this.props.pitch.ellipseRotate(id, posX, posY, snap);
-		}
-		if (id.startsWith("txt")) {
-			this.props.pitch.textRotate(id, posX, posY, snap);
-		}
-	}
-
-	editLinePoint(pid, id, deltaX, deltaY) {
-		this.props.pitch.lineEdit(pid, id, deltaX, deltaY);
-	}
-
 	isDragStarted(e) {
 		if (0 !== e.button) {
 			return false;
@@ -208,42 +136,11 @@ class PitchEdit extends Component {
 	}
 	
 	playerEditStarted(editNode) {
-		if (!editNode.startsWith("pl")) {
-			return false;
-		}
 		const editPlayer = this.props.pitch.playerEditStart(editNode);
 		if (null === editPlayer) {
 			return false;
 		}
 		this._playerDialogRef.current.openDialog(editPlayer);
-		return true;
-	}
-
-	squareEditStarted(editNode) {
-		if (!editNode.startsWith("sq")) {
-			return false;
-		}
-		return true;
-	}
-
-	ellipseEditStarted(editNode) {
-		if (!editNode.startsWith("el")) {
-			return false;
-		}
-		return true;
-	}
-
-	lineEditStarted(editNode) {
-		if (!editNode.startsWith("ln")) {
-			return false;
-		}
-		return true;
-	}
-
-	textEditStarted(editNode) {
-		if (!editNode.startsWith("txt")) {
-			return false;
-		}
 		return true;
 	}
 
@@ -253,42 +150,43 @@ class PitchEdit extends Component {
 	}
 
 	objectDrag(posX, posY, deltaX, deltaY, snap) {
+		const p = this.props.pitch;
 		switch (this._dragObjectType) {
 			case DragObject.Player:
-				this.playerDrag(this._dragNode, deltaX, deltaY);
+				p.playerMove(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.Ball:
-				this.ballDrag(this._dragNode, deltaX, deltaY);
+				p.ballMove(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditTopLeft:
-				this.editTopLeft(this._dragNode, deltaX, deltaY);
+				p.editTopLeft(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditTopRight:
-				this.editTopRight(this._dragNode, deltaX, deltaY);
+				p.editTopRight(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditBottomLeft:
-				this.editBottomLeft(this._dragNode, deltaX, deltaY);
+				p.editBottomLeft(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditBottomRight:
-				this.editBottomRight(this._dragNode, deltaX, deltaY);
+				p.editBottomRight(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditMove:
-				this.editMove(this._dragNode, deltaX, deltaY);
+				p.editMove(this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditRotate:
-				this.editRotate(this._dragNode, posX, posY, snap);
+				p.editRotate(this._dragNode, posX, posY, snap);
 				break;
 			case DragObject.EditLineP1:
-				this.editLinePoint("p1", this._dragNode, deltaX, deltaY);
+				p.lineEdit('p1', this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditLineC1:
-				this.editLinePoint("c1", this._dragNode, deltaX, deltaY);
+				p.lineEdit('c1', this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditLineC2:
-				this.editLinePoint("c2", this._dragNode, deltaX, deltaY);
+				p.lineEdit('c2', this._dragNode, deltaX, deltaY);
 				break;
 			case DragObject.EditLineP2:
-				this.editLinePoint("p2", this._dragNode, deltaX, deltaY);
+				p.lineEdit('p2', this._dragNode, deltaX, deltaY);
 				break;
 			default:
 				console.log("Invalid drag object type", this._dragObjectType, this._dragNode);
@@ -300,32 +198,29 @@ class PitchEdit extends Component {
 		if (this.props.drawMode.mode !== 'select') {
 			return;
 		}
-		let editNode = e.target.getAttribute("data-ref");
-		if (null === editNode) {
+		let id = e.target.getAttribute("data-ref");
+		if (null === id) {
 			return;
 		}
-		if (this.playerEditStarted(editNode)) {
+		const p = this.props.pitch;
+		if (this.playerEditStarted(id)) {
 			e.preventDefault();
 			return;
 		}
-		if (this.squareEditStarted(editNode)) {
+		if (p.squareEditStart(id)) {
 			e.preventDefault();
-			this.props.pitch.squareEditStart(editNode);
 			return;
 		}
-		if (this.ellipseEditStarted(editNode)) {
+		if (p.ellipseEditStart(id)) {
 			e.preventDefault();
-			this.props.pitch.ellipseEditStart(editNode);
 			return;
 		}
-		if (this.lineEditStarted(editNode)) {
+		if (p.lineEditStart(id)) {
 			e.preventDefault();
-			this.props.pitch.lineEditStart(editNode);
 			return;
 		}
-		if (this.textEditStarted(editNode)) {
+		if (p.textEditStart(id)) {
 			e.preventDefault();
-			this.props.pitch.textEditStart(editNode);
 			return;
 		}
 	}
@@ -333,27 +228,29 @@ class PitchEdit extends Component {
 	hMouseDown(e) {
 		let pos = this.getRealPosition(e);
 		const dm = this.props.drawMode;
+		const p = this.props.pitch;
 		switch (dm.mode) {
 			case 'line':
 				e.preventDefault();
-				this._dragNode = this.props.pitch.lineCreate(
+				this._dragNode = p.lineCreate(
 					pos.X, pos.Y, dm.color, dm.lineArrowStart, dm.lineArrowEnd, dm.lineDashed
 				);
 				break;
 			case 'square':
 				e.preventDefault();
-				this._dragNode = this.props.pitch.squareCreate(
+				this._dragNode = p.squareCreate(
 					pos.X, pos.Y, dm.color, dm.lineDashed
 				);
 				break;
 			case 'ellipse':
 				e.preventDefault();
-				this._dragNode = this.props.pitch.ellipseCreate(
+				this._dragNode = p.ellipseCreate(
 					pos.X, pos.Y, dm.color, dm.lineDashed
 				);
 				break;
 			case 'text':
-				this._dragNode = this.props.pitch.textCreate(
+				e.preventDefault();
+				this._dragNode = p.textCreate(
 					pos.X, pos.Y, dm.color, dm.textSize
 				);
 				break;
@@ -369,17 +266,18 @@ class PitchEdit extends Component {
 
 	hMouseUp(e) {
 		e.preventDefault();
+		const p = this.props.pitch;
 		let pos = this.getRealPosition(e);
 		let isShift = e.getModifierState("Shift");
 		switch (this.props.drawMode.mode) {
 			case 'line':
-				this.props.pitch.lineCleanup();
+				p.lineCleanup();
 				break;
 			case 'square':
-				this.props.pitch.squareCleanup();
+				p.squareCleanup();
 				break;
 			case 'ellipse':
-				this.props.pitch.ellipseCleanup();
+				p.ellipseCleanup();
 				break;
 			case 'text':
 				break;
@@ -394,7 +292,7 @@ class PitchEdit extends Component {
 		}
 		// Reset editing
 		if (0 === e.button && this._dragObjectType === DragObject.None) {
-			this.props.pitch.endAllEdits();
+			p.endAllEdits();
 		}
 		this._dragNode = null;
 		this._dragObjectType = DragObject.None;
@@ -404,19 +302,19 @@ class PitchEdit extends Component {
 		if (null == this._dragNode) {
 			return;
 		}
+		const p = this.props.pitch;
 		e.preventDefault();
-
 		let pos = this.getRealPosition(e);
 		let isShift = e.getModifierState("Shift");
 		switch (this.props.drawMode.mode) {
 			case 'line':
-				this.props.pitch.lineResize(this._dragNode, pos.X, pos.Y);
+				p.lineResize(this._dragNode, pos.X, pos.Y);
 				break;
 			case 'square':
-				this.props.pitch.squareResize(this._dragNode, pos.X, pos.Y, isShift);
+				p.squareResize(this._dragNode, pos.X, pos.Y, isShift);
 				break;
 			case 'ellipse':
-				this.props.pitch.ellipseResize(this._dragNode, pos.X, pos.Y, isShift);
+				p.ellipseResize(this._dragNode, pos.X, pos.Y, isShift);
 				break;
 			case 'text':
 				break;
