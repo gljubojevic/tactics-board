@@ -1,37 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Player from '../pitch/Player';
 
 class PlayerEdit extends Component {
 
 	render() {
-		const className = 'player pc' + this.props.color;
-		const transform = 'translate(' + this.props.x + ' ' + this.props.y + ')';
+		const pl = this.props.player;
+		const className = 'player pc' + pl.color;
+		const transform = 'translate(' + pl.x + ' ' + pl.y + ')';
 		return (
 			<g className={className} textAnchor="middle" transform={transform}>
-				<circle r="50" cx="50" cy="70" className="draggable" data-ref={this.props.id} />
-				<text className="number" x="50" y="70" dominantBaseline="central">{this.props.no}</text>
-				<text x="50">{this.props.name}</text>
+				<circle r="50" cx="50" cy="70" className="draggable" data-ref={pl.id} />
+				<text className="number" x="50" y="70" dominantBaseline="central">{pl.no}</text>
+				<text x="50">{pl.name}</text>
 			</g>
 		);
 	}
 }
 
 PlayerEdit.defaultProps = {
-	id:"",
-	x:0,
-	y:0,
-	color:0,
-	no: 0,
-	name: ""
+	player: null
 }
 
 PlayerEdit.propTypes = {
-	id: PropTypes.string,
-	x: PropTypes.number,
-	y: PropTypes.number,
-	color: PropTypes.number,
-	no: PropTypes.number,
-	name: PropTypes.string
+	player: PropTypes.instanceOf(Player)
 }
 
 export default PlayerEdit;

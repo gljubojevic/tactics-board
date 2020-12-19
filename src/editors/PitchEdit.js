@@ -343,48 +343,48 @@ class PitchEdit extends Component {
 		}
 	}
 
-	renderPlayers() {
-		return this.props.pitch.players.map((pl, index) => {
+	renderPlayers(players) {
+		return players.map((pl, index) => {
 			return (
-				<PlayerEdit key={index.toString()} id={pl.id} x={pl.x} y={pl.y} no={pl.no} name={pl.name} color={pl.color} />
+				<PlayerEdit key={index.toString()} player={pl} />
 			);
 		});
 	}
 
-	renderBalls(){
-		return this.props.pitch.balls.map((b, index) => {
+	renderBalls(balls){
+		return balls.map((b, index) => {
 			return (
-				<BallEdit key={index.toString()} id={b.id} x={b.x} y={b.y} color={b.color} />
+				<BallEdit key={index.toString()} ball={b} />
 			);
 		});
 	}
 
-	renderSquares(){
-		return this.props.pitch.squares.map((s, index) => {
+	renderSquares(squares){
+		return squares.map((s, index) => {
 			return (
 				<SquareEdit key={index.toString()} square={s} />
 			);
 		});
 	}
 
-	renderEllipses(){
-		return this.props.pitch.ellipses.map((el, index) => {
+	renderEllipses(ellipses){
+		return ellipses.map((el, index) => {
 			return (
 				<EllipseEdit key={index.toString()} ellipse={el} />
 			);
 		});
 	}
 
-	renderLines(){
-		return this.props.pitch.lines.map((l, index) => {
+	renderLines(lines){
+		return lines.map((l, index) => {
 			return (
 				<LineEdit key={index.toString()} line={l} />
 			);
 		});
 	}
 
-	renderTexts(){
-		return this.props.pitch.texts.map((tx, index) => {
+	renderTexts(texts){
+		return texts.map((tx, index) => {
 			return (
 				<TextEdit key={index.toString()} text={tx} onEditDone={this.textEditDone} />
 			);
@@ -437,14 +437,6 @@ class PitchEdit extends Component {
 
 	render() {
 		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
-
-		const playersShow = this.renderPlayers();
-		const ballsShow = this.renderBalls();
-		const squaresShow = this.renderSquares();
-		const ellipsesShow = this.renderEllipses();
-		const linesShow = this.renderLines();
-		const textsShow = this.renderTexts();
-		const pitchOverlayShow = this.renderPitchOverlay();
 
 		// default class is full screen width and height with padding for menu height
 		const pitchClasses = "pitch " + this.props.classes.offset;
@@ -541,18 +533,18 @@ class PitchEdit extends Component {
 						</g>
 					</g>
 					<g id="pitchOverlay" stroke="white" strokeWidth="8">
-						{pitchOverlayShow}
+						{this.renderPitchOverlay()}
 					</g>
-					<g id="ellipses">{ellipsesShow}</g>
-					<g id="squares">{squaresShow}</g>
+					<g id="ellipses">{this.renderEllipses(this.props.pitch.ellipses)}</g>
+					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
-						{playersShow}
+						{this.renderPlayers(this.props.pitch.players)}
 					</g>
 					<g id="balls" transform={ballsTransform}>
-						{ballsShow}
+						{this.renderBalls(this.props.pitch.balls)}
 					</g>
-					<g id="lines">{linesShow}</g>
-					<g id="texts">{textsShow}</g>
+					<g id="lines">{this.renderLines(this.props.pitch.lines)}</g>
+					<g id="texts">{this.renderTexts(this.props.pitch.texts)}</g>
 				</svg>
 			</div>
 			<PlayerDialog ref={this._playerDialogRef} onEditDone={this.playerEditDone} />

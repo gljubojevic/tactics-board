@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Ball from '../pitch/Ball';
 
 class BallEdit extends Component {
 
@@ -12,12 +13,13 @@ class BallEdit extends Component {
 	}
 
 	render() {
-		const className = 'ball bc' + this.props.color;
-		const transform = 'translate(' + this.props.x + ' ' + this.props.y + ')';
-		const ball = this.props.color === 4 ? this.ballImage() : null;
+		const b = this.props.ball;
+		const className = 'ball bc' + b.color;
+		const transform = 'translate(' + b.x + ' ' + b.y + ')';
+		const ball = b.color === 4 ? this.ballImage() : null;
 		return (
 			<g className={className} transform={transform}>
-				<circle r="30" cx="30" cy="30" className="draggable" data-ref={this.props.id} />
+				<circle r="30" cx="30" cy="30" className="draggable" data-ref={b.id} />
 				{ball}
 			</g>
 		);
@@ -25,17 +27,11 @@ class BallEdit extends Component {
 }
 
 BallEdit.defaultProps = {
-	id:"",
-	x:0,
-	y:0,
-	color:0
+	ball: null
 }
 
 BallEdit.propTypes = {
-	id: PropTypes.string,
-	x: PropTypes.number,
-	y: PropTypes.number,
-	color: PropTypes.number
+	ball: PropTypes.instanceOf(Ball)
 }
 
 export default BallEdit;
