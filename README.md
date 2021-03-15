@@ -1,6 +1,9 @@
 # Tactics board
 Project for futsal Tactics board [preview](https://gljubojevic.github.io/tactics-board)
 
+Reference for project is https://tactical-board.com/uk/mini-football  
+**All features there are required here too**
+
 Project is using following technologies/libraries:
 - [React](https://create-react-app.dev/)
 - [Material UI](https://material-ui.com/)
@@ -15,10 +18,9 @@ This should enable following features:
 - collaborating on same tactics
 
 ## What needs to be done
-Here is list of what needs to be done in project.
-Reference for project is https://tactical-board.com/uk/mini-football
-
-Project is required to have all features of reference project but for futsal only.
+Here is list of what needs to be done in project.  
+Reference for project is https://tactical-board.com/uk/mini-football  
+**Project is required to have all features of reference project but for futsal only.**
 
 **NOTE:** Functionality that is already done is ~~scratched~~ in description below.
 
@@ -29,7 +31,7 @@ Tactics board is SVG image generated client side and displayed with [React](http
 All drawing is done by modifying parameters of shape elements than SVG is generated and displayed.
 
 Image can be saved:
-- as set of parameters to be editable
+- as set of parameters to be editable (JSON definition)
 - ~~as PNG bitmap images as download~~
 
 Target platforms
@@ -38,7 +40,7 @@ Target platforms
 
 ### Drawing units
 SVG image is generated using metric centimeter (cm) as default unit.  
-1 in SVG image equals 1cm in reality.
+1 in SVG image equals 1cm in real world.
 
 ## Futsal pitch
 Main editing area is shown as default futsal pitch including all elements defined by [futsal rules](https://www.fifa.com/who-we-are/news/new-futsal-laws-of-the-game-approved-3073616)
@@ -64,6 +66,8 @@ Predefined shapes are dragged on pitch to be placed on desired position.
 - filled irregular shapes
 - text
 	- four different sizes, predefined text size
+	- needs debugging to show cursor before entering text
+	- needs selection, copy, cut, paste
 
 All the shapes can be drawn with one of 6 colors.
 
