@@ -24,6 +24,7 @@ import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-m
 import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
 import FullscreenToggle from './FullscreenToggle';
+import AnimControls from './AnimControls';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -43,6 +44,7 @@ class AppTools extends Component {
 		// Drawing menu
 		this._refDrawMenu = React.createRef();
 		this._refOpenDrawMenu = React.createRef();
+		this._refAnimControl = React.createRef();
 		this.drawingModeIcon = this.drawingModeIcon.bind(this);
 		this.drawMenuAnchorEl = this.drawMenuAnchorEl.bind(this);
 		this.drawMenuOpen = this.drawMenuOpen.bind(this);
@@ -105,6 +107,10 @@ class AppTools extends Component {
 		return this._refPaletteDialog.current;
 	}
 
+	animControlAnchorEl() {
+		return this._refAnimControl.current;
+	}
+
 	render() {
 		const drawingModeIcon = this.drawingModeIcon();
 
@@ -116,6 +122,8 @@ class AppTools extends Component {
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
+						<div className={this.props.classes.grow} />
+						<AnimControls ref={this._refAnimControl} anchorEl={this.animControlAnchorEl}/>
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
 							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
@@ -155,6 +163,7 @@ class AppTools extends Component {
 						</List>
 					</Box>
 				</Drawer>
+				
 				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} />
 				<PaletteDialog ref={this._refPaletteDialog} drawMode={this.props.drawMode} />
 			</React.Fragment>
