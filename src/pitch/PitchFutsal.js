@@ -113,6 +113,19 @@ class PitchFutsal {
 	animKeyFrameAdd() {
 		let last = this.AnimKeyFrames.length - 1;
 		let beforeLast = last--;
+		
+		// If there are no created KeyFrames create a copy of the first one 
+		if( this.AnimKeyFrames.length>=1){
+			last=0
+				let newKeyFrame = this.AnimKeyFrames[last].clone();
+			// copy and add new
+			this.AnimKeyFrames = this.AnimKeyFrames.map(kf => kf);
+			this.AnimKeyFrames.push(newKeyFrame);
+			// position to last key frame
+			this.AnimKeyFrameCurrent = this.AnimKeyFrames.length - 1;
+			this._modified();
+			return;
+		}
 		if (beforeLast >= 0) {
 			// Add check if there is diff between previous and last key frame, 
 			// forbid adding if no changes between last two frames
@@ -143,7 +156,8 @@ class PitchFutsal {
 		if (0 === this.AnimKeyFrameCurrent) {
 			return;
 		}
-		this.AnimKeyFrameCurrent++;
+		//Used to be ++, probably a mistake
+		this.AnimKeyFrameCurrent--;
 		this._modified();
 	}
 

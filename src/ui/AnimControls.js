@@ -1,36 +1,45 @@
 import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import MovieIcon from '@material-ui/icons/Movie';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import PauseIcon from '@material-ui/icons/Pause';
 import LoopIcon from '@material-ui/icons/Loop';
+import AddIcon from '@material-ui/icons/Add';
+
 class AnimControls extends Component {
-	
 
     render(){
-        const word="Hello World";
+    
         return (
             <div >
                 <div  style={{float:"left"}}>
-                  <IconButton edge="end" color="inherit">
-                    <ArrowBackIcon />
+                    
+                  <IconButton edge="end" color="inherit" onClick={this.props.pitch.animKeyFramePrevious.bind(this.props.pitch)} >
+                    <ArrowBackIcon/>
                 </IconButton>
+
                 <IconButton color="inherit" >
-                    <MovieIcon fontSize="large"/>
+                    {this.props.pitch.AnimKeyFrameCurrent}
                 </IconButton>
                 
-                <IconButton edge="start" color="inherit" >
+                <IconButton edge="start" color="inherit"  onClick={this.props.pitch.animKeyFrameNext.bind(this.props.pitch)} >
                     <ArrowForwardIcon />
                 </IconButton>
-                </div>
 
+                <IconButton color="inherit" onClick={this.props.pitch.animKeyFrameAdd.bind(this.props.pitch)} >
+                    <AddIcon  fontSize="large"></AddIcon>
+                </IconButton>
+
+                </div>
+                
                 <div style={{float:'right'}}>
+
                 <IconButton color="inherit">
                     <PlayArrowIcon fontSize="large" />
                 </IconButton>
+
                 <IconButton color="inherit" >
                     <PauseIcon fontSize="large"/>
                 </IconButton>
@@ -38,14 +47,16 @@ class AnimControls extends Component {
                 <IconButton  color="inherit" >
                     <StopIcon fontSize="large"/>
                 </IconButton>
+
                 <IconButton color="inherit" >
                     <LoopIcon fontSize="large"/>
                 </IconButton>
+
                 </div>
             </div>
         );
     }
-
+    
 }
 
 export default AnimControls;

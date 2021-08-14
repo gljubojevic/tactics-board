@@ -123,7 +123,7 @@ class AppTools extends Component {
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
 						<div className={this.props.classes.grow} />
-						<AnimControls ref={this._refAnimControl} anchorEl={this.animControlAnchorEl}/>
+						<AnimControls pitch={this.props.pitch} ref={this._refAnimControl} anchorEl={this.animControlAnchorEl}/>
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
 							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
