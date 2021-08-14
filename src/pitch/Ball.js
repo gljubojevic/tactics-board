@@ -12,6 +12,24 @@ class Ball {
 		this.x = this.xDefault;
 		this.y = this.yDefault;
 	}
+
+	clone() {
+		return new Ball(
+			this.id, 
+			this.color, 
+			this.x, this.y,
+			this.xDefault, this.yDefault
+		);
+	}
+
+	equalTo(b) {
+		return this.id === b.id
+			&& this.color === b.color
+			&& this.x === b.x
+			&& this.y === b.y
+			&& this.xDefault === b.xDefault
+			&& this.yDefault === b.yDefault
+	}
 }
 
 export default Ball;

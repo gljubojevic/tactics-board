@@ -20,6 +20,30 @@ class Player {
 		this.no = this.noDefault;
 	}
 
+	clone() {
+		return new Player(
+			this.id, 
+			this.no, 
+			this.name, 
+			this.color, 
+			this.x, this.y, this.rotation,
+			this.xDefault, this.yDefault, this.noDefault
+		);
+	}
+
+	equalTo(p) {
+		return this.id === p.id
+			&& this.no === p.no
+			&& this.name === p.name
+			&& this.color === p.color
+			&& this.x === p.x
+			&& this.y === p.y
+			&& this.rotation === p.rotation
+			&& this.xDefault === p.xDefault
+			&& this.yDefault === p.yDefault
+			&& this.noDefault === p.noDefault
+	}
+
 	get isPlaced() {
 		return this.x !== this.xDefault || this.y !== this.yDefault;
 	}
