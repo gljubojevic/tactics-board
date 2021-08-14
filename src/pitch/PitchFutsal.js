@@ -5,6 +5,7 @@ import Ellipse from "./Ellipse";
 import Line from "./Line";
 import Point from "./Point";
 import Text from "./Text";
+import AnimKeyFrame from "./AnimKeyFrame";
 
 const ElementIDPrefix = {
 	Ball: 'bl',
@@ -18,8 +19,8 @@ const ElementIDPrefix = {
 class PitchFutsal {
 
 	constructor() {
-		this.players = [];
-		this.balls = [];
+		this.AnimKeyFrameCurrent = 0;
+		this.AnimKeyFrames = [];
 
 		this.squareID = -1;
 		this.squares = [];
@@ -37,11 +38,15 @@ class PitchFutsal {
 	}
 
 	initDefault(noPlayers, noPlayerColors, playerSize, noBalls, noBallColors, ballSize) {
-		this._initPlayers(noPlayers, noPlayerColors, playerSize);
-		this._initBalls(noBalls, noBallColors, ballSize);
+		let kf = new AnimKeyFrame(
+			this._initPlayers(noPlayers, noPlayerColors, playerSize),
+			this._initBalls(noBalls, noBallColors, ballSize)
+		);
+		this.AnimKeyFrames.push(kf);
 	}
 
 	_initPlayers(noPlayers, noPlayerColors, playerSize) {
+		let players = [];
 		let groupSize = Math.floor(noPlayers / noPlayerColors);
 		for (var i = 0; i < noPlayers; i++) {
 			let color = Math.floor(i / groupSize);
@@ -53,11 +58,13 @@ class PitchFutsal {
 				color * playerSize, 0,
 				number
 			);
-			this.players.push(player);
+			players.push(player);
 		}
+		return players;
 	}
 
 	_initBalls(noBalls, noBallColors, ballSize) {
+		let balls = [];
 		let groupSize = Math.floor(noBalls / noBallColors);
 		for (var i = 0; i < noBalls; i++) {
 			let color = Math.floor(i / groupSize);
@@ -66,15 +73,17 @@ class PitchFutsal {
 				color * ballSize,0,
 				color * ballSize,0
 			);
-			this.balls.push(ball);
+			balls.push(ball);
 		}
+		return balls;
 	}
 
 	_modified() {
 		let cp = new PitchFutsal();
 		cp.isModified = true;
-		cp.players = this.players;
-		cp.balls = this.balls;
+		cp.AnimKeyFrameCurrent = this.AnimKeyFrameCurrent;
+		cp.AnimKeyFrames = this.AnimKeyFrames;
+
 		cp.squareID = this.squareID;
 		cp.squares = this.squares;
 		cp.ellipseID = this.ellipseID;
@@ -90,14 +99,27 @@ class PitchFutsal {
 		}
 	}
 
+	playersCurrentKeyFrame() {
+		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].players;
+	}
+
+	playersPreviousKeyFrame() {
+		if (0 === this.AnimKeyFrameCurrent) {
+			return null;
+		}
+		return this.AnimKeyFrames[this.AnimKeyFrameCurrent-1].players;
+	}
+
+	// note: only move current key frame player
 	playerMove(id, deltaX, deltaY) {
-		this.players = this.players.map(p => {
+		let players = this.playersCurrentKeyFrame().map(p => {
 			if (id === p.id) {
 				p.x += deltaX;
 				p.y += deltaY;
 			}
 			return p;
 		});
+		this.AnimKeyFrames[this.AnimKeyFrameCurrent].players = players;
 		this._modified();
 	}
 
@@ -106,7 +128,7 @@ class PitchFutsal {
 			return null;
 		}
 		// Edit player data
-		const p = this.players.find(p => id === p.id);
+		const p = this.playersCurrentKeyFrame().find(p => id === p.id);
 		// disable editing non placed players
 		if (!p.isPlaced) {
 			return null;
@@ -119,31 +141,47 @@ class PitchFutsal {
 		return editPlayer;
 	}
 
+	// note: edit player attributes changes player on all key frames
 	playerEditDone(player) {
-		this.players = this.players.map(p => {
-			if (player.id !== p.id) {
+		this.AnimKeyFrames = this.AnimKeyFrames.map(kf => {
+			kf.players = kf.players.map(p => {
+				if (player.id !== p.id) {
+					return p;
+				}
+				if (player.remove) {
+					p.reset();
+				} else {
+					p.name = player.name;
+					p.no = player.no;
+				}
 				return p;
-			}
-			if (player.remove) {
-				p.reset();
-			} else {
-				p.name = player.name;
-				p.no = player.no;
-			}
-			return p;
+			});
+			return kf;
 		});
 		this._modified();
 	}
 
+	ballsCurrentKeyFrame() {
+		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].balls;
+	}
 
+	ballsPreviousKeyFrame() {
+		if (0 === this.AnimKeyFrameCurrent) {
+			return null;
+		}
+		return this.AnimKeyFrames[this.AnimKeyFrameCurrent-1].balls;
+	}
+
+	// note: only move current key frame ball
 	ballMove(id, deltaX, deltaY) {
-		this.balls = this.balls.map(b => {
+		let balls = this.ballsCurrentKeyFrame().map(b => {
 			if (id === b.id) {
 				b.x += deltaX;
 				b.y += deltaY;
 			}
 			return b;
 		});
+		this.AnimKeyFrames[this.AnimKeyFrameCurrent].balls = balls;
 		this._modified();
 	}
 

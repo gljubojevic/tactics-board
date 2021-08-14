@@ -538,10 +538,10 @@ class PitchEdit extends Component {
 					<g id="ellipses">{this.renderEllipses(this.props.pitch.ellipses)}</g>
 					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
-						{this.renderPlayers(this.props.pitch.players)}
+						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame())}
 					</g>
 					<g id="balls" transform={ballsTransform}>
-						{this.renderBalls(this.props.pitch.balls)}
+						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame())}
 					</g>
 					<g id="lines">{this.renderLines(this.props.pitch.lines)}</g>
 					<g id="texts">{this.renderTexts(this.props.pitch.texts)}</g>
