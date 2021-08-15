@@ -7,6 +7,7 @@ import StopIcon from '@material-ui/icons/Stop';
 import PauseIcon from '@material-ui/icons/Pause';
 import LoopIcon from '@material-ui/icons/Loop';
 import AddIcon from '@material-ui/icons/Add';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class AnimControls extends Component {
 
@@ -15,42 +16,59 @@ class AnimControls extends Component {
         return (
             <div >
                 <div  style={{float:"left"}}>
-                    
-                  <IconButton edge="end" color="inherit" onClick={this.props.pitch.animKeyFramePrevious.bind(this.props.pitch)} >
+
+                <Tooltip title="Previous Frame">
+                  <IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.props.pitch.animKeyFramePrevious.bind(this.props.pitch)} >
                     <ArrowBackIcon/>
                 </IconButton>
+                </Tooltip>
 
-                <IconButton color="inherit" >
+                
+                <Tooltip title="Current Frame">
+                <IconButton color="inherit" aria-label="Current Frame">
                     {this.props.pitch.AnimKeyFrameCurrent}
                 </IconButton>
+                </Tooltip>
                 
-                <IconButton edge="start" color="inherit"  onClick={this.props.pitch.animKeyFrameNext.bind(this.props.pitch)} >
+                <Tooltip title="Next Frame">
+                <IconButton edge="start" color="inherit" aria-label="Next Frame" onClick={this.props.pitch.animKeyFrameNext.bind(this.props.pitch)} >
                     <ArrowForwardIcon />
                 </IconButton>
+                </Tooltip>
 
-                <IconButton color="inherit" onClick={this.props.pitch.animKeyFrameAdd.bind(this.props.pitch)} >
+                <Tooltip title="Add Frame">
+                <IconButton color="inherit" aria-label="Add Frame" onClick={this.props.pitch.animKeyFrameAdd.bind(this.props.pitch)} >
                     <AddIcon  fontSize="large"></AddIcon>
                 </IconButton>
+                </Tooltip>
 
                 </div>
                 
                 <div style={{float:'right'}}>
 
-                <IconButton color="inherit">
+                <Tooltip title="Play Animation">
+                <IconButton aria-label="Play Animation" color="inherit">
                     <PlayArrowIcon fontSize="large" />
                 </IconButton>
+                </Tooltip>
 
-                <IconButton color="inherit" >
+                <Tooltip title="Pause Animation">
+                <IconButton aria-label="Pause Animation" color="inherit" >
                     <PauseIcon fontSize="large"/>
                 </IconButton>
+                </Tooltip>
                 
-                <IconButton  color="inherit" >
+                <Tooltip title="Stop Animation">
+                <IconButton aria-label="Stop Animation" color="inherit" >
                     <StopIcon fontSize="large"/>
                 </IconButton>
-
-                <IconButton color="inherit" >
+                </Tooltip>
+                
+                <Tooltip title="Loop Animation">
+                <IconButton  aria-label="Loop Animation" color="inherit" >
                     <LoopIcon fontSize="large"/>
                 </IconButton>
+                </Tooltip>
 
                 </div>
             </div>

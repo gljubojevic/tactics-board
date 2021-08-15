@@ -6,6 +6,9 @@ import AppTools from './ui/AppTools'
 import ConfirmDialog from './ui/ConfirmDialog'
 import PitchFutsal from './pitch/PitchFutsal'
 import DrawMode from './pitch/DrawMode'
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import './App.css';
 
 class App extends Component {
@@ -25,6 +28,8 @@ class App extends Component {
 		this.PitchReset = this.PitchReset.bind(this);
 		this.OnPitchModified = this.OnPitchModified.bind(this);
 		this.OnDrawModeModified = this.OnDrawModeModified.bind(this);
+		this.OnCloseSnackbar=this.OnCloseSnackbar.bind(this);
+		this.OnOpenSnackbar=this.OnOpenSnackbar.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -33,7 +38,9 @@ class App extends Component {
 		this.drawMode.onModified = this.OnDrawModeModified;
 		this.state = {
 			pitch: this.pitch,
-			drawMode: this.drawMode
+			drawMode: this.drawMode,
+			snackBarShow:false,
+			snackBarMsg:"",
 		}
 	}
 	
@@ -107,12 +114,30 @@ class App extends Component {
 			svg.width/2, svg.height/2
 		);
 	}
+	OnCloseSnackbar(){
+		this.setState({
+			snackBarShow:false
+		})
+	}
+	OnOpenSnackbar(message){
+		this.setState({
+			snackBarShow:true,
+			snackBarMsg:message
+		})
+	}
 
 	render() {
 		return (
 			<React.Fragment>
 				<ThemeProvider theme={this.appTheme}>
-					<AppTools pitch={this.state.pitch} ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} />
+					<Snackbar open={this.state.snackBarShow} anchorOrigin={{ vertical: 'top',horizontal: 'center',}} message={this.state.snackBarMsg} autoHideDuration={1000} onClose={this.OnCloseSnackbar}
+							action={
+							<IconButton size="small" aria-label="close" color="inherit" onClick={this.OnCloseSnackbar}>
+								<CloseIcon fontSize="small" />
+						 	</IconButton>}>
+					</Snackbar>
+					<AppTools pitch={this.state.pitch} ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} 
+							   openSnackbar={this.OnOpenSnackbar}/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<SvgToImg ref={this.refSvgToImg} />
