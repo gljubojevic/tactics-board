@@ -343,18 +343,26 @@ class PitchEdit extends Component {
 		}
 	}
 
-	renderPlayers(players) {
+	renderPlayers(players, isEdit) {
+		if (null === players) {
+			return null;
+		}
+		const keyPrefix = isEdit ? "ed" : "";
 		return players.map((pl, index) => {
 			return (
-				<PlayerEdit key={index.toString()} player={pl} />
+				<PlayerEdit key={keyPrefix + index.toString()} player={pl} isEdit={isEdit} />
 			);
 		});
 	}
 
-	renderBalls(balls){
+	renderBalls(balls, isEdit){
+		if (null === balls) {
+			return null;
+		}
+		const keyPrefix = isEdit ? "ed" : "";
 		return balls.map((b, index) => {
 			return (
-				<BallEdit key={index.toString()} ball={b} />
+				<BallEdit key={keyPrefix + index.toString()} ball={b} isEdit={isEdit} />
 			);
 		});
 	}
@@ -538,10 +546,12 @@ class PitchEdit extends Component {
 					<g id="ellipses">{this.renderEllipses(this.props.pitch.ellipses)}</g>
 					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
-						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame())}
+						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false)}
+						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame(), true)}
 					</g>
 					<g id="balls" transform={ballsTransform}>
-						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame())}
+						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), false)}
+						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), true)}
 					</g>
 					<g id="lines">{this.renderLines(this.props.pitch.lines)}</g>
 					<g id="texts">{this.renderTexts(this.props.pitch.texts)}</g>

@@ -14,12 +14,14 @@ class BallEdit extends Component {
 
 	render() {
 		const b = this.props.ball;
+		const editID = this.props.isEdit ? b.id : null;
+		const editClassName = this.props.isEdit ? 'draggable' : null;
 		const className = 'ball bc' + b.color;
 		const transform = 'translate(' + b.x + ' ' + b.y + ')';
 		const ball = b.color === 4 ? this.ballImage() : null;
 		return (
 			<g className={className} transform={transform}>
-				<circle r="30" cx="30" cy="30" className="draggable" data-ref={b.id} />
+				<circle r="30" cx="30" cy="30" className={editClassName} data-ref={editID} />
 				{ball}
 			</g>
 		);
@@ -27,11 +29,13 @@ class BallEdit extends Component {
 }
 
 BallEdit.defaultProps = {
-	ball: null
+	ball: null,
+	isEdit: true
 }
 
 BallEdit.propTypes = {
-	ball: PropTypes.instanceOf(Ball)
+	ball: PropTypes.instanceOf(Ball),
+	isEdit: PropTypes.bool
 }
 
 export default BallEdit;
