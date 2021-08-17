@@ -383,10 +383,18 @@ class PitchEdit extends Component {
 		});
 	}
 
-	renderLines(lines){
+	renderLines(lines, isPath){
+		if (null === lines) {
+			return null;
+		}
+		const keyPrefix = isPath ? "ph" : "";
 		return lines.map((l, index) => {
+			// don't render lines that are single point
+			if (l.empty()) {
+				return null;
+			}
 			return (
-				<LineEdit key={index.toString()} line={l} />
+				<LineEdit key={keyPrefix + index.toString()} line={l} isPath={isPath} />
 			);
 		});
 	}
@@ -411,11 +419,17 @@ class PitchEdit extends Component {
 	}
 
 	generatePicthStyles() {
+		// default colors list
 		const colors = this.props.drawMode.colorOptions.map((col, index) => {
 			return '.pc'+ index +' { fill: '+col+'; stroke: '+ col +'; }';
 		});
 
-		return colors.concat([
+		// edit color
+		const allColors = colors.concat([
+			'.pc' + this.props.drawMode.editColorIndex  + ' { fill: '+ this.props.drawMode.editColor +'; stroke: '+ this.props.drawMode.editColor +'; }'
+		]);
+
+		return allColors.concat([
 			'.bc0 { fill: #ffa500; }',
 			'.bc1 { fill: #cc3333; }',
 			'.bc2 { fill: #222333; }',
@@ -436,6 +450,8 @@ class PitchEdit extends Component {
 			'.ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
 			'.line { stroke-width: 12; }',
 			'.line path { fill: none; stroke-width: 12; }',
+			'.path { stroke-width: 6; }',
+			'.path path { fill: none; stroke-width: 6; }',
 			'.draggable { cursor: move; pointer-events: all;}',
 			'.editBox { fill: none; stroke-width: 8; stroke-opacity: 1; }',
 			'.editTransparent { fill: none; stroke-width: 0; }',
@@ -455,13 +471,13 @@ class PitchEdit extends Component {
 		const pitchTransform = 'translate(' + pitchLeft + ' ' + pitchTop + ')';
 
 		// calculate players position in viewbox
-		const playersLeft = pitchLeft;
-		const playersTop = pitchTop + 2000 + 50;
+		const playersLeft = pitchLeft + 50;
+		const playersTop = pitchTop + 2000 + 50 + 25;
 		const playersTransform = 'translate(' + playersLeft + ' ' + playersTop + ')';
 
 		// calculate balls position in viewBox
 		const ballsLeft = pitchLeft + 1050
-		const ballsTop = pitchTop + 2000 + 100;
+		const ballsTop = pitchTop + 2000 + 90;
 		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"
 
 		return (
@@ -546,14 +562,16 @@ class PitchEdit extends Component {
 					<g id="ellipses">{this.renderEllipses(this.props.pitch.ellipses)}</g>
 					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
+						{this.renderLines(this.props.pitch.playerPathsCurrentKeyFrame(), true)}
 						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false)}
 						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame(), true)}
 					</g>
 					<g id="balls" transform={ballsTransform}>
-						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), false)}
+						{this.renderLines(this.props.pitch.ballPathsCurrentKeyFrame(), true)}
+						{this.renderBalls(this.props.pitch.ballsPreviousKeyFrame(), false)}
 						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), true)}
 					</g>
-					<g id="lines">{this.renderLines(this.props.pitch.lines)}</g>
+					<g id="lines">{this.renderLines(this.props.pitch.lines, false)}</g>
 					<g id="texts">{this.renderTexts(this.props.pitch.texts)}</g>
 				</svg>
 			</div>

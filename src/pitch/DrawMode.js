@@ -75,6 +75,16 @@ class DrawMode {
 		return ['#8b2323','#e7e739','#912cee','#04b804','#1d4ba0','#ee2c2c','#ff7f50','#56c6eb'];
 	}
 
+	// hardcoded edit color
+	get editColor() {
+		return '#666666';
+	}
+
+	// hardcoded edit color index
+	get editColorIndex() {
+		return 99;
+	}
+
 	get color() {
 		return this._color;
 	}

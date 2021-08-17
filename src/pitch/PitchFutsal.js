@@ -6,15 +6,7 @@ import Line from "./Line";
 import Point from "./Point";
 import Text from "./Text";
 import AnimKeyFrame from "./AnimKeyFrame";
-
-const ElementIDPrefix = {
-	Ball: 'bl',
-	Player: 'pl',
-	Square: 'sq',
-	Ellipse: 'el',
-	Line: 'ln',
-	Text: 'txt'
-}
+import { ElementIDPrefix } from "./Constants";
 
 class PitchFutsal {
 
@@ -40,7 +32,9 @@ class PitchFutsal {
 	initDefault(noPlayers, noPlayerColors, playerSize, noBalls, noBallColors, ballSize) {
 		let kf = new AnimKeyFrame(
 			this._initPlayers(noPlayers, noPlayerColors, playerSize),
-			this._initBalls(noBalls, noBallColors, ballSize)
+			null,
+			this._initBalls(noBalls, noBallColors, ballSize),
+			null
 		);
 		this.AnimKeyFrames.push(kf);
 	}
@@ -103,6 +97,10 @@ class PitchFutsal {
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].players;
 	}
 
+	playerPathsCurrentKeyFrame() {
+		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].playerPaths;
+	}
+
 	playersPreviousKeyFrame() {
 		if (0 === this.AnimKeyFrameCurrent) {
 			return null;
@@ -158,6 +156,15 @@ class PitchFutsal {
 			return p;
 		});
 		this.AnimKeyFrames[this.AnimKeyFrameCurrent].players = players;
+		// edit path end position
+		if (this.AnimKeyFrameCurrent > 0) {
+			let playerPathID = id.replace(ElementIDPrefix.Player, ElementIDPrefix.PathPlayer);
+			this.AnimKeyFrames[this.AnimKeyFrameCurrent].playerPaths = this.lineResizeP2(
+				this.playerPathsCurrentKeyFrame(),
+				playerPathID, deltaX, deltaY
+			);
+		}
+		// TODO: edit path start position on previous key frame
 		this._modified();
 	}
 
@@ -203,6 +210,10 @@ class PitchFutsal {
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].balls;
 	}
 
+	ballPathsCurrentKeyFrame() {
+		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].ballPaths;
+	}
+
 	ballsPreviousKeyFrame() {
 		if (0 === this.AnimKeyFrameCurrent) {
 			return null;
@@ -220,6 +231,14 @@ class PitchFutsal {
 			return b;
 		});
 		this.AnimKeyFrames[this.AnimKeyFrameCurrent].balls = balls;
+		// edit path end position
+		if (this.AnimKeyFrameCurrent > 0) {
+			let ballPathID = id.replace(ElementIDPrefix.Ball, ElementIDPrefix.PathBall);
+			this.AnimKeyFrames[this.AnimKeyFrameCurrent].ballPaths = this.lineResizeP2(
+				this.ballPathsCurrentKeyFrame(),
+				ballPathID, deltaX, deltaY
+			);
+		}
 		this._modified();
 	}
 
@@ -245,6 +264,25 @@ class PitchFutsal {
 		return l.id;
 	}
 
+	lineResizeP1(lines, id, deltaX, deltaY) {
+		return lines.map(l => {
+			if (id === l.id) {
+				l.resizeP1(deltaX,deltaY);
+			}
+			return l;
+		});
+	}
+
+	lineResizeP2(lines, id, deltaX, deltaY) {
+		return lines.map(l => {
+			if (id === l.id) {
+				l.resizeP2(deltaX, deltaY);
+			}
+			return l;
+		});
+	}
+
+	// TODO: remove for only delta resize
 	lineResize(id, x2, y2) {
 		this.lines = this.lines.map(l => {
 			if (id === l.id) {
@@ -255,13 +293,34 @@ class PitchFutsal {
 		this._modified();
 	}
 
-	lineEdit(pid, id, deltaX, deltaY) {
-		this.lines = this.lines.map(l => {
+	lineOrPathEdit(lines, pid, id, deltaX, deltaY) {
+		return lines.map(l => {
 			if (id === l.id) {
 				l.edit(pid, deltaX, deltaY);
 			}
 			return l;
 		});
+	}
+
+	lineEdit(pid, id, deltaX, deltaY) {
+		if (id.startsWith(ElementIDPrefix.Line)) {
+			this.lines = this.lineOrPathEdit(
+				this.lines,
+				pid, id, deltaX, deltaY
+			);
+		}
+		if (id.startsWith(ElementIDPrefix.PathPlayer)) {
+			this.AnimKeyFrames[this.AnimKeyFrameCurrent].playerPaths = this.lineOrPathEdit(
+				this.playerPathsCurrentKeyFrame(),
+				pid, id, deltaX, deltaY
+			);
+		}
+		if (id.startsWith(ElementIDPrefix.PathBall)) {
+			this.AnimKeyFrames[this.AnimKeyFrameCurrent].ballPaths = this.lineOrPathEdit(
+				this.ballPathsCurrentKeyFrame(),
+				pid, id, deltaX, deltaY
+			);
+		}
 		this._modified();
 	}
 

@@ -23,8 +23,24 @@ class Line {
 			&& this.p1.equalTo(this.c2);
 	}
 
+	resizeP1(deltaX, deltaY) {
+		this.p1 = new Point(this.p1.x + deltaX, this.p1.y + deltaY);
+		this.linearControlPoints();
+	}
+
+	resizeP2(deltaX, deltaY) {
+		this.p2 = new Point(this.p2.x + deltaX, this.p2.y + deltaY);
+		this.linearControlPoints();
+	}
+
+	// TODO: Remove for only delta resize
 	resize(x2,y2) {
-		this.p2= new Point(x2,y2);
+		this.p2 = new Point(x2,y2);
+		this.linearControlPoints();
+	}
+
+	// calculate linear control points position
+	linearControlPoints() {
 		let lx = this.p2.x - this.p1.x;
 		let ly = this.p2.y - this.p1.y;
 		this.c1 = new Point(
