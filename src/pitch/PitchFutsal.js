@@ -12,6 +12,7 @@ class PitchFutsal {
 
 	constructor() {
 		this.AnimKeyFrameCurrent = 0;
+		this.AnimKeyFrameDuration = 10;	// duration of each key frame in seconds
 		this.AnimKeyFrames = [];
 
 		this.squareID = -1;
@@ -76,6 +77,7 @@ class PitchFutsal {
 		let cp = new PitchFutsal();
 		cp.isModified = true;
 		cp.AnimKeyFrameCurrent = this.AnimKeyFrameCurrent;
+		cp.AnimKeyFrameDuration = this.AnimKeyFrameDuration;
 		cp.AnimKeyFrames = this.AnimKeyFrames;
 
 		cp.squareID = this.squareID;
