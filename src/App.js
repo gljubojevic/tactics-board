@@ -136,8 +136,8 @@ class App extends Component {
 								<CloseIcon fontSize="small" />
 						 	</IconButton>}>
 					</Snackbar>
-					<AppTools pitch={this.state.pitch} ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} 
-							   openSnackbar={this.OnOpenSnackbar}/>
+					<AppTools ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} 
+							  currentKeyFrame={this.state.pitch.AnimKeyFrameCurrent} previousKeyframe={this.state.pitch.animKeyFramePrevious} nextKeyFrame={this.state.pitch.animKeyFrameNext} addKeyFrame={this.state.pitch.animKeyFrameAdd} openSnackbar={this.OnOpenSnackbar}/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<SvgToImg ref={this.refSvgToImg} />

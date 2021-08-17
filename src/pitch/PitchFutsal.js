@@ -23,6 +23,10 @@ class PitchFutsal {
 		this.textID = -1;
 		this.texts = [];
 
+		this.animKeyFrameAdd=this.animKeyFrameAdd.bind(this);
+		this.animKeyFrameNext=this.animKeyFrameNext.bind(this);
+		this.animKeyFramePrevious=this.animKeyFramePrevious.bind(this);
+
 		this._overlay = "none";
 
 		this.isModified = false;

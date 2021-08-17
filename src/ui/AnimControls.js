@@ -18,7 +18,7 @@ class AnimControls extends Component {
                 <div  style={{float:"left"}}>
 
                 <Tooltip title="Previous Frame">
-                  <IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.props.pitch.animKeyFramePrevious.bind(this.props.pitch)} >
+                  <IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.props.previousKeyFrame} >
                     <ArrowBackIcon/>
                 </IconButton>
                 </Tooltip>
@@ -26,18 +26,18 @@ class AnimControls extends Component {
                 
                 <Tooltip title="Current Frame">
                 <IconButton color="inherit" aria-label="Current Frame">
-                    {this.props.pitch.AnimKeyFrameCurrent}
+                    {this.props.currentKeyFrame}
                 </IconButton>
                 </Tooltip>
                 
                 <Tooltip title="Next Frame">
-                <IconButton edge="start" color="inherit" aria-label="Next Frame" onClick={this.props.pitch.animKeyFrameNext.bind(this.props.pitch)} >
+                <IconButton edge="start" color="inherit" aria-label="Next Frame" onClick={this.props.nextKeyFrame} >
                     <ArrowForwardIcon />
                 </IconButton>
                 </Tooltip>
 
                 <Tooltip title="Add Frame">
-                <IconButton color="inherit" aria-label="Add Frame" onClick={this.props.pitch.animKeyFrameAdd.bind(this.props.pitch)} >
+                <IconButton color="inherit" aria-label="Add Frame" onClick={this.props.addKeyFrame} >
                     <AddIcon  fontSize="large"></AddIcon>
                 </IconButton>
                 </Tooltip>
