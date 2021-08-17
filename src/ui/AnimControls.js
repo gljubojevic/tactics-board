@@ -9,36 +9,8 @@ import PauseIcon from '@material-ui/icons/Pause';
 import LoopIcon from '@material-ui/icons/Loop';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
-import PitchFutsal from '../pitch/PitchFutsal';
 
 class AnimControls extends Component {
-
-	constructor(props) {
-		super(props);
-		this.keyFrameAdd = this.keyFrameAdd.bind(this);
-		this.keyFrameNext = this.keyFrameNext.bind(this);
-		this.keyFramePrevious = this.keyFramePrevious.bind(this);
-	}
-
-	keyFrameAdd() {
-		if (this.props.pitch.animKeyFrameAdd()){
-			this.props.snackbarOpen("success", "New key frame added to animation");
-		} else {
-			this.props.snackbarOpen("error", "Can't add new key frame no change is done to current key frame");
-		}
-	}
-
-	keyFrameNext() {
-		if (!this.props.pitch.animKeyFrameNext()) {
-			this.props.snackbarOpen("warning", "No more key frames to navigate");
-		}
-	}
-
-	keyFramePrevious() {
-		if (!this.props.pitch.animKeyFramePrevious()) {
-			this.props.snackbarOpen("warning", "You are on first key frame");
-		}
-	}
 
     render(){
     
@@ -47,25 +19,25 @@ class AnimControls extends Component {
                 <div  style={{float:"left"}}>
 
                 <Tooltip title="Previous Frame">
-                  <IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.keyFramePrevious} >
+                  <IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.props.keyFramePrevious} >
                     <ArrowBackIcon/>
                 </IconButton>
                 </Tooltip>
                 
                 <Tooltip title="Current Frame">
                 <IconButton color="inherit" aria-label="Current Frame">
-                    {this.props.pitch.AnimKeyFrameCurrent}
+                    {this.props.keyFrameCurrent}
                 </IconButton>
                 </Tooltip>
                 
                 <Tooltip title="Next Frame">
-                <IconButton edge="start" color="inherit" aria-label="Next Frame" onClick={this.keyFrameNext} >
+                <IconButton edge="start" color="inherit" aria-label="Next Frame" onClick={this.props.keyFrameNext} >
                     <ArrowForwardIcon />
                 </IconButton>
                 </Tooltip>
 
                 <Tooltip title="Add Frame">
-                <IconButton color="inherit" aria-label="Add Frame" onClick={this.keyFrameAdd} >
+                <IconButton color="inherit" aria-label="Add Frame" onClick={this.props.keyFrameAdd} >
                     <AddIcon  fontSize="large"></AddIcon>
                 </IconButton>
                 </Tooltip>
@@ -106,13 +78,17 @@ class AnimControls extends Component {
 }
 
 AnimControls.defaultProps = {
-	pitch: null,
-	snackbarOpen: null
+	keyFrameCurrent: 0,
+	keyFrameAdd: null,
+	keyFrameNext: null,
+	keyFramePrevious: null
 }
 
 AnimControls.propTypes = {
-	pitch: PropTypes.instanceOf(PitchFutsal),
-	snackbarOpen: PropTypes.func
+	keyFrameCurrent: PropTypes.number,
+	keyFrameAdd: PropTypes.func,
+	keyFrameNext: PropTypes.func,
+	keyFramePrevious: PropTypes.func
 }
 
 export default AnimControls;

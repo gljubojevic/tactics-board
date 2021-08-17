@@ -25,7 +25,6 @@ import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
 import FullscreenToggle from './FullscreenToggle';
 import AnimControls from './AnimControls';
-import PitchFutsal from '../pitch/PitchFutsal';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -45,7 +44,6 @@ class AppTools extends Component {
 		// Drawing menu
 		this._refDrawMenu = React.createRef();
 		this._refOpenDrawMenu = React.createRef();
-		this._refAnimControl = React.createRef();
 		this.drawingModeIcon = this.drawingModeIcon.bind(this);
 		this.drawMenuAnchorEl = this.drawMenuAnchorEl.bind(this);
 		this.drawMenuOpen = this.drawMenuOpen.bind(this);
@@ -108,10 +106,6 @@ class AppTools extends Component {
 		return this._refPaletteDialog.current;
 	}
 
-	animControlAnchorEl() {
-		return this._refAnimControl.current;
-	}
-
 	render() {
 		const drawingModeIcon = this.drawingModeIcon();
 
@@ -124,7 +118,11 @@ class AppTools extends Component {
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
 						<div className={this.props.classes.grow} />
-						<AnimControls pitch={this.props.pitch} ref={this._refAnimControl} anchorEl={this.animControlAnchorEl} snackbarOpen={this.props.snackbarOpen} />
+						<AnimControls keyFrameCurrent={this.props.animKeyFrameCurrent}
+							keyFrameAdd={this.props.animKeyFrameAdd}
+							keyFrameNext={this.props.animKeyFrameNext}
+							keyFramePrevious={this.props.animKeyFramePrevious}
+						/>
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
 							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
@@ -173,21 +171,26 @@ class AppTools extends Component {
 }
 
 AppTools.defaultProps = {
-	pitch: null,
 	drawMode: null,
 	saveImage: null,
 	createNewScheme: null,
 	createNewAnimation: null,
-	snackbarOpen: null
+	animKeyFrameCurrent: 0,
+	animKeyFrameAdd: null,
+	animKeyFrameNext: null,
+	animKeyFramePrevious: null
 }
 
 AppTools.propTypes = {
-	pitch: PropTypes.instanceOf(PitchFutsal),
 	drawMode: PropTypes.instanceOf(DrawMode),
 	saveImage: PropTypes.func,
 	createNewScheme: PropTypes.func,
 	createNewAnimation: PropTypes.func,
-	snackbarOpen: PropTypes.func
+	snackbarOpen: PropTypes.func,
+	animKeyFrameCurrent: PropTypes.number,
+	animKeyFrameAdd: PropTypes.func,
+	animKeyFrameNext: PropTypes.func,
+	animKeyFramePrevious: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);

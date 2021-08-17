@@ -29,6 +29,9 @@ class App extends Component {
 		this.OnDrawModeModified = this.OnDrawModeModified.bind(this);
 		this.SnackbarOpen=this.SnackbarOpen.bind(this);
 		this.SnackbarOnClose=this.SnackbarOnClose.bind(this);
+		this.AnimKeyFrameAdd=this.AnimKeyFrameAdd.bind(this);
+		this.AnimKeyFrameNext=this.AnimKeyFrameNext.bind(this);
+		this.AnimKeyFramePrevious=this.AnimKeyFramePrevious.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -143,11 +146,39 @@ class App extends Component {
 		});
 	}
 
+	AnimKeyFrameAdd() {
+		if (this.pitch.animKeyFrameAdd()){
+			this.SnackbarOpen("success", "New key frame added to animation");
+		} else {
+			this.SnackbarOpen("error", "Can't add new key frame no change is done to current key frame");
+		}
+	}
+
+	AnimKeyFrameNext() {
+		if (!this.pitch.animKeyFrameNext()) {
+			this.SnackbarOpen("warning", "No more key frames to navigate");
+		}
+	}
+
+	AnimKeyFramePrevious() {
+		if (!this.pitch.animKeyFramePrevious()) {
+			this.SnackbarOpen("warning", "You are on first key frame");
+		}
+	}
+
 	render() {
 		return (
 			<React.Fragment>
 				<ThemeProvider theme={this.appTheme}>
-					<AppTools pitch={this.state.pitch} ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} snackbarOpen={this.SnackbarOpen}/>
+					<AppTools ref={this.refAppTools} drawMode={this.state.drawMode}
+						saveImage={this.SaveImage}
+						createNewScheme={this.CreateNewScheme}
+						createNewAnimation={this.CreateNewAnimation}
+						animKeyFrameCurrent={this.state.pitch.AnimKeyFrameCurrent}
+						animKeyFrameAdd={this.AnimKeyFrameAdd}
+						animKeyFrameNext={this.AnimKeyFrameNext}
+						animKeyFramePrevious={this.AnimKeyFramePrevious}
+					/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
