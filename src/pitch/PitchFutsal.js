@@ -12,7 +12,7 @@ class PitchFutsal {
 
 	constructor() {
 		this.AnimKeyFrameCurrent = 0;
-		this.AnimKeyFrameDuration = 10;	// duration of each key frame in seconds
+		this.AnimKeyFrameDuration = 5;	// duration of each key frame in seconds
 		this.AnimKeyFrames = [];
 
 		this.squareID = -1;
@@ -108,6 +108,15 @@ class PitchFutsal {
 			return null;
 		}
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent-1].players;
+	}
+
+	animKeyFrameDurationSet(duration) {
+		let newDuration = parseInt(duration);
+		this.AnimKeyFrameDuration = isNaN(newDuration) ? 1 : newDuration;
+		if (0 >= this.AnimKeyFrameDuration) {
+			this.AnimKeyFrameDuration = 1;
+		}
+		this._modified();
 	}
 
 	animKeyFrameAdd() {
