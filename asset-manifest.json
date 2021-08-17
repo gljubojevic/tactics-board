@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/tactics-board/static/css/main.a2bc5f7d.chunk.css",
-    "main.js": "/tactics-board/static/js/main.564e8450.chunk.js",
-    "main.js.map": "/tactics-board/static/js/main.564e8450.chunk.js.map",
+    "main.js": "/tactics-board/static/js/main.26e6efa5.chunk.js",
+    "main.js.map": "/tactics-board/static/js/main.26e6efa5.chunk.js.map",
     "runtime-main.js": "/tactics-board/static/js/runtime-main.3f70615d.js",
     "runtime-main.js.map": "/tactics-board/static/js/runtime-main.3f70615d.js.map",
-    "static/js/2.cbd7354b.chunk.js": "/tactics-board/static/js/2.cbd7354b.chunk.js",
-    "static/js/2.cbd7354b.chunk.js.map": "/tactics-board/static/js/2.cbd7354b.chunk.js.map",
+    "static/js/2.47ae1183.chunk.js": "/tactics-board/static/js/2.47ae1183.chunk.js",
+    "static/js/2.47ae1183.chunk.js.map": "/tactics-board/static/js/2.47ae1183.chunk.js.map",
     "index.html": "/tactics-board/index.html",
     "static/css/main.a2bc5f7d.chunk.css.map": "/tactics-board/static/css/main.a2bc5f7d.chunk.css.map",
-    "static/js/2.cbd7354b.chunk.js.LICENSE.txt": "/tactics-board/static/js/2.cbd7354b.chunk.js.LICENSE.txt",
+    "static/js/2.47ae1183.chunk.js.LICENSE.txt": "/tactics-board/static/js/2.47ae1183.chunk.js.LICENSE.txt",
     "static/media/App.css": "/tactics-board/static/media/wood_floor.89dc586a.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.3f70615d.js",
-    "static/js/2.cbd7354b.chunk.js",
+    "static/js/2.47ae1183.chunk.js",
     "static/css/main.a2bc5f7d.chunk.css",
-    "static/js/main.564e8450.chunk.js"
+    "static/js/main.26e6efa5.chunk.js"
   ]
 }
