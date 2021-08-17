@@ -25,6 +25,7 @@ import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
 import FullscreenToggle from './FullscreenToggle';
 import AnimControls from './AnimControls';
+import PitchFutsal from '../pitch/PitchFutsal';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -123,8 +124,7 @@ class AppTools extends Component {
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
 						<div className={this.props.classes.grow} />
-						<AnimControls currentKeyFrame={this.props.currentKeyFrame} previousKeyFrame={this.props.previousKeyframe} ref={this._refAnimControl} 
-								nextKeyFrame={this.props.nextKeyFrame} addKeyFrame={this.props.addKeyFrame} anchorEl={this.animControlAnchorEl}/>
+						<AnimControls pitch={this.props.pitch} ref={this._refAnimControl} anchorEl={this.animControlAnchorEl} snackbarOpen={this.props.snackbarOpen} />
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
 							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
@@ -173,17 +173,21 @@ class AppTools extends Component {
 }
 
 AppTools.defaultProps = {
+	pitch: null,
 	drawMode: null,
 	saveImage: null,
 	createNewScheme: null,
-	createNewAnimation: null
+	createNewAnimation: null,
+	snackbarOpen: null
 }
 
 AppTools.propTypes = {
+	pitch: PropTypes.instanceOf(PitchFutsal),
 	drawMode: PropTypes.instanceOf(DrawMode),
 	saveImage: PropTypes.func,
 	createNewScheme: PropTypes.func,
-	createNewAnimation: PropTypes.func
+	createNewAnimation: PropTypes.func,
+	snackbarOpen: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);

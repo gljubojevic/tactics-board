@@ -7,8 +7,7 @@ import ConfirmDialog from './ui/ConfirmDialog'
 import PitchFutsal from './pitch/PitchFutsal'
 import DrawMode from './pitch/DrawMode'
 import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import MuiAlert from '@material-ui/lab/Alert';
 import './App.css';
 
 class App extends Component {
@@ -28,8 +27,8 @@ class App extends Component {
 		this.PitchReset = this.PitchReset.bind(this);
 		this.OnPitchModified = this.OnPitchModified.bind(this);
 		this.OnDrawModeModified = this.OnDrawModeModified.bind(this);
-		this.OnCloseSnackbar=this.OnCloseSnackbar.bind(this);
-		this.OnOpenSnackbar=this.OnOpenSnackbar.bind(this);
+		this.SnackbarOpen=this.SnackbarOpen.bind(this);
+		this.SnackbarOnClose=this.SnackbarOnClose.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -39,8 +38,11 @@ class App extends Component {
 		this.state = {
 			pitch: this.pitch,
 			drawMode: this.drawMode,
-			snackBarShow:false,
-			snackBarMsg:"",
+			snackBar: {
+				Show: false,
+				Severity: 'info',
+				Message: ''
+			}
 		}
 	}
 	
@@ -114,32 +116,43 @@ class App extends Component {
 			svg.width/2, svg.height/2
 		);
 	}
-	OnCloseSnackbar(){
+
+	// function to open Snackbar
+	SnackbarOpen(severity, message) {
 		this.setState({
-			snackBarShow:false
-		})
+			snackBar: {
+				Show: true,
+				Severity: severity,
+				Message: message
+			}
+		});
 	}
-	OnOpenSnackbar(message){
+
+	// Event when Snackbar closes
+	SnackbarOnClose(){
+		// read current state to avoid changing message while hiding
+		const severity = this.state.snackBar.Severity;
+		const message = this.state.snackBar.Message;
+		// hide snackbar
 		this.setState({
-			snackBarShow:true,
-			snackBarMsg:message
-		})
+			snackBar: {
+				Show: false,
+				Severity: severity,
+				Message: message
+			}
+		});
 	}
 
 	render() {
 		return (
 			<React.Fragment>
 				<ThemeProvider theme={this.appTheme}>
-					<Snackbar open={this.state.snackBarShow} anchorOrigin={{ vertical: 'top',horizontal: 'center',}} message={this.state.snackBarMsg} autoHideDuration={1000} onClose={this.OnCloseSnackbar}
-							action={
-							<IconButton size="small" aria-label="close" color="inherit" onClick={this.OnCloseSnackbar}>
-								<CloseIcon fontSize="small" />
-						 	</IconButton>}>
-					</Snackbar>
-					<AppTools ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} 
-							  currentKeyFrame={this.state.pitch.AnimKeyFrameCurrent} previousKeyframe={this.state.pitch.animKeyFramePrevious} nextKeyFrame={this.state.pitch.animKeyFrameNext} addKeyFrame={this.state.pitch.animKeyFrameAdd} openSnackbar={this.OnOpenSnackbar}/>
+					<AppTools pitch={this.state.pitch} ref={this.refAppTools} drawMode={this.state.drawMode} saveImage={this.SaveImage} createNewScheme={this.CreateNewScheme} createNewAnimation={this.CreateNewAnimation} snackbarOpen={this.SnackbarOpen}/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
+					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
+						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
+					</Snackbar>
 					<SvgToImg ref={this.refSvgToImg} />
 				</ThemeProvider>
 			</React.Fragment>

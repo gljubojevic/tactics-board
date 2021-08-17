@@ -23,10 +23,6 @@ class PitchFutsal {
 		this.textID = -1;
 		this.texts = [];
 
-		this.animKeyFrameAdd=this.animKeyFrameAdd.bind(this);
-		this.animKeyFrameNext=this.animKeyFrameNext.bind(this);
-		this.animKeyFramePrevious=this.animKeyFramePrevious.bind(this);
-
 		this._overlay = "none";
 
 		this.isModified = false;
@@ -120,7 +116,7 @@ class PitchFutsal {
 			// forbid adding if no changes between last two frames
 			if (this.AnimKeyFrames[last].equalTo(this.AnimKeyFrames[beforeLast])) {
 				console.log("No change in data new add frame forbidden");
-				return;
+				return false;
 			}
 		}
 		// clone last
@@ -131,23 +127,26 @@ class PitchFutsal {
 		// position to last key frame
 		this.AnimKeyFrameCurrent = this.AnimKeyFrames.length - 1;
 		this._modified();
+		return true;
 	}
 
 	animKeyFrameNext() {
 		let next = this.AnimKeyFrameCurrent + 1;
 		if (next >= this.AnimKeyFrames.length) {
-			return;
+			return false;
 		}
 		this.AnimKeyFrameCurrent = next;
 		this._modified();
+		return true;
 	}
 
 	animKeyFramePrevious() {
 		if (0 === this.AnimKeyFrameCurrent) {
-			return;
+			return false;
 		}
 		this.AnimKeyFrameCurrent--;
 		this._modified();
+		return true;
 	}
 
 	// note: only move current key frame player
