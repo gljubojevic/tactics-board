@@ -16,7 +16,6 @@ class App extends Component {
 		// application Material-UI theme
 		this.appTheme = createMuiTheme();
 		// references
-		this.refAppTools = React.createRef();
 		this.refPitchEdit = React.createRef();
 		this.refSvgToImg = React.createRef();
 		this.refConfirmDialog = React.createRef();
@@ -170,7 +169,7 @@ class App extends Component {
 		return (
 			<React.Fragment>
 				<ThemeProvider theme={this.appTheme}>
-					<AppTools ref={this.refAppTools} drawMode={this.state.drawMode}
+					<AppTools drawMode={this.state.drawMode}
 						saveImage={this.SaveImage}
 						createNewScheme={this.CreateNewScheme}
 						createNewAnimation={this.CreateNewAnimation}
