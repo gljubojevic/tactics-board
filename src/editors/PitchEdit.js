@@ -90,14 +90,22 @@ class PitchEdit extends Component {
 		}
 	}
 
+	// TODO: reconsider name since it returns all positions
 	getRealPosition(e) {
 		let scale = this.getScale();	// TODO: reconsider scale
 		let box = this._bgRef.current.getBoundingClientRect();
- 		let x = e.clientX - box.left;	//x position within the element.
-  		let y = e.clientY - box.top; 	//y position within the element.
+ 		let x = e.clientX - box.left;			//x position within the element.
+  		let y = e.clientY - box.top; 			//y position within the element.
+		let deltaX = e.clientX - this._mouseX;	// deltaX mouse move on screen
+		let deltaY = e.clientY - this._mouseY;	// deltaY mouse move on screen
+		this.resetMouseDrag(e);
 		let realPosition = {
+			scaleX: scale.X,
+			scaleY: scale.Y,
 			X: x * scale.X,
-			Y: y * scale.Y
+			Y: y * scale.Y,
+			deltaX: deltaX * scale.X,
+			deltaY: deltaY * scale.Y
 		}
 		return realPosition;
 	}
@@ -283,11 +291,7 @@ class PitchEdit extends Component {
 				break;
 			case 'select':
 			default:
-				let scale = this.getScale();
-				let deltaX = (e.clientX - this._mouseX) * scale.X;
-				let deltaY = (e.clientY - this._mouseY) * scale.Y;
-				this.resetMouseDrag(e);
-				this.objectDrag(pos.X, pos.Y, deltaX, deltaY, isShift);
+				this.objectDrag(pos.X, pos.Y, pos.deltaX, pos.deltaY, isShift);
 				break;
 		}
 		// Reset editing
@@ -320,11 +324,7 @@ class PitchEdit extends Component {
 				break;
 			case 'select':
 			default:
-				let scale = this.getScale();
-				let deltaX = (e.clientX - this._mouseX) * scale.X;
-				let deltaY = (e.clientY - this._mouseY) * scale.Y;
-				this.resetMouseDrag(e);
-				this.objectDrag(pos.X, pos.Y, deltaX, deltaY, isShift);
+				this.objectDrag(pos.X, pos.Y, pos.deltaX, pos.deltaY, isShift);
 				break;
 		}
 	}
