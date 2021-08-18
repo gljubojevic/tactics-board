@@ -9,6 +9,8 @@ import PauseIcon from '@material-ui/icons/Pause';
 import LoopIcon from '@material-ui/icons/Loop';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class AnimControls extends Component {
 
@@ -56,6 +58,18 @@ class AnimControls extends Component {
 					<IconButton  aria-label="Loop Animation" color="inherit" >
 						<LoopIcon fontSize="large"/>
 					</IconButton>
+				</Tooltip>
+				<Tooltip data-delay-hide="1000" title="Select frame duration">
+				<Select
+					id="frameDurationSelect"
+					onChange={this.props.keyFrameDurationSet}
+					defaultValue={5}>
+					<MenuItem value={1}>1</MenuItem>
+					<MenuItem value={3}>3</MenuItem>
+					<MenuItem value={5}>5</MenuItem>
+					<MenuItem value={7}>7</MenuItem>
+					<MenuItem value={10}>10</MenuItem>
+       			 </Select>
 				</Tooltip>
 
 			</React.Fragment>

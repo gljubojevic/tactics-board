@@ -31,6 +31,7 @@ class App extends Component {
 		this.AnimKeyFrameAdd=this.AnimKeyFrameAdd.bind(this);
 		this.AnimKeyFrameNext=this.AnimKeyFrameNext.bind(this);
 		this.AnimKeyFramePrevious=this.AnimKeyFramePrevious.bind(this);
+		this.AnimKeyFrameDurationSet=this.AnimKeyFrameDurationSet.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -165,6 +166,12 @@ class App extends Component {
 		}
 	}
 
+	AnimKeyFrameDurationSet(duration){
+		if (!this.pitch.animKeyFrameDurationSet(duration)) {
+			this.SnackbarOpen("info", "You set the frame duration to "+{duration}+"s");
+		}
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -177,6 +184,7 @@ class App extends Component {
 						animKeyFrameAdd={this.AnimKeyFrameAdd}
 						animKeyFrameNext={this.AnimKeyFrameNext}
 						animKeyFramePrevious={this.AnimKeyFramePrevious}
+						animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
 					/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
