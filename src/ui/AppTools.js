@@ -179,7 +179,8 @@ AppTools.defaultProps = {
 	animKeyFrameCurrent: 0,
 	animKeyFrameAdd: null,
 	animKeyFrameNext: null,
-	animKeyFramePrevious: null
+	animKeyFramePrevious: null,
+	keyFrameDurationSet: null,
 }
 
 AppTools.propTypes = {
@@ -191,7 +192,8 @@ AppTools.propTypes = {
 	animKeyFrameCurrent: PropTypes.number,
 	animKeyFrameAdd: PropTypes.func,
 	animKeyFrameNext: PropTypes.func,
-	animKeyFramePrevious: PropTypes.func
+	animKeyFramePrevious: PropTypes.func,
+	keyFrameDurationSet: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);
