@@ -18,7 +18,7 @@ class BallEdit extends Component {
 		const b = this.props.ball;
 		const editID = this.props.isEdit ? b.id : null;
 		const editClassName = this.props.isEdit ? 'draggable' : null;
-		const className = 'ball bc' + b.color;
+		const className = 'ball bc' + b.color + (this.props.isPrevFrame ? ' transparent': '');
 		const transform = 'translate(' + b.x + ' ' + b.y + ')';
 		const ball = b.color === 4 ? this.ballImage() : null;
 		return (
@@ -32,12 +32,14 @@ class BallEdit extends Component {
 
 BallEdit.defaultProps = {
 	ball: null,
-	isEdit: true
+	isEdit: true,
+	isPrevFrame: false
 }
 
 BallEdit.propTypes = {
 	ball: PropTypes.instanceOf(Ball),
-	isEdit: PropTypes.bool
+	isEdit: PropTypes.bool,
+	isPrevFrame: PropTypes.bool
 }
 
 export default BallEdit;

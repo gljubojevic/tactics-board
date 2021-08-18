@@ -343,26 +343,26 @@ class PitchEdit extends Component {
 		}
 	}
 
-	renderPlayers(players, isEdit) {
+	renderPlayers(players, isEdit, isPrevFrame) {
 		if (null === players) {
 			return null;
 		}
 		const keyPrefix = isEdit ? "ed" : "";
 		return players.map((pl, index) => {
 			return (
-				<PlayerEdit key={keyPrefix + index.toString()} player={pl} isEdit={isEdit} />
+				<PlayerEdit key={keyPrefix + index.toString()} player={pl} isEdit={isEdit} isPrevFrame={isPrevFrame} />
 			);
 		});
 	}
 
-	renderBalls(balls, isEdit){
+	renderBalls(balls, isEdit, isPrevFrame) {
 		if (null === balls) {
 			return null;
 		}
 		const keyPrefix = isEdit ? "ed" : "";
 		return balls.map((b, index) => {
 			return (
-				<BallEdit key={keyPrefix + index.toString()} ball={b} isEdit={isEdit} />
+				<BallEdit key={keyPrefix + index.toString()} ball={b} isEdit={isEdit} isPrevFrame={isPrevFrame} />
 			);
 		});
 	}
@@ -455,7 +455,8 @@ class PitchEdit extends Component {
 			'.draggable { cursor: move; pointer-events: all;}',
 			'.editBox { fill: none; stroke-width: 8; stroke-opacity: 1; }',
 			'.editTransparent { fill: none; stroke-width: 0; }',
-			'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }'
+			'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }',
+			'.transparent { fill-opacity: 50%; stroke-opacity: 50%; }'
 		]);
 	}
 
@@ -563,13 +564,13 @@ class PitchEdit extends Component {
 					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
 						{this.renderLines(this.props.pitch.playerPathsCurrentKeyFrame(), true)}
-						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false)}
-						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame(), true)}
+						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false, true)}
+						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame(), true, false)}
 					</g>
 					<g id="balls" transform={ballsTransform}>
 						{this.renderLines(this.props.pitch.ballPathsCurrentKeyFrame(), true)}
-						{this.renderBalls(this.props.pitch.ballsPreviousKeyFrame(), false)}
-						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), true)}
+						{this.renderBalls(this.props.pitch.ballsPreviousKeyFrame(), false, true)}
+						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), true, false)}
 					</g>
 					<g id="lines">{this.renderLines(this.props.pitch.lines, false)}</g>
 					<g id="texts">{this.renderTexts(this.props.pitch.texts)}</g>

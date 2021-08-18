@@ -17,7 +17,7 @@ class PlayerEdit extends Component {
 		const pl = this.props.player;
 		const editID = this.props.isEdit ? pl.id : null;
 		const editClassName = this.props.isEdit ? 'draggable' : null;
-		const className = 'player pc' + pl.color;
+		const className = 'player pc' + pl.color + (this.props.isPrevFrame ? ' transparent': '');
 		const transform = 'translate(' + pl.x + ' ' + pl.y + ')';
 		return (
 			<g className={className} textAnchor="middle" transform={transform}>
@@ -31,12 +31,14 @@ class PlayerEdit extends Component {
 
 PlayerEdit.defaultProps = {
 	player: null,
-	isEdit: true
+	isEdit: true, 
+	isPrevFrame: false
 }
 
 PlayerEdit.propTypes = {
 	player: PropTypes.instanceOf(Player),
-	isEdit: PropTypes.bool
+	isEdit: PropTypes.bool,
+	isPrevFrame: PropTypes.bool
 }
 
 export default PlayerEdit;
