@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import PitchEdit from './editors/PitchEdit'
 import SvgToImg from './editors/SvgToImg'
 import AppTools from './ui/AppTools'
@@ -14,7 +14,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		// application Material-UI theme
-		this.appTheme = createMuiTheme();
+		this.appTheme = createTheme();
 		// references
 		this.refPitchEdit = React.createRef();
 		this.refSvgToImg = React.createRef();

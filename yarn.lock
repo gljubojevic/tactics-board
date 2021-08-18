@@ -1403,7 +1403,7 @@
     "@types/yargs" "^15.0.0"
     "chalk" "^4.0.0"
 
-"@material-ui/core@^4.11.0", "@material-ui/core@^4.12.1":
+"@material-ui/core@^4.0.0", "@material-ui/core@^4.12.1", "@material-ui/core@^4.12.3":
   "integrity" "sha512-sdpgI/PL56QVsEJldwEe4FFaFTLUqN+rd7sSZiRCdx2E/C7z5yK0y/khAWVBH24tXwto7I1hCzNWfJGZIYJKnw=="
   "resolved" "https://registry.npmjs.org/@material-ui/core/-/core-4.12.3.tgz"
   "version" "4.12.3"
@@ -1421,10 +1421,10 @@
     "react-is" "^16.8.0 || ^17.0.0"
     "react-transition-group" "^4.4.0"
 
-"@material-ui/icons@^4.9.1":
-  "integrity" "sha512-GBitL3oBWO0hzBhvA9KxqcowRUsA0qzwKkURyC8nppnC3fw54KPKZ+d4V1Eeg/UnDRSzDaI9nGCdel/eh9AQMg=="
-  "resolved" "https://registry.npmjs.org/@material-ui/icons/-/icons-4.9.1.tgz"
-  "version" "4.9.1"
+"@material-ui/icons@^4.11.2":
+  "integrity" "sha512-fQNsKX2TxBmqIGJCSi3tGTO/gZ+eJgWmMJkgDiOfyNaunNaxcklJQFaFogYcFl0qFuaEz1qaXYXboa/bUXVSOQ=="
+  "resolved" "https://registry.npmjs.org/@material-ui/icons/-/icons-4.11.2.tgz"
+  "version" "4.11.2"
   dependencies:
     "@babel/runtime" "^7.4.4"
 
@@ -7553,10 +7553,10 @@
     "inherits" "^2.0.1"
     "safe-buffer" "^5.1.2"
 
-"mdi-material-ui@^6.16.0":
-  "integrity" "sha512-i22DW95kady0ty5QylixkEa9h40YTt2KETvAd1OdrXkfnKkDH4RCXNtONw2KGsK6pANH+M2Oqh2SfG98UjcX8g=="
-  "resolved" "https://registry.npmjs.org/mdi-material-ui/-/mdi-material-ui-6.16.0.tgz"
-  "version" "6.16.0"
+"mdi-material-ui@^6.22.1":
+  "integrity" "sha512-wndaFXJhoFr9g5kPw31TZajTa9uf/21jb2jD1rJ5Vi+sj2GZYnZz2BYbrfp1qFgd7tZz8XAcnpsSNMdLbe+dtw=="
+  "resolved" "https://registry.npmjs.org/mdi-material-ui/-/mdi-material-ui-6.22.1.tgz"
+  "version" "6.22.1"
 
 "mdn-data@2.0.14":
   "integrity" "sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow=="
