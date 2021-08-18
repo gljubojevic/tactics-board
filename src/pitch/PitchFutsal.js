@@ -170,16 +170,31 @@ class PitchFutsal {
 			return p;
 		});
 		this.AnimKeyFrames[this.AnimKeyFrameCurrent].players = players;
-		// edit path end position
+		// Adjust player anim paths when player is moved
+		this.playerAdjustAnimPaths(
+			id.replace(ElementIDPrefix.Player, ElementIDPrefix.PathPlayer), 
+			deltaX, deltaY
+		);
+		this._modified();
+	}
+
+	// NOTE: adjustment always makes path straight line
+	// this same on original tactics-board
+	playerAdjustAnimPaths(playerPathID, deltaX, deltaY) {
+		// Adjust path end position
 		if (this.AnimKeyFrameCurrent > 0) {
-			let playerPathID = id.replace(ElementIDPrefix.Player, ElementIDPrefix.PathPlayer);
 			this.AnimKeyFrames[this.AnimKeyFrameCurrent].playerPaths = this.lineResizeP2(
 				this.playerPathsCurrentKeyFrame(),
 				playerPathID, deltaX, deltaY
 			);
 		}
-		// TODO: edit path start position on previous key frame
-		this._modified();
+		// Adjust path start position on next frame
+		if (this.AnimKeyFrameCurrent < (this.AnimKeyFrames.length - 1)) {
+			this.AnimKeyFrames[this.AnimKeyFrameCurrent+1].playerPaths = this.lineResizeP1(
+				this.AnimKeyFrames[this.AnimKeyFrameCurrent+1].playerPaths,
+				playerPathID, deltaX, deltaY
+			);
+		}
 	}
 
 	playerEditStart(id) {
@@ -245,15 +260,31 @@ class PitchFutsal {
 			return b;
 		});
 		this.AnimKeyFrames[this.AnimKeyFrameCurrent].balls = balls;
-		// edit path end position
+		// Adjust ball paths when ball is moved
+		this.ballAdjustAnimPaths(
+			id.replace(ElementIDPrefix.Ball, ElementIDPrefix.PathBall), 
+			deltaX, deltaY
+		);
+		this._modified();
+	}
+
+	// NOTE: adjustment always makes path straight line
+	// this same on original tactics-board
+	ballAdjustAnimPaths(ballPathID, deltaX, deltaY) {
+		// Adjust path end position
 		if (this.AnimKeyFrameCurrent > 0) {
-			let ballPathID = id.replace(ElementIDPrefix.Ball, ElementIDPrefix.PathBall);
 			this.AnimKeyFrames[this.AnimKeyFrameCurrent].ballPaths = this.lineResizeP2(
 				this.ballPathsCurrentKeyFrame(),
 				ballPathID, deltaX, deltaY
 			);
 		}
-		this._modified();
+		// Adjust path start position on next frame
+		if (this.AnimKeyFrameCurrent < (this.AnimKeyFrames.length - 1)) {
+			this.AnimKeyFrames[this.AnimKeyFrameCurrent+1].ballPaths = this.lineResizeP1(
+				this.AnimKeyFrames[this.AnimKeyFrameCurrent+1].ballPaths,
+				ballPathID, deltaX, deltaY
+			);
+		}
 	}
 
 	lineNewID() {
