@@ -122,7 +122,7 @@ class AppTools extends Component {
 							keyFrameAdd={this.props.animKeyFrameAdd}
 							keyFrameNext={this.props.animKeyFrameNext}
 							keyFramePrevious={this.props.animKeyFramePrevious}
-							keyFrameDurationSet={this.props.keyFrameDurationSet}
+							keyFrameDurationSet={this.props.animKeyFrameDurationSet}
 						/>
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">

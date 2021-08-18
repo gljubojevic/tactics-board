@@ -168,7 +168,7 @@ class App extends Component {
 
 	AnimKeyFrameDurationSet(duration){
 		if (!this.pitch.animKeyFrameDurationSet(duration)) {
-			this.SnackbarOpen("info", "You set the frame duration to "+{duration}+"s");
+			this.SnackbarOpen("info", `You set the frame duration to ${duration}s` );
 		}
 	}
 

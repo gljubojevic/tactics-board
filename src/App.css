@@ -10,6 +10,8 @@
 }
 
 #frameDurationSelect{
-	color:white;
-	font-size: large;
+	font-size: large; 
+	color: white;
+	border-radius: 5px;
+	border: 1px solid white;
 }
