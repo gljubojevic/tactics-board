@@ -296,14 +296,8 @@ class PitchFutsal {
 		});
 	}
 
-	// TODO: remove for only delta resize
-	lineResize(id, x2, y2) {
-		this.lines = this.lines.map(l => {
-			if (id === l.id) {
-				l.resize(x2,y2);
-			}
-			return l;
-		});
+	lineResize(id, deltaX, deltaY) {
+		this.lines = this.lineResizeP2(this.lines, id, deltaX, deltaY);
 		this._modified();
 	}
 

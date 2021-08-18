@@ -33,12 +33,6 @@ class Line {
 		this.linearControlPoints();
 	}
 
-	// TODO: Remove for only delta resize
-	resize(x2,y2) {
-		this.p2 = new Point(x2,y2);
-		this.linearControlPoints();
-	}
-
 	// calculate linear control points position
 	linearControlPoints() {
 		let lx = this.p2.x - this.p1.x;

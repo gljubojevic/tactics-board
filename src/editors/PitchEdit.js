@@ -312,7 +312,7 @@ class PitchEdit extends Component {
 		let isShift = e.getModifierState("Shift");
 		switch (this.props.drawMode.mode) {
 			case 'line':
-				p.lineResize(this._dragNode, pos.X, pos.Y);
+				p.lineResize(this._dragNode, pos.deltaX, pos.deltaY);
 				break;
 			case 'square':
 				p.squareResize(this._dragNode, pos.X, pos.Y, isShift);
