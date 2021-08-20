@@ -17,11 +17,11 @@ class AnimControls extends Component {
 	constructor(props) {
 		super(props);
 		this.handleChange = this.handleChange.bind(this);
-	  }
+	}
 	
-	  handleChange(event) {  
-			this.props.keyFrameDurationSet(event.target.value)
-		}
+	handleChange(event) {  
+		this.props.keyFrameDurationSet(event.target.value)
+	}
 
 	render(){
 		return (
@@ -49,7 +49,7 @@ class AnimControls extends Component {
 				</Tooltip>
 
 				<Tooltip title="Play Animation">
-					<IconButton aria-label="Play Animation" color="inherit">
+					<IconButton aria-label="Play Animation" color="inherit" onClick={this.props.animPlayerShow}>
 						<PlayArrowIcon />
 					</IconButton>
 				</Tooltip>
@@ -91,7 +91,8 @@ AnimControls.defaultProps = {
 	keyFrameAdd: null,
 	keyFrameNext: null,
 	keyFramePrevious: null,
-	keyFrameDurationSet: null
+	keyFrameDurationSet: null,
+	animPlayerShow: null
 }
 
 AnimControls.propTypes = {
@@ -99,7 +100,8 @@ AnimControls.propTypes = {
 	keyFrameAdd: PropTypes.func,
 	keyFrameNext: PropTypes.func,
 	keyFramePrevious: PropTypes.func,
-	keyFrameDurationSet: PropTypes.func
+	keyFrameDurationSet: PropTypes.func,
+	animPlayerShow: PropTypes.func
 }
 
 export default AnimControls;

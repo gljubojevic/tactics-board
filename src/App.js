@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import PitchEdit from './editors/PitchEdit'
 import SvgToImg from './editors/SvgToImg'
 import AppTools from './ui/AppTools'
+import AnimPlayer from './ui/AnimPlayer'
 import ConfirmDialog from './ui/ConfirmDialog'
 import PitchFutsal from './pitch/PitchFutsal'
 import DrawMode from './pitch/DrawMode'
@@ -19,6 +20,7 @@ class App extends Component {
 		this.refPitchEdit = React.createRef();
 		this.refSvgToImg = React.createRef();
 		this.refConfirmDialog = React.createRef();
+		this.refAnimPlayer = React.createRef();
 		// event handlers
 		this.SaveImage = this.SaveImage.bind(this);
 		this.CreateNewScheme = this.CreateNewScheme.bind(this);
@@ -32,6 +34,8 @@ class App extends Component {
 		this.AnimKeyFrameNext=this.AnimKeyFrameNext.bind(this);
 		this.AnimKeyFramePrevious=this.AnimKeyFramePrevious.bind(this);
 		this.AnimKeyFrameDurationSet=this.AnimKeyFrameDurationSet.bind(this);
+		this.animPlayerAnchorEl=this.animPlayerAnchorEl.bind(this);
+		this.animPlayerShow=this.animPlayerShow.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -172,6 +176,14 @@ class App extends Component {
 		}
 	}
 
+	animPlayerAnchorEl() {
+		return this.refPitchEdit.current;
+	}
+
+	animPlayerShow() {
+		this.refAnimPlayer.current.show();
+    }
+
 	render() {
 		return (
 			<React.Fragment>
@@ -185,8 +197,10 @@ class App extends Component {
 						animKeyFrameNext={this.AnimKeyFrameNext}
 						animKeyFramePrevious={this.AnimKeyFramePrevious}
 						animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
+						animPlayerShow={this.animPlayerShow}
 					/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+					<AnimPlayer ref={this.refAnimPlayer} anchorEl={this.animPlayerAnchorEl} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>

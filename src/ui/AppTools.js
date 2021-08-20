@@ -123,6 +123,7 @@ class AppTools extends Component {
 							keyFrameNext={this.props.animKeyFrameNext}
 							keyFramePrevious={this.props.animKeyFramePrevious}
 							keyFrameDurationSet={this.props.animKeyFrameDurationSet}
+							animPlayerShow={this.props.animPlayerShow}
 						/>
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
@@ -176,11 +177,13 @@ AppTools.defaultProps = {
 	saveImage: null,
 	createNewScheme: null,
 	createNewAnimation: null,
+	snackbarOpen: null,
 	animKeyFrameCurrent: 0,
 	animKeyFrameAdd: null,
 	animKeyFrameNext: null,
 	animKeyFramePrevious: null,
 	keyFrameDurationSet: null,
+	animPlayerShow: null,
 }
 
 AppTools.propTypes = {
@@ -193,7 +196,8 @@ AppTools.propTypes = {
 	animKeyFrameAdd: PropTypes.func,
 	animKeyFrameNext: PropTypes.func,
 	animKeyFramePrevious: PropTypes.func,
-	keyFrameDurationSet: PropTypes.func
+	keyFrameDurationSet: PropTypes.func,
+	animPlayerShow: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);
