@@ -200,7 +200,12 @@ class App extends Component {
 						animPlayerShow={this.animPlayerShow}
 					/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
-					<AnimPlayer ref={this.refAnimPlayer} anchorEl={this.animPlayerAnchorEl} />
+					<AnimPlayer
+						ref={this.refAnimPlayer} 
+						anchorEl={this.animPlayerAnchorEl}
+						keyFramesNo={this.state.pitch.AnimKeyFrames.length}
+						keyFrameDuration={this.state.pitch.AnimKeyFrameDuration}
+					/>
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>

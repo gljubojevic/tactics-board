@@ -23,6 +23,7 @@ const BorderLinearProgress = withStyles((theme) => ({
 	},
 	bar: {
 		borderRadius: 5,
+		transition: 'none'	// disable animation to have immediate feedback
 	}
 }))(LinearProgress);
   
@@ -33,20 +34,107 @@ class AnimPlayer extends Component {
 		this.state = {
 			isOpen: false,
 			isPlaying: false,
+			isPaused: false,
+			animTime: 0
 		}
+		this.currentTime = 0;
 		this.show = this.show.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.playPause = this.playPause.bind(this);
 		this.stop = this.stop.bind(this);
+		this.animStep = this.animStep.bind(this);
+		this.animPlaybackStart = this.animPlaybackStart.bind(this);
 	}
 
 	playPause() {
 		let isPlaying = this.state.isPlaying;
-		this.setState({ isPlaying: !isPlaying });
+		let isPaused = this.state.isPaused;
+		if (!isPlaying) {
+			isPlaying = true;
+			isPaused = false;
+			this.animPlaybackStart();
+		} else {
+			isPaused = !isPaused;
+		}
+		this.setState({
+			isPlaying: isPlaying,
+			isPaused: isPaused
+		});
+	}
+
+	animPlaybackStart() {
+		// Prepare animation for playback
+		if (null != this.props.animStart) {
+			this.props.animStart();
+		}
+		// start animation steps
+		window.requestAnimationFrame(this.animStep);
 	}
 
 	stop() {
-		this.setState({ isPlaying: false });
+		this.currentTime = 0;
+		this.setState({
+			isPlaying: false,
+			isPaused: false,
+			animTime: 0
+		});
+		// stop / cancel anim playback
+		if (null != this.props.animStop) {
+			this.props.animStop();
+		}
+	}
+
+	animTotalTime() {
+		// note: first keyframe is only initial position so it is skipped
+		// total time is in milliseconds
+		return (this.props.keyFramesNo-1) * this.props.keyFrameDuration * 1000;
+	}
+
+	animProgress() {
+		let animTime = this.state.animTime;
+		let pct = 100 * animTime / this.animTotalTime();
+		return Math.round(pct);
+	}
+
+	animTime() {
+		let timeSec = this.state.animTime / 1000;
+		let sec = Math.floor(timeSec).toString();
+		let msec = Math.floor((timeSec - sec) * 1000).toString();
+		// correct formatting '000:000'
+		sec = '000'.substring(0, 3 - sec.length) + sec;
+		msec = '000'.substring(0, 3 - msec.length) + msec;
+		return sec + ':' + msec;
+	}
+
+	animStep(time) {
+		// anim is started time
+		if (0 === this.currentTime) {
+			this.currentTime = time;
+		}
+		const elapsedTime = time - this.currentTime;
+		this.currentTime = time;
+
+		let animTime = this.state.animTime;
+
+		//console.log(time);
+		if (!this.state.isPaused) {
+			animTime += elapsedTime;
+			if (animTime > this.animTotalTime() ) {
+				animTime = 0;
+			}
+			this.setState({
+				animTime: animTime
+			})
+		}
+
+		// show current frame
+		if (null != this.props.animFrameShow) {
+			this.props.animFrameShow(animTime);
+		}
+
+		if (this.state.isPlaying) {
+			window.requestAnimationFrame(this.animStep);
+		}
 	}
 
 	show() {
@@ -59,7 +147,7 @@ class AnimPlayer extends Component {
 	}
 
 	renderPlayPause() {
-		if (!this.state.isPlaying) {
+		if (!this.state.isPlaying || this.state.isPaused) {
 			return (
 				<PlayArrowIcon />
 			);
@@ -74,13 +162,8 @@ class AnimPlayer extends Component {
 			<Popover open={this.state.isOpen}
 				onClose={this.handleClose}
 				anchorEl={this.props.anchorEl}
-				anchorOrigin={{
-					vertical: 'bottom',
-					horizontal: 'center',
-				}}
-				transformOrigin={{
-					horizontal: 'center'
-				}}
+				anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+				transformOrigin={{horizontal: 'center'}}
 			>
 				<Grid container alignItems="center">
 					<Grid item>
@@ -105,18 +188,20 @@ class AnimPlayer extends Component {
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Stop Animation">
-							<IconButton aria-label="Stop Animation" color="inherit" onClick={this.stop} disabled={!this.state.isPlaying}>
-								<StopIcon />
-							</IconButton>
+							<span>
+								<IconButton aria-label="Stop Animation" color="inherit" onClick={this.stop} disabled={!this.state.isPlaying}>
+									<StopIcon />
+								</IconButton>
+							</span>
 						</Tooltip>
 					</Grid>
 					<Grid item>
 						<Box display="flex" alignItems="center">
-							<Box mr={1}>
-								<Typography variant="body2" color="textSecondary">00:000</Typography>
+							<Box mr={1} minWidth={55}>
+								<Typography variant="body2" color="textSecondary">{this.animTime()}</Typography>
 							</Box>
 							<Box mr={1}>
-								<BorderLinearProgress variant="determinate" value={35} />
+								<BorderLinearProgress variant="determinate" value={this.animProgress()} />
 							</Box>
 						</Box>
 					</Grid>
@@ -127,11 +212,21 @@ class AnimPlayer extends Component {
 }
 
 AnimPlayer.defaultProps = {
-	anchorEl: null
+	anchorEl: null,
+	keyFramesNo: 0,
+	keyFrameDuration: 0,
+	animStart: null,
+	animStop: null,
+	animFrame: null,
 }
 
 AnimPlayer.propTypes = {
 	anchorEl: PropTypes.func,
+	keyFramesNo: PropTypes.number,
+	keyFrameDuration: PropTypes.number,
+	animStart: PropTypes.func,
+	animStop: PropTypes.func,
+	animFrame: PropTypes.func
 }
 
 export default AnimPlayer;
