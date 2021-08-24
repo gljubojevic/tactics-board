@@ -4,9 +4,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import StopIcon from '@material-ui/icons/Stop';
-import PauseIcon from '@material-ui/icons/Pause';
-import LoopIcon from '@material-ui/icons/Loop';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import Select from '@material-ui/core/Select';
@@ -51,21 +48,6 @@ class AnimControls extends Component {
 				<Tooltip title="Play Animation">
 					<IconButton aria-label="Play Animation" color="inherit" onClick={this.props.animPlayerShow}>
 						<PlayArrowIcon />
-					</IconButton>
-				</Tooltip>
-				<Tooltip title="Pause Animation">
-					<IconButton aria-label="Pause Animation" color="inherit" >
-						<PauseIcon />
-					</IconButton>
-				</Tooltip>
-				<Tooltip title="Stop Animation">
-					<IconButton aria-label="Stop Animation" color="inherit" >
-						<StopIcon />
-					</IconButton>
-				</Tooltip>
-				<Tooltip title="Loop Animation">
-					<IconButton  aria-label="Loop Animation" color="inherit" >
-						<LoopIcon />
 					</IconButton>
 				</Tooltip>
 				<Tooltip data-delay-hide="1000" title="Select frame duration">
