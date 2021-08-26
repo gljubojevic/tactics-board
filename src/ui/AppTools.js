@@ -20,11 +20,13 @@ import MovieCreationIcon from '@material-ui/icons/MovieCreation';
 import LinkIcon from '@material-ui/icons/Link';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
+import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui';
 import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
 import FullscreenToggle from './FullscreenToggle';
 import AnimControls from './AnimControls';
+import ExtrasDialog from './ExtrasDialog';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -53,6 +55,8 @@ class AppTools extends Component {
 		// palette dialog
 		this._refPaletteDialog = React.createRef();
 		this.paletteDialogRef = this.paletteDialogRef.bind(this);
+		this.extrasDialogRef = this.extrasDialogRef.bind(this);
+		this._refExtrasDialog = React.createRef();
 	}
 
 	setDrawer(isOpen) {
@@ -96,6 +100,8 @@ class AppTools extends Component {
 				return (<ShapeOvalPlus />);
 			case 'text':
 				return (<TextFieldsIcon />);
+			case 'extras':
+				return (<SportsSoccerIcon />);
 			case 'select':
 			default:
 				return (<CursorDefault />);
@@ -104,6 +110,10 @@ class AppTools extends Component {
 
 	paletteDialogRef() {
 		return this._refPaletteDialog.current;
+	}
+
+	extrasDialogRef() {
+		return this._refExtrasDialog.current;
 	}
 
 	render() {
@@ -165,8 +175,9 @@ class AppTools extends Component {
 					</Box>
 				</Drawer>
 				
-				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} />
+				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} extrasDialogRef={this.extrasDialogRef} />
 				<PaletteDialog ref={this._refPaletteDialog} drawMode={this.props.drawMode} />
+				<ExtrasDialog ref={this._refExtrasDialog} drawMode={this.props.drawMode} />
 			</React.Fragment>
 		);
 	}

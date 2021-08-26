@@ -32,7 +32,7 @@ class DrawMode {
 	// ellipse	- draw ellipse
 	// text		- draw text
 	get modeOptions(){
-		return ['select','line','square','ellipse','text'];
+		return ['select','line','square','ellipse','text','extras'];
 	}
 
 	get mode() {

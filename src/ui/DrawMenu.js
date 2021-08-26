@@ -17,6 +17,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PaletteIcon from '@material-ui/icons/Palette';
+import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
 
 class DrawMenu extends Component {
@@ -45,6 +46,7 @@ class DrawMenu extends Component {
 		this.pitchOverlayOnChange = this.pitchOverlayOnChange.bind(this);
 
 		this.colorSelect = this.colorSelect.bind(this);
+		this.extrasSelect = this.extrasSelect.bind(this);
 
 		this.textSizesToggle = this.textSizesToggle.bind(this);
 		this.textSizeSelected = this.textSizeSelected.bind(this);
@@ -57,6 +59,7 @@ class DrawMenu extends Component {
 	close(e) {
 		// read from "data-value" attribute
 		let mode = e.currentTarget.dataset.value;
+		console.log(mode);
 		if (mode) {
 			this.props.drawMode.mode = mode;
 		}
@@ -152,6 +155,11 @@ class DrawMenu extends Component {
 		this.props.paletteDialogRef().Show();
 	}
 
+	extrasSelect(e) {
+		this.close(e);
+		this.props.extrasDialogRef().Show();
+	}
+
 	textSizesToggle() {
 		this.setState({
 			textSizes: !this.state.textSizes
@@ -206,6 +214,13 @@ class DrawMenu extends Component {
 					<PaletteIcon style={{ color: colorSelected }} />
 				</ListItemIcon>
 				<ListItemText primary={colorNameSelected} />
+			</MenuItem>
+			<Divider />
+			<MenuItem  data-value="extras" onClick={this.extrasSelect}>
+				<ListItemIcon>
+					<SportsSoccerIcon/>
+				</ListItemIcon>
+				<ListItemText primary="Extras" />
 			</MenuItem>
 			<Divider />
 			<MenuItem data-value="line" onClick={this.close}>
