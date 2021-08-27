@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DrawMode from '../pitch/DrawMode';
 import LeftGoalIcon from '../pitch/LeftGoalIcon'
+import SmallLeftGoalIcon from '../pitch/SmallLeftGoalIcon '
 import RightGoalIcon from '../pitch/RightGoalIcon'
+import SmallRightGoalIcon from '../pitch/SmallRightGoalIcon'
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -63,8 +65,8 @@ class ExtrasDialog extends Component {
 		return (
 			[{icon:<LeftGoalIcon />,name:"Left Goal",dimX:100,dimY:350,posX:0,posY:-25},
 			{icon:<RightGoalIcon />,name:"Right Goal",dimX:100,dimY:350,posX:0,posY:-25},
-			{icon:<LeftGoalIcon />,name:"Left Goal Small",dimX:150,dimY:400,posX:-25,posY:-50},
-			{icon:<RightGoalIcon />,name:"Right Goal Small",dimX:150,dimY:400,posX:-25,posY:-50}]);
+			{icon:<SmallLeftGoalIcon />,name:"Left Goal Small",dimX:100,dimY:350,posX:-25,posY:-50},
+			{icon:<SmallRightGoalIcon />,name:"Right Goal Small",dimX:100,dimY:350,posX:-25,posY:-50}]);
 	}
 
 	radioIcon(extras,isChecked) {
