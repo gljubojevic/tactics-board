@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/tactics-board/static/css/main.a2bc5f7d.chunk.css",
-    "main.js": "/tactics-board/static/js/main.26e6efa5.chunk.js",
-    "main.js.map": "/tactics-board/static/js/main.26e6efa5.chunk.js.map",
+    "main.css": "/tactics-board/static/css/main.dd36a52f.chunk.css",
+    "main.js": "/tactics-board/static/js/main.8a1dba7b.chunk.js",
+    "main.js.map": "/tactics-board/static/js/main.8a1dba7b.chunk.js.map",
     "runtime-main.js": "/tactics-board/static/js/runtime-main.3f70615d.js",
     "runtime-main.js.map": "/tactics-board/static/js/runtime-main.3f70615d.js.map",
-    "static/js/2.47ae1183.chunk.js": "/tactics-board/static/js/2.47ae1183.chunk.js",
-    "static/js/2.47ae1183.chunk.js.map": "/tactics-board/static/js/2.47ae1183.chunk.js.map",
+    "static/js/2.7442c3cf.chunk.js": "/tactics-board/static/js/2.7442c3cf.chunk.js",
+    "static/js/2.7442c3cf.chunk.js.map": "/tactics-board/static/js/2.7442c3cf.chunk.js.map",
     "index.html": "/tactics-board/index.html",
-    "static/css/main.a2bc5f7d.chunk.css.map": "/tactics-board/static/css/main.a2bc5f7d.chunk.css.map",
-    "static/js/2.47ae1183.chunk.js.LICENSE.txt": "/tactics-board/static/js/2.47ae1183.chunk.js.LICENSE.txt",
+    "static/css/main.dd36a52f.chunk.css.map": "/tactics-board/static/css/main.dd36a52f.chunk.css.map",
+    "static/js/2.7442c3cf.chunk.js.LICENSE.txt": "/tactics-board/static/js/2.7442c3cf.chunk.js.LICENSE.txt",
     "static/media/App.css": "/tactics-board/static/media/wood_floor.89dc586a.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.3f70615d.js",
-    "static/js/2.47ae1183.chunk.js",
-    "static/css/main.a2bc5f7d.chunk.css",
-    "static/js/main.26e6efa5.chunk.js"
+    "static/js/2.7442c3cf.chunk.js",
+    "static/css/main.dd36a52f.chunk.css",
+    "static/js/main.8a1dba7b.chunk.js"
   ]
 }
