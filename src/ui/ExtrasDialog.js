@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DrawMode from '../pitch/DrawMode';
-import LeftGoalIcon from '../pitch/LeftGoalIcon'
-import SmallLeftGoalIcon from '../pitch/SmallLeftGoalIcon '
-import RightGoalIcon from '../pitch/RightGoalIcon'
-import SmallRightGoalIcon from '../pitch/SmallRightGoalIcon'
+import GoalIcon from '../pitch/GoalIcon'
+import SmallGoalIcon from '../pitch/SmallGoalIcon '
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -63,37 +61,36 @@ class ExtrasDialog extends Component {
 
 	getIcons() {
 		return (
-			[{icon:<LeftGoalIcon />,name:"Left Goal",dimX:100,dimY:350,posX:0,posY:-25},
-			{icon:<RightGoalIcon />,name:"Right Goal",dimX:100,dimY:350,posX:0,posY:-25},
-			{icon:<SmallLeftGoalIcon />,name:"Left Goal Small",dimX:100,dimY:350,posX:-25,posY:-50},
-			{icon:<SmallRightGoalIcon />,name:"Right Goal Small",dimX:100,dimY:350,posX:-25,posY:-50}]);
+			[{ icon: <GoalIcon />, name: "Goal", dimX: 100, dimY: 350, posX: 0, posY: -25 },
+			{ icon: <SmallGoalIcon />, name: "Goal Small", dimX: 80, dimY: 380, posX: 0, posY: -50 }]);
 	}
 
-	radioIcon(extras,isChecked) {
+	radioIcon(extras, isChecked) {
 		if (!isChecked) {
 			return (
-				
-				<SvgIcon viewBox={`${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`} className={this.props.classes.radioIcon}>
-					{extras.icon}
-				</SvgIcon>
+					<SvgIcon viewBox={`${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`} className={this.props.classes.radioIcon}>
+						{extras.icon}
+					</SvgIcon>
 			);
 		}
 		return (
-			<SvgIcon viewBox={`${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`} className={this.props.classes.radioIconSelected}>
-				{extras.icon}
-			</SvgIcon>
+				<SvgIcon viewBox={`${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`} className={this.props.classes.radioIconSelected}>
+					{extras.icon}
+				</SvgIcon>
 		);
 	}
 
 	renderRadios() {
 		return this.getIcons().map((extras, index) => {
-			const ico = this.radioIcon(extras,false);
-			const icoChk = this.radioIcon(extras,true);
+			const ico = this.radioIcon(extras, false);
+			const icoChk = this.radioIcon(extras, true);
 			return (
-				<Tooltip title={extras.name}>
-					<Radio name="extras-select" key={index} value={index} className={this.props.classes.radio} icon={ico} checkedIcon={icoChk} onChange={this.extrasChange} />
-				</Tooltip>
-				
+				<div style={{display: 'inline-block'}}>
+					<label style={{display: 'block',  textAlign: "center"}}>{extras.name}</label>
+						<Radio name="extras-select" key={index} value={index} className={this.props.classes.radio} icon={ico} checkedIcon={icoChk} onChange={this.extrasChange} />
+				</div>
+
+
 			);
 		});
 	}
