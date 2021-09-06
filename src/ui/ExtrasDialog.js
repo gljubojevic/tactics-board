@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DrawMode from '../pitch/DrawMode';
-import GoalIcon from '../pitch/GoalIcon'
-import SmallGoalIcon from '../pitch/SmallGoalIcon '
+import GoalIcon from '../editors/GoalIcon'
+import SmallGoalIcon from '../editors/SmallGoalIcon'
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Radio from '@material-ui/core/Radio';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { Tooltip } from '@material-ui/core';
 
 // this is for offset from toolbar and default class
 const styles = theme => ({
