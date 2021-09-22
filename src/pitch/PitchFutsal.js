@@ -5,6 +5,7 @@ import Ellipse from "./Ellipse";
 import Line from "./Line";
 import Point from "./Point";
 import Text from "./Text";
+import Extras from "./Extras";
 import AnimKeyFrame from "./AnimKeyFrame";
 import { ElementIDPrefix } from "./Constants";
 
@@ -23,6 +24,8 @@ class PitchFutsal {
 		this.lines = [];
 		this.textID = -1;
 		this.texts = [];
+		this.extrasID = -1;
+		this.extras = [];
 
 		this._overlay = "none";
 
@@ -88,6 +91,8 @@ class PitchFutsal {
 		cp.lines = this.lines;
 		cp.textID = this.textID;
 		cp.texts = this.texts;
+		cp.extrasID = this.extrasID;
+		cp.extras = this.extras;
 		cp._overlay = this.overlay;
 		// trigger event modified
 		if (null !== this.onModified) {
@@ -509,7 +514,6 @@ class PitchFutsal {
 			return sq;
 		});
 		this._modified();
-		return this.squares;
 	}
 
 	squareRotate(id, posX, posY, snap) {
@@ -625,35 +629,129 @@ class PitchFutsal {
 		this._modified();
 	}
 
+	extrasNewID() {
+		this.extrasID += 1;
+		return ElementIDPrefix.Extras + this.extrasID;
+	}
+
+	extrasCreate(t, x, y, width, height) {
+		let ex = new Extras(
+			this.extrasNewID(),t,
+			x,y,width,height,0,
+			true
+		);
+		this.extras = this.extras.map((e) => e);
+		this.extras.push(ex);
+		this._modified();
+		return ex.id;
+	}
+
+	extrasEditStart(id) {
+		if (!id.startsWith(ElementIDPrefix.Extras)) {
+			return false;
+		}
+		this.extras = this.extras.map(ex => {
+			if (id === ex.id) {
+				ex.isEdit = true;
+			}
+			return ex;
+		});
+		this._modified();
+		return true;
+	}
+
+	extrasMove(id, deltaX, deltaY) {
+		if (!id.startsWith(ElementIDPrefix.Extras)) {
+			return false;
+		}
+		this.extras = this.extras.map(ex => {
+			if (id === ex.id) {
+				ex.move(deltaX, deltaY);
+			}
+			return ex;
+		});
+		this._modified();
+	}
+
+	extrasRotate(id, posX, posY, snap) {
+		if (!id.startsWith(ElementIDPrefix.Extras)) {
+			return;
+		}
+		this.extras = this.extras.map(ex => {
+			if (id === ex.id && ex.isRotatable) {
+				ex.rotate(posX, posY, snap);
+			}
+			return ex;
+		});
+		this._modified();
+	}
+
+	extrasResize(id, x2, y2, proportional) {
+		this.extras = this.extras.map(ex => {
+			if (id === ex.id && ex.isResizable) {
+				ex.resize(x2, y2, proportional);
+			}
+			return ex;
+		});
+		this._modified();
+	}
+
+	extrasEdit(corner, id, deltaX, deltaY) {
+		if (!id.startsWith(ElementIDPrefix.Extras)) {
+			return;
+		}
+		this.extras = this.extras.map(ex => {
+			if (id === ex.id) {
+				ex.edit(corner, deltaX, deltaY);
+			}
+			return ex;
+		});
+		this._modified();
+		return this.extras;
+	}
+
+	extrasEditEnd() {
+		this.extras = this.extras.map(ex => {
+			ex.isEdit = false;
+			return ex;
+		});
+	}
+
 	editTopLeft(id, deltaX, deltaY) {
 		this.squareEdit("tl",id, deltaX, deltaY);
 		this.ellipseEdit("tl",id, deltaX, deltaY);
+		this.extrasEdit("tl",id, deltaX, deltaY);
 	}
 	
 	editTopRight(id, deltaX, deltaY) {
 		this.squareEdit("tr",id, deltaX, deltaY);
 		this.ellipseEdit("tr",id, deltaX, deltaY);
+		this.extrasEdit("tr",id, deltaX, deltaY);
 	}
 
 	editBottomLeft(id, deltaX, deltaY) {
 		this.squareEdit("bl",id, deltaX, deltaY);
 		this.ellipseEdit("bl",id, deltaX, deltaY);
+		this.extrasEdit("bl",id, deltaX, deltaY);
 	}
 
 	editBottomRight(id, deltaX, deltaY) {
 		this.squareEdit("br",id, deltaX, deltaY);
 		this.ellipseEdit("br",id, deltaX, deltaY);
+		this.extrasEdit("br",id, deltaX, deltaY);
 	}
 
 	editMove(id, deltaX, deltaY) {
 		this.squareEdit("mv",id, deltaX, deltaY);
 		this.ellipseEdit("mv",id, deltaX, deltaY);
+		this.extrasEdit("mv",id, deltaX, deltaY);
 		this.textMove(id, deltaX, deltaY);
 	}
 
 	editRotate(id, posX, posY, snap) {
 		this.squareRotate(id, posX, posY, snap);
 		this.ellipseRotate(id, posX, posY, snap);
+		this.extrasRotate(id, posX, posY, snap);
 		this.textRotate(id, posX, posY, snap);
 	}
 
@@ -661,6 +759,7 @@ class PitchFutsal {
 		this.lineEditEnd();
 		this.squareEditEnd();
 		this.ellipsesEditEnd();
+		this.extrasEditEnd();
 		// TODO: Text end editing
 		this._modified();
 	}

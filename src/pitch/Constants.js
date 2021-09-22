@@ -6,7 +6,16 @@ const ElementIDPrefix = {
 	Line: 'ln',
 	Text: 'txt',
 	PathPlayer: 'pp',
-	PathBall: 'bp'
+	PathBall: 'bp',
+	Extras: 'ex'
 }
 
-export { ElementIDPrefix }
+const ExtrasType = {
+	Goal: 0,
+	GoalSmall: 1,
+	Ladder: 2,
+	Cone: 3,
+	Flag: 4
+}
+
+export { ElementIDPrefix, ExtrasType }

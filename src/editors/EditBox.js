@@ -9,7 +9,7 @@ class EditBox extends Component {
 
 	renderHandles(box) {
 		if (!this.props.showResize) {
-			return;
+			return null;
 		}
 		const tl = new Point(box.x, box.y);
 		const tr = new Point(box.x + box.width, box.y);
@@ -25,6 +25,15 @@ class EditBox extends Component {
 		)
 	}
 
+	renderRotateHandle(box) {
+		if (!this.props.showRotate) {
+			return null;
+		}
+		return (
+			<RotateHandle box={box} />
+		)
+	}
+
 	render() {
 		const box = this.props.box;
 		const boxClass = this.props.showBox ? "editBox draggable" : "editTransparent draggable";
@@ -32,8 +41,8 @@ class EditBox extends Component {
 		return (
 			<g>
 				<rect className={boxClass} x={box.x} y={box.y} width={box.width} height={box.height} data-ref={"edit-mv-" + box.id} />
-				 {this.renderHandles(box)}
-				<RotateHandle box={box} />
+				{this.renderHandles(box)}
+				{this.renderRotateHandle(box)}
 			</g>
 		)
 	}
@@ -42,13 +51,15 @@ class EditBox extends Component {
 EditBox.defaultProps = {
 	box: null,
 	showBox:false,
-	showResize:true
+	showResize:true,
+	showRotate:true
 }
 
 EditBox.propTypes = {
 	box: PropTypes.instanceOf(Box),
 	showBox: PropTypes.bool,
-	showResize: PropTypes.bool
+	showResize: PropTypes.bool,
+	showRotate: PropTypes.bool
 }
 
 export default EditBox;
