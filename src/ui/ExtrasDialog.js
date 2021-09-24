@@ -74,17 +74,12 @@ class ExtrasDialog extends Component {
 	}
 
 	radioIcon(extras, isChecked) {
-		if (!isChecked) {
-			return (
-					<SvgIcon viewBox={`${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`} className={this.props.classes.radioIcon}>
-						{extras.icon}
-					</SvgIcon>
-			);
-		}
+		const className = isChecked ? this.props.classes.radioIconSelected : this.props.classes.radioIcon;
+		const viewBox = `${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`;
 		return (
-				<SvgIcon viewBox={`${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`} className={this.props.classes.radioIconSelected}>
-					{extras.icon}
-				</SvgIcon>
+			<SvgIcon viewBox={viewBox} className={className}>
+				{extras.icon}
+			</SvgIcon>
 		);
 	}
 
