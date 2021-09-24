@@ -9,6 +9,7 @@ import SquareEdit from './SquareEdit'
 import EllipseEdit from './EllipseEdit'
 import LineEdit from './LineEdit'
 import TextEdit from './TextEdit'
+import ExtrasEdit from './ExtrasEdit'
 import PlayerDialog from './PlayerDialog'
 
 // this is for offset from toolbar and default class
@@ -407,6 +408,14 @@ class PitchEdit extends Component {
 		});
 	}
 
+	renderExtras(extras){
+		return extras.map((ex, index) => {
+			return (
+				<ExtrasEdit key={index.toString()} extras={ex} />
+			);
+		});
+	}
+
 	renderPitchOverlay(){
 		const o = this.props.pitch.overlaySize();
 		if (null === o) {
@@ -562,6 +571,7 @@ class PitchEdit extends Component {
 					</g>
 					<g id="ellipses">{this.renderEllipses(this.props.pitch.ellipses)}</g>
 					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
+					<g id="extras">{this.renderExtras(this.props.pitch.extras)}</g>
 					<g id="players" transform={playersTransform} fontSize="50">
 						{this.renderLines(this.props.pitch.playerPathsCurrentKeyFrame(), true)}
 						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false, true)}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DrawMode from '../pitch/DrawMode';
 import GoalIcon from '../editors/GoalIcon';
 import Ladder from '../editors/Ladder';
 import Cone from '../editors/Cone';
@@ -13,7 +12,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Radio from '@material-ui/core/Radio';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-// this is for offset from toolbar and default class
 const styles = theme => ({
 	radio: {
 		padding: 0,
@@ -58,6 +56,11 @@ class ExtrasDialog extends Component {
 	}
 
 	extrasChange(e) {
+		let exIndex = parseInt(e.target.value);
+		if (this.props.extrasCreate) {
+			// TODO: correct sizes
+			this.props.extrasCreate(exIndex, 100, 100);
+		}
 		this.handleClose();
 	}
 
@@ -113,12 +116,12 @@ class ExtrasDialog extends Component {
 }
 
 ExtrasDialog.defaultProps = {
-	drawMode: null
+	extrasCreate: null,
 }
 
 ExtrasDialog.propTypes = {
 	classes: PropTypes.object.isRequired,
-	drawMode: PropTypes.instanceOf(DrawMode)
+	extrasCreate: PropTypes.func
 };
 
 export default withStyles(styles, { withTheme: true })(ExtrasDialog);

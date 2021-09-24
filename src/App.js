@@ -26,6 +26,7 @@ class App extends Component {
 		this.CreateNewScheme = this.CreateNewScheme.bind(this);
 		this.CreateNewAnimation = this.CreateNewAnimation.bind(this);
 		this.PitchReset = this.PitchReset.bind(this);
+		this.ExtrasCreate = this.ExtrasCreate.bind(this);
 		this.OnPitchModified = this.OnPitchModified.bind(this);
 		this.OnDrawModeModified = this.OnDrawModeModified.bind(this);
 		this.SnackbarOpen=this.SnackbarOpen.bind(this);
@@ -150,6 +151,10 @@ class App extends Component {
 		});
 	}
 
+	ExtrasCreate(t, width, height) {
+		this.pitch.extrasCreate(t, width, height);
+	}
+
 	AnimKeyFrameAdd() {
 		if (this.pitch.animKeyFrameAdd()){
 			this.SnackbarOpen("success", "New key frame added to animation");
@@ -198,6 +203,7 @@ class App extends Component {
 						animKeyFramePrevious={this.AnimKeyFramePrevious}
 						animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
 						animPlayerShow={this.animPlayerShow}
+						extrasCreate={this.ExtrasCreate}
 					/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 					<AnimPlayer

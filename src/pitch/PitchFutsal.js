@@ -12,6 +12,9 @@ import { ElementIDPrefix } from "./Constants";
 class PitchFutsal {
 
 	constructor() {
+		this.width = 4500;	// pitch width in cm
+		this.height = 2500;	// pitch height in cm
+
 		this.AnimKeyFrameCurrent = 0;
 		this.AnimKeyFrameDuration = 5;	// duration of each key frame in seconds
 		this.AnimKeyFrames = [];
@@ -79,6 +82,10 @@ class PitchFutsal {
 	_modified() {
 		let cp = new PitchFutsal();
 		cp.isModified = true;
+
+		cp.width = this.width;
+		cp.height = this.height;
+
 		cp.AnimKeyFrameCurrent = this.AnimKeyFrameCurrent;
 		cp.AnimKeyFrameDuration = this.AnimKeyFrameDuration;
 		cp.AnimKeyFrames = this.AnimKeyFrames;
@@ -634,10 +641,13 @@ class PitchFutsal {
 		return ElementIDPrefix.Extras + this.extrasID;
 	}
 
-	extrasCreate(t, x, y, width, height) {
+	extrasCreate(t, width, height) {
+		// note: extras is always added to center of pitch with edit mode selected
 		let ex = new Extras(
 			this.extrasNewID(),t,
-			x,y,width,height,0,
+			this.width / 2,
+			this.height / 2,
+			width,height,0,
 			true
 		);
 		this.extras = this.extras.map((e) => e);

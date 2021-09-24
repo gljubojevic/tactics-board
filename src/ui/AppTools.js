@@ -177,7 +177,7 @@ class AppTools extends Component {
 				
 				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} extrasDialogRef={this.extrasDialogRef} />
 				<PaletteDialog ref={this._refPaletteDialog} drawMode={this.props.drawMode} />
-				<ExtrasDialog ref={this._refExtrasDialog} drawMode={this.props.drawMode} />
+				<ExtrasDialog ref={this._refExtrasDialog} extrasCreate={this.props.extrasCreate} />
 			</React.Fragment>
 		);
 	}
@@ -195,6 +195,7 @@ AppTools.defaultProps = {
 	animKeyFramePrevious: null,
 	keyFrameDurationSet: null,
 	animPlayerShow: null,
+	extrasCreate: null,
 }
 
 AppTools.propTypes = {
@@ -208,7 +209,8 @@ AppTools.propTypes = {
 	animKeyFrameNext: PropTypes.func,
 	animKeyFramePrevious: PropTypes.func,
 	keyFrameDurationSet: PropTypes.func,
-	animPlayerShow: PropTypes.func
+	animPlayerShow: PropTypes.func,
+	extrasCreate: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);

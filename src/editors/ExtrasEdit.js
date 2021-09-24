@@ -20,7 +20,7 @@ class ExtrasEdit extends Component {
 		const transform = 'rotate('+ ex.rotation + ',' + ex.x + ',' + ex.y + ')';
 		return (
 			<g transform={transform}>
-				<rect x={sq.x} y={sq.y} width={sq.width} height={sq.height} data-ref={sq.id} />
+				<rect x={ex.x} y={ex.y} width={ex.width} height={ex.height} data-ref={ex.id} />
 				{this.editBox(ex.isEdit, ex.box, ex.isResizable, ex.isRotatable)}
 			</g>
 		);
