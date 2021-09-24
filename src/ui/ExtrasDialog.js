@@ -93,12 +93,10 @@ class ExtrasDialog extends Component {
 			const ico = this.radioIcon(extras, false);
 			const icoChk = this.radioIcon(extras, true);
 			return (
-				<div style={{display: 'inline-block'}}>
+				<div key={index} style={{display: 'inline-block'}}>
 					<label style={{display: 'block',  textAlign: "center"}}>{extras.name}</label>
-						<Radio name="extras-select" key={index} value={index} className={this.props.classes.radio} icon={ico} checkedIcon={icoChk} onChange={this.extrasChange} />
+					<Radio name="extras-select" value={index} className={this.props.classes.radio} icon={ico} checkedIcon={icoChk} onChange={this.extrasChange} />
 				</div>
-
-
 			);
 		});
 	}
