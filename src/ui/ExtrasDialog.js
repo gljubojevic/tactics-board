@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import GoalIcon from '../editors/GoalIcon';
+import Goal from '../editors/Goal';
 import Ladder from '../editors/Ladder';
 import Cone from '../editors/Cone';
 import Flag from '../editors/Flag';
@@ -66,7 +66,7 @@ class ExtrasDialog extends Component {
 
 	getIcons() {
 		return (
-			[{ icon: <GoalIcon />, name: "Goal", dimX: 100, dimY: 350, posX: 0, posY: -25 },
+			[{ icon: <Goal />, name: "Goal", dimX: 100, dimY: 350, posX: 0, posY: -25 },
 			{ icon: <SmallGoalIcon />, name: "Goal Small", dimX: 80, dimY: 380, posX: 0, posY: -50 },
 			{ icon: <Ladder />, name: "Ladder", dimX: 100, dimY: 350, posX: 85, posY: -25 },
 			{ icon: <Cone />, name: "Cone", dimX: 100, dimY: 150, posX: 0, posY: -25 },
