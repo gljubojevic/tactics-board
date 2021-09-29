@@ -5,6 +5,7 @@ import Ladder from '../editors/Ladder';
 import Cone from '../editors/Cone';
 import Flag from '../editors/Flag';
 import SmallGoalIcon from '../editors/SmallGoalIcon'
+import { ExtrasDefaults } from '../pitch/Constants';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -56,10 +57,10 @@ class ExtrasDialog extends Component {
 	}
 
 	extrasChange(e) {
-		let exIndex = parseInt(e.target.value);
 		if (this.props.extrasCreate) {
-			// TODO: correct sizes
-			this.props.extrasCreate(exIndex, 100, 100);
+			let t = parseInt(e.target.value);
+			const def = ExtrasDefaults[t];
+			this.props.extrasCreate(t, def.width, def.height);
 		}
 		this.handleClose();
 	}
