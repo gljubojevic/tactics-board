@@ -55,8 +55,8 @@ class Extras {
 	get box() {
 		return new Box(
 			this.id,
-			this.x,
-			this.y,
+			this.x - this.width / 2,
+			this.y - this.height / 2,
 			this.width,
 			this.height
 		);
