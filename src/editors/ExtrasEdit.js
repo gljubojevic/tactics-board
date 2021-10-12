@@ -10,12 +10,12 @@ import { ExtrasType } from '../pitch/Constants';
 
 class ExtrasEdit extends Component {
 
-	editBox(isEdit, box, isResizable, isRotatable) {
+	editBox(isEdit, box, isBoxVisible, isResizable, isRotatable) {
 		if (!isEdit) {
 			return null;
 		}
 		return (
-			<EditBox box={box} showBox={false} showResize={isResizable} showRotate={isRotatable} />
+			<EditBox box={box} showBox={isBoxVisible} showResize={isResizable} showRotate={isRotatable} />
 		)
 	}
 
@@ -41,7 +41,7 @@ class ExtrasEdit extends Component {
 		return (
 			<g transform={transform}>
 				{this.renderGfx(ex)}
-				{this.editBox(ex.isEdit, ex.box, ex.isResizable, ex.isRotatable)}
+				{this.editBox(ex.isEdit, ex.box, ex.isBoxVisible, ex.isResizable, ex.isRotatable)}
 			</g>
 		);
 	}

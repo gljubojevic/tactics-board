@@ -13,6 +13,19 @@ class Extras {
 		this.isEdit = isEdit;
 	}
 
+	get isBoxVisible() {
+		switch (this.t) {
+			case ExtrasType.Cone:
+			case ExtrasType.Flag:
+				return true;
+			case ExtrasType.Goal:
+			case ExtrasType.GoalSmall:
+			case ExtrasType.Ladder:
+			default:
+				return false;
+		}
+	}
+
 	get isResizable() {
 		switch (this.t) {
 			case ExtrasType.Ladder:
