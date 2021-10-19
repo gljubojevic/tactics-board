@@ -62,16 +62,6 @@ class Extras {
 		);
 	}
 
-	resize(x2, y2, proportional) {
-	//	this.x2 = x2;
-	//	if (!proportional) {
-	//		this.y2 = y2;
-	//	} else {
-	//		let szy = this.width * (this.y1 < y2 ? 1 : -1);
-	//		this.y2 = this.y1 + szy;
-	//	}
-	}
-
 	edit(corner, deltaX, deltaY) {
 		switch (corner) {
 			case "tl":

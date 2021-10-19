@@ -696,16 +696,6 @@ class PitchFutsal {
 		this._modified();
 	}
 
-	extrasResize(id, x2, y2, proportional) {
-		this.extras = this.extras.map(ex => {
-			if (id === ex.id && ex.isResizable) {
-				ex.resize(x2, y2, proportional);
-			}
-			return ex;
-		});
-		this._modified();
-	}
-
 	extrasEdit(corner, id, deltaX, deltaY) {
 		if (!id.startsWith(ElementIDPrefix.Extras)) {
 			return;
