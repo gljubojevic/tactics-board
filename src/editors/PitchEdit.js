@@ -232,6 +232,10 @@ class PitchEdit extends Component {
 			e.preventDefault();
 			return;
 		}
+		if (p.extrasEditStart(id)) {
+			e.preventDefault();
+			return;
+		}
 	}
 
 	hMouseDown(e) {
