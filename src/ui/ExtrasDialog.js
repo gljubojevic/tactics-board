@@ -4,8 +4,7 @@ import Goal from '../editors/Goal';
 import Ladder from '../editors/Ladder';
 import Cone from '../editors/Cone';
 import Flag from '../editors/Flag';
-import SmallGoalIcon from '../editors/SmallGoalIcon'
-import { ExtrasDefaults } from '../pitch/Constants';
+import { ExtrasDefaults, ExtrasType } from '../pitch/Constants';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -20,15 +19,6 @@ const styles = theme => ({
 	radioIcon: {
 		width: 100,
 		height: 100,
-	},
-	radioIconSelected: {
-		width: 100,
-		height: 100,
-		border: '1px solid lightgrey',
-		color: theme.palette.common.white,
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
 	}
 })
 
@@ -41,7 +31,6 @@ class ExtrasDialog extends Component {
 		this.Show = this.Show.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.extrasChange = this.extrasChange.bind(this);
-		this.getIcons = this.getIcons.bind(this);
 	}
 
 	Show() {
@@ -65,33 +54,44 @@ class ExtrasDialog extends Component {
 		this.handleClose();
 	}
 
-	getIcons() {
-		return (
-			[{ icon: <Goal />, name: "Goal", dimX: 100, dimY: 350, posX: 0, posY: -25 },
-			{ icon: <SmallGoalIcon />, name: "Goal Small", dimX: 80, dimY: 380, posX: 0, posY: -50 },
-			{ icon: <Ladder />, name: "Ladder", dimX: 100, dimY: 350, posX: 85, posY: -25 },
-			{ icon: <Cone />, name: "Cone", dimX: 100, dimY: 150, posX: 0, posY: -25 },
-			{ icon: <Flag />, name: "Flag", dimX: 100, dimY: 350, posX: 0, posY: -40 }]);
+	getExtrasGfx(extrasType) {
+		const def = ExtrasDefaults[extrasType];
+		const x = def.width / 2 * def.viewBoxScale;
+		const y = def.height / 2 * def.viewBoxScale;
+		switch (extrasType) {
+			case ExtrasType.Goal:
+			case ExtrasType.GoalSmall:
+				return (<Goal x={x} y={y} width={def.width} height={def.height} />);
+			case ExtrasType.Ladder:
+				return (<Ladder x={x} y={y} width={def.width} height={def.height} />);
+			case ExtrasType.Cone:
+				return (<Cone x={x} y={y} width={def.width} height={def.height} />);
+			case ExtrasType.Flag:
+				return (<Flag x={x} y={y} width={def.width} height={def.height} />);
+			default:
+				throw new Error("Unknown extras type");
+		}
 	}
 
-	radioIcon(extras, isChecked) {
-		const className = isChecked ? this.props.classes.radioIconSelected : this.props.classes.radioIcon;
-		const viewBox = `${extras.posX} ${extras.posY} ${extras.dimX} ${extras.dimY}`;
+	radioIcon(extrasType) {
+		const def = ExtrasDefaults[extrasType];
+		const viewBox = `0 0 ${def.width * def.viewBoxScale} ${def.height * def.viewBoxScale}`;
 		return (
-			<SvgIcon viewBox={viewBox} className={className}>
-				{extras.icon}
+			<SvgIcon viewBox={viewBox} className={this.props.classes.radioIcon}>
+				{this.getExtrasGfx(extrasType)}
 			</SvgIcon>
 		);
 	}
 
 	renderRadios() {
-		return this.getIcons().map((extras, index) => {
-			const ico = this.radioIcon(extras, false);
-			const icoChk = this.radioIcon(extras, true);
+		const allExtras = [ExtrasType.Goal, ExtrasType.GoalSmall, ExtrasType.Ladder, ExtrasType.Cone, ExtrasType.Flag];
+		return allExtras.map((val, index) => {
+			const ico = this.radioIcon(val);
+			const def = ExtrasDefaults[val];
 			return (
 				<div key={index} style={{display: 'inline-block'}}>
-					<label style={{display: 'block',  textAlign: "center"}}>{extras.name}</label>
-					<Radio name="extras-select" value={index} className={this.props.classes.radio} icon={ico} checkedIcon={icoChk} onChange={this.extrasChange} />
+					<label style={{display: 'block',  textAlign: "center"}}>{def.name}</label>
+					<Radio name="extras-select" value={val} className={this.props.classes.radio} icon={ico} onChange={this.extrasChange} />
 				</div>
 			);
 		});
@@ -100,7 +100,7 @@ class ExtrasDialog extends Component {
 	render() {
 		return (
 			<Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitle id="responsive-dialog-title">Extras Dialog</DialogTitle>
+				<DialogTitle>Select element to place on pitch</DialogTitle>
 				<DialogContent>
 					{this.renderRadios()}
 				</DialogContent>
