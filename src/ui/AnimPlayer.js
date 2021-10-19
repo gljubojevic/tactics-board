@@ -163,7 +163,7 @@ class AnimPlayer extends Component {
 				onClose={this.handleClose}
 				anchorEl={this.props.anchorEl}
 				anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-				transformOrigin={{horizontal: 'center'}}
+				transformOrigin={{horizontal: 'center', vertical: 'top'}}
 			>
 				<Grid container alignItems="center">
 					<Grid item>
