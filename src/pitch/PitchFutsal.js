@@ -72,10 +72,11 @@ class PitchFutsal {
 		let groupSize = Math.floor(noBalls / noBallColors);
 		for (var i = 0; i < noBalls; i++) {
 			let color = Math.floor(i / groupSize);
+			let posX = color * ballSize;
 			let ball = new Ball(
 				ElementIDPrefix.Ball + i, color,
-				color * ballSize,0,
-				color * ballSize,0
+				new Point(posX, 0),
+				new Point(posX, 0)
 			);
 			balls.push(ball);
 		}
@@ -314,8 +315,7 @@ class PitchFutsal {
 	ballMove(id, deltaX, deltaY) {
 		let balls = this.ballsCurrentKeyFrame().map(b => {
 			if (id === b.id) {
-				b.x += deltaX;
-				b.y += deltaY;
+				b.pos.move(deltaX, deltaY);
 			}
 			return b;
 		});

@@ -1,38 +1,35 @@
+import Point from "./Point";
+
 class Ball {
-	constructor(id="", color=0, x=0, y=0, xDefault=0, yDefault=0){
+	constructor(id="", color=0, pos=new Point(0,0), posDefault=new Point(0,0)){
 		this.id = id;
 		this.color = color;
-		this.x = x;
-		this.y = y;
-		this.xDefault = xDefault;
-		this.yDefault = yDefault;
+		this.pos = pos;
+		this.posDefault = posDefault;
 	}
 
 	reset() {
-		this.x = this.xDefault;
-		this.y = this.yDefault;
+		this.pos = this.posDefault;
 	}
 
 	clone() {
 		return new Ball(
 			this.id, 
 			this.color, 
-			this.x, this.y,
-			this.xDefault, this.yDefault
+			this.pos.clone(),
+			this.posDefault.clone()
 		);
 	}
 
 	equalTo(b) {
 		return this.id === b.id
 			&& this.color === b.color
-			&& this.x === b.x
-			&& this.y === b.y
-			&& this.xDefault === b.xDefault
-			&& this.yDefault === b.yDefault
+			&& this.pos.equalTo(b.pos)
+			&& this.posDefault.equalTo(b.posDefault)
 	}
 
 	get isPlaced() {
-		return this.x !== this.xDefault || this.y !== this.yDefault;
+		return !this.pos.equalTo(this.posDefault);
 	}
 }
 

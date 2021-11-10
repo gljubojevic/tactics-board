@@ -22,6 +22,13 @@ class AnimKeyFrame {
 		return p1 + (p2-p1) * keyFramePos;
 	}
 
+	linearPos(p1, p2, keyFramePos) {
+		return new Point(
+			p1.x + (p2.x-p1.x) * keyFramePos,
+			p1.y + (p2.y-p1.y) * keyFramePos
+		)
+	}
+
 	animatePlayersOnPaths(keyFramePos) {
 		return this.players.map((p, index)=> {
 			if (!p.isPlaced) {
@@ -42,8 +49,7 @@ class AnimKeyFrame {
 			}
 			let bc = b.clone();
 			let path = this.ballPaths[index];
-			bc.x = this.linear(path.p1.x, path.p2.x, keyFramePos);
-			bc.y = this.linear(path.p1.y, path.p2.y, keyFramePos);
+			bc.pos = this.linearPos(path.p1, path.p2, keyFramePos);
 			return bc;
 		});
 	}
@@ -65,10 +71,10 @@ class AnimKeyFrame {
 			}),
 			this.balls.map(b => b.clone()),
 			this.balls.map((b, index) => {
-				let p1 = new Point(b.x, b.y);
-				let p2 = new Point(b.x, b.y);
-				let c1 = new Point(b.x, b.y);
-				let c2 = new Point(b.x, b.y);
+				let p1 = b.pos.clone();
+				let p2 = b.pos.clone();
+				let c1 = b.pos.clone();
+				let c2 = b.pos.clone();
 				let path = new Line(
 					this.ballPathID(index), 99,	// using 99 as edit color 
 					p1, p2, c1, c2,

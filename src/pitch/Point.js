@@ -12,6 +12,10 @@ class Point {
 		this.x += deltaX;
 		this.y += deltaY;
 	}
+
+	clone() {
+		return new Point(this.x, this.y);
+	}
 }
 
 export default Point;

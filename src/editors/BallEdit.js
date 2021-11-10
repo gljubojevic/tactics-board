@@ -19,7 +19,7 @@ class BallEdit extends Component {
 		const editID = this.props.isEdit ? b.id : null;
 		const editClassName = this.props.isEdit ? 'draggable' : null;
 		const className = 'ball bc' + b.color + (this.props.isPrevFrame ? ' transparent': '');
-		const transform = 'translate(' + b.x + ' ' + b.y + ')';
+		const transform = 'translate(' + b.pos.x + ' ' + b.pos.y + ')';
 		const ball = b.color === 4 ? this.ballImage() : null;
 		return (
 			<g className={className} transform={transform}>
