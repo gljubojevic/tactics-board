@@ -30,6 +30,10 @@ class Ball {
 			&& this.xDefault === b.xDefault
 			&& this.yDefault === b.yDefault
 	}
+
+	get isPlaced() {
+		return this.x !== this.xDefault || this.y !== this.yDefault;
+	}
 }
 
 export default Ball;

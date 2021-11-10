@@ -18,6 +18,9 @@ class PitchFutsal {
 		this.AnimKeyFrameCurrent = 0;
 		this.AnimKeyFrameDuration = 5;	// duration of each key frame in seconds
 		this.AnimKeyFrames = [];
+		this.AnimPlaying = false;
+		this.AnimPlayers = null;
+		this.AnimBalls = null;
 
 		this.squareID = -1;
 		this.squares = [];
@@ -89,6 +92,9 @@ class PitchFutsal {
 		cp.AnimKeyFrameCurrent = this.AnimKeyFrameCurrent;
 		cp.AnimKeyFrameDuration = this.AnimKeyFrameDuration;
 		cp.AnimKeyFrames = this.AnimKeyFrames;
+		cp.AnimPlaying = this.AnimPlaying;
+		cp.AnimPlayers = this.AnimPlayers;
+		cp.AnimBalls = this.AnimBalls;
 
 		cp.squareID = this.squareID;
 		cp.squares = this.squares;
@@ -108,14 +114,23 @@ class PitchFutsal {
 	}
 
 	playersCurrentKeyFrame() {
+		if (this.AnimPlaying) {
+			return null;
+		}
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].players;
 	}
 
 	playerPathsCurrentKeyFrame() {
+		if (this.AnimPlaying) {
+			return null;
+		}
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].playerPaths;
 	}
 
 	playersPreviousKeyFrame() {
+		if (this.AnimPlaying) {
+			return null;
+		}
 		if (0 === this.AnimKeyFrameCurrent) {
 			return null;
 		}
@@ -170,6 +185,30 @@ class PitchFutsal {
 		this.AnimKeyFrameCurrent--;
 		this._modified();
 		return true;
+	}
+
+	animStart() {
+		this.AnimPlaying = true;
+		this.animFrame(0);	// prepare first frame
+		this._modified();
+	}
+
+	animStop() {
+		this.AnimPlaying = false;
+		this.AnimPlayers = null;
+		this.AnimBalls = null;
+		this._modified();
+	}
+
+	animFrame(time) {
+		const kfDuration = this.AnimKeyFrameDuration * 1000;
+		const keyFrame = Math.floor(time / kfDuration);
+		const kfTime = time - (keyFrame * kfDuration);
+		const kfPos = kfTime / kfDuration;
+		// keyFrame+1 is because paths are stored on next key frame
+		this.AnimPlayers = this.AnimKeyFrames[keyFrame+1].animatePlayersOnPaths(kfPos);
+		this.AnimBalls = this.AnimKeyFrames[keyFrame+1].animateBallsOnPaths(kfPos);
+		this._modified();
 	}
 
 	// note: only move current key frame player
@@ -248,14 +287,23 @@ class PitchFutsal {
 	}
 
 	ballsCurrentKeyFrame() {
+		if (this.AnimPlaying) {
+			return null;
+		}
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].balls;
 	}
 
 	ballPathsCurrentKeyFrame() {
+		if (this.AnimPlaying) {
+			return null;
+		}
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent].ballPaths;
 	}
 
 	ballsPreviousKeyFrame() {
+		if (this.AnimPlaying) {
+			return null;
+		}
 		if (0 === this.AnimKeyFrameCurrent) {
 			return null;
 		}

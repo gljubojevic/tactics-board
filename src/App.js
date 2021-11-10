@@ -35,6 +35,9 @@ class App extends Component {
 		this.AnimKeyFrameNext=this.AnimKeyFrameNext.bind(this);
 		this.AnimKeyFramePrevious=this.AnimKeyFramePrevious.bind(this);
 		this.AnimKeyFrameDurationSet=this.AnimKeyFrameDurationSet.bind(this);
+		this.AnimStart=this.AnimStart.bind(this);
+		this.AnimStop=this.AnimStop.bind(this);
+		this.AnimFrame=this.AnimFrame.bind(this);
 		this.animPlayerAnchorEl=this.animPlayerAnchorEl.bind(this);
 		this.animPlayerShow=this.animPlayerShow.bind(this);
 
@@ -181,11 +184,27 @@ class App extends Component {
 		}
 	}
 
+	AnimStart() {
+		this.state.pitch.animStart();
+	}
+
+	AnimStop() {
+		this.state.pitch.animStop();
+	}
+
+	AnimFrame(time) {
+		this.state.pitch.animFrame(time);
+	}
+
 	animPlayerAnchorEl() {
 		return this.refPitchEdit.current;
 	}
 
 	animPlayerShow() {
+		if (this.state.pitch.AnimKeyFrames.length < 2) {
+			this.SnackbarOpen("warning", "No animation is created");
+			return;
+		}
 		this.refAnimPlayer.current.show();
     }
 
@@ -211,6 +230,9 @@ class App extends Component {
 						anchorEl={this.animPlayerAnchorEl}
 						keyFramesNo={this.state.pitch.AnimKeyFrames.length}
 						keyFrameDuration={this.state.pitch.AnimKeyFrameDuration}
+						animStart={this.AnimStart}
+						animStop={this.AnimStop}
+						animFrame={this.AnimFrame}
 					/>
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>

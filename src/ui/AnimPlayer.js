@@ -128,8 +128,8 @@ class AnimPlayer extends Component {
 		}
 
 		// show current frame
-		if (null != this.props.animFrameShow) {
-			this.props.animFrameShow(animTime);
+		if (null != this.props.animFrame) {
+			this.props.animFrame(animTime);
 		}
 
 		if (this.state.isPlaying) {

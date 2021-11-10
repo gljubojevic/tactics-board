@@ -18,6 +18,36 @@ class AnimKeyFrame {
 		return ElementIDPrefix.PathBall + index;
 	}
 
+	linear(p1,p2,keyFramePos) {
+		return p1 + (p2-p1) * keyFramePos;
+	}
+
+	animatePlayersOnPaths(keyFramePos) {
+		return this.players.map((p, index)=> {
+			if (!p.isPlaced) {
+				return p;
+			}
+			let pc = p.clone();
+			let path = this.playerPaths[index];
+			pc.x = this.linear(path.p1.x, path.p2.x, keyFramePos);
+			pc.y = this.linear(path.p1.y, path.p2.y, keyFramePos);
+			return pc;
+		});
+	}
+
+	animateBallsOnPaths(keyFramePos) {
+		return this.balls.map((b, index) => {
+			if (!b.isPlaced) {
+				return b;
+			}
+			let bc = b.clone();
+			let path = this.ballPaths[index];
+			bc.x = this.linear(path.p1.x, path.p2.x, keyFramePos);
+			bc.y = this.linear(path.p1.y, path.p2.y, keyFramePos);
+			return bc;
+		});
+	}
+
 	clone() {
 		return new AnimKeyFrame(
 			this.players.map(p => p.clone()),

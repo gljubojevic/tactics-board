@@ -580,11 +580,13 @@ class PitchEdit extends Component {
 						{this.renderLines(this.props.pitch.playerPathsCurrentKeyFrame(), true)}
 						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false, true)}
 						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame(), true, false)}
+						{this.renderPlayers(this.props.pitch.AnimPlayers, false, false)}
 					</g>
 					<g id="balls" transform={ballsTransform}>
 						{this.renderLines(this.props.pitch.ballPathsCurrentKeyFrame(), true)}
 						{this.renderBalls(this.props.pitch.ballsPreviousKeyFrame(), false, true)}
 						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), true, false)}
+						{this.renderBalls(this.props.pitch.AnimBalls, false, false)}
 					</g>
 					<g id="lines">{this.renderLines(this.props.pitch.lines, false)}</g>
 					<g id="texts">{this.renderTexts(this.props.pitch.texts)}</g>
