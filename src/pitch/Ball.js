@@ -9,7 +9,7 @@ class Ball {
 	}
 
 	reset() {
-		this.pos = this.posDefault;
+		this.pos = this.posDefault.clone();
 	}
 
 	clone() {

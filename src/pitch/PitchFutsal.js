@@ -55,11 +55,12 @@ class PitchFutsal {
 		for (var i = 0; i < noPlayers; i++) {
 			let color = Math.floor(i / groupSize);
 			let number = groupSize - (i % groupSize);
+			let posX = color * playerSize;
 			let player = new Player(
 				ElementIDPrefix.Player + i, number, "", color,
-				color * playerSize, 0,
+				new Point(posX, 0),
 				0,
-				color * playerSize, 0,
+				new Point(posX, 0),
 				number
 			);
 			players.push(player);
@@ -216,8 +217,7 @@ class PitchFutsal {
 	playerMove(id, deltaX, deltaY) {
 		let players = this.playersCurrentKeyFrame().map(p => {
 			if (id === p.id) {
-				p.x += deltaX;
-				p.y += deltaY;
+				p.pos.move(deltaX, deltaY);
 			}
 			return p;
 		});

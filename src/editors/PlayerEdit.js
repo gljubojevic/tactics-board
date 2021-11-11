@@ -18,7 +18,7 @@ class PlayerEdit extends Component {
 		const editID = this.props.isEdit ? pl.id : null;
 		const editClassName = this.props.isEdit ? 'draggable' : null;
 		const className = 'player pc' + pl.color + (this.props.isPrevFrame ? ' transparent': '');
-		const transform = 'translate(' + pl.x + ' ' + pl.y + ')';
+		const transform = 'translate(' + pl.pos.x + ' ' + pl.pos.y + ')';
 		return (
 			<g className={className} textAnchor="middle" transform={transform}>
 				<circle r="50" className={editClassName} data-ref={editID} />
