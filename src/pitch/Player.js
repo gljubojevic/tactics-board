@@ -37,10 +37,9 @@ class Player {
 			&& this.no === p.no
 			&& this.name === p.name
 			&& this.color === p.color
-			&& this.pos.equalTo() === p.x
-			&& this.y === p.y
+			&& this.pos.equalTo(p.pos)
 			&& this.rotation === p.rotation
-			&& this.posDefault.equalTo(p)
+			&& this.posDefault.equalTo(p.posDefault)
 			&& this.noDefault === p.noDefault
 	}
 

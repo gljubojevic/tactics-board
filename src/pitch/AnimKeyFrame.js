@@ -53,29 +53,27 @@ class AnimKeyFrame {
 		return new AnimKeyFrame(
 			this.players.map(p => p.clone()),
 			this.players.map((p, index) => {
-				let p1 = p.pos.clone();
-				let p2 = p.pos.clone();
-				let c1 = p.pos.clone();
-				let c2 = p.pos.clone();
-				let path = new Line(
+				// new key frame has line with all points at same position
+				return new Line(
 					this.playerPathID(index), 99,	// using 99 as edit color 
-					p1, p2, c1, c2,
+					p.pos.clone(), 
+					p.pos.clone(),
+					p.pos.clone(), 
+					p.pos.clone(),
 					false, false, true, true
 				);
-				return path;
 			}),
 			this.balls.map(b => b.clone()),
 			this.balls.map((b, index) => {
-				let p1 = b.pos.clone();
-				let p2 = b.pos.clone();
-				let c1 = b.pos.clone();
-				let c2 = b.pos.clone();
-				let path = new Line(
+				// new key frame has line with all points at same position
+				return new Line(
 					this.ballPathID(index), 99,	// using 99 as edit color 
-					p1, p2, c1, c2,
+					b.pos.clone(),
+					b.pos.clone(),
+					b.pos.clone(), 
+					b.pos.clone(),
 					false, false, true, true
 				);
-				return path;
 			})
 		);
 	}
