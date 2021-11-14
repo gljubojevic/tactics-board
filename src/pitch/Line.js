@@ -3,7 +3,7 @@ import Path from "./Path";
 
 class Line {
 	// For line spline with control points see https://www.particleincell.com/2012/bezier-splines/
-	// Line iz created as straight line with 2 spline segments
+	// Line is created as straight line with 3 cubic bezier spline segments
 	constructor(id="", color=0, p1=new Point(0,0), p2=new Point(0,0), c1=new Point(0,0), c2=new Point(0,0), arrowStart=false, arrowEnd=false, dashed=false, isEdit=false){
 		this.id = id;
 		this.color = color;

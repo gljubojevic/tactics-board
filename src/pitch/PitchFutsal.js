@@ -191,6 +191,7 @@ class PitchFutsal {
 
 	animStart() {
 		this.AnimPlaying = true;
+		this.AnimKeyFrames.map(kf => kf.animPreCalcSplines());
 		this.animFrame(0);	// prepare first frame
 		this._modified();
 	}

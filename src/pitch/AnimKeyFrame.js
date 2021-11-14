@@ -1,4 +1,3 @@
-import Point from "./Point";
 import Line from "./Line";
 import { ElementIDPrefix } from "./Constants";
 
@@ -6,8 +5,10 @@ class AnimKeyFrame {
 	constructor(players=null, playerPaths=null, balls=null, ballPaths=null){
 		this.players = players;
 		this.playerPaths = playerPaths;
+		this.playerPathSplines = [];
 		this.balls = balls;
 		this.ballPaths = ballPaths;
+		this.ballPathSplines = [];
 	}
 
 	playerPathID(index) {
@@ -18,33 +19,49 @@ class AnimKeyFrame {
 		return ElementIDPrefix.PathBall + index;
 	}
 
-	linearPos(p1, p2, keyFramePos) {
-		return new Point(
-			p1.x + (p2.x-p1.x) * keyFramePos,
-			p1.y + (p2.y-p1.y) * keyFramePos
-		)
+	// this is to pre calc bezier splines from lines instead doing it every anim frame
+	animPreCalcSplines() {
+		if (null !== this.playerPaths) {
+			this.playerPathSplines = this.playerPaths.map(l => l.paths());
+		}
+		if (null != this.ballPaths) {
+			this.ballPathSplines = this.ballPaths.map(l => l.paths());
+		}
+	}
+
+	// there are 3 cubic bezier splines forming a path
+	splinePathPos(keyFramePos) {
+		const scale = keyFramePos * 3;
+		const idx = Math.floor(scale);
+		return {
+			idx: idx,		// bezier spline index
+			t: scale - idx	// bezier spline position
+		};
 	}
 
 	animatePlayersOnPaths(keyFramePos) {
+		const splinePos = this.splinePathPos(keyFramePos);
 		return this.players.map((p, index)=> {
 			if (!p.isPlaced) {
 				return p;
 			}
 			let pc = p.clone();
-			let path = this.playerPaths[index];
-			pc.pos = this.linearPos(path.p1, path.p2, keyFramePos);
+			let splines = this.playerPathSplines[index];
+			pc.pos = splines[splinePos.idx].position(splinePos.t);
+			//pc.rotation = splines[splinePos.idx].rotation(splinePos.t);
 			return pc;
 		});
 	}
 
 	animateBallsOnPaths(keyFramePos) {
+		const splinePos = this.splinePathPos(keyFramePos);
 		return this.balls.map((b, index) => {
 			if (!b.isPlaced) {
 				return b;
 			}
 			let bc = b.clone();
-			let path = this.ballPaths[index];
-			bc.pos = this.linearPos(path.p1, path.p2, keyFramePos);
+			let splines = this.ballPathSplines[index];
+			bc.pos = splines[splinePos.idx].position(splinePos.t);
 			return bc;
 		});
 	}
