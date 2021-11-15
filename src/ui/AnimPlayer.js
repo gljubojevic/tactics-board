@@ -34,7 +34,7 @@ class AnimPlayer extends Component {
 		this.state = {
 			isOpen: false,
 			isPlaying: false,
-			isPaused: false,
+			isLoop: false,
 			animTime: 0
 		}
 		this.currentTime = 0;
@@ -43,45 +43,57 @@ class AnimPlayer extends Component {
 		this.playPause = this.playPause.bind(this);
 		this.stop = this.stop.bind(this);
 		this.animStep = this.animStep.bind(this);
-		this.animPlaybackStart = this.animPlaybackStart.bind(this);
+		this.loopToggle = this.loopToggle.bind(this);
 	}
 
-	playPause() {
-		let isPlaying = this.state.isPlaying;
-		let isPaused = this.state.isPaused;
-		if (!isPlaying) {
-			isPlaying = true;
-			isPaused = false;
-			this.animPlaybackStart();
-		} else {
-			isPaused = !isPaused;
-		}
-		this.setState({
-			isPlaying: isPlaying,
-			isPaused: isPaused
+	show() {
+		this.setState({ 
+			isOpen: true,
+			isPlaying: false,
+			isLoop: false,
+			animTime: 0
 		});
-	}
-
-	animPlaybackStart() {
 		// Prepare animation for playback
 		if (null != this.props.animStart) {
 			this.props.animStart();
 		}
-		// start animation steps
+		// reset current time so anim can start from beginning
+		this.currentTime = 0;
+		// start animation frames
 		window.requestAnimationFrame(this.animStep);
 	}
 
-	stop() {
-		this.currentTime = 0;
+	handleClose() {
+		// close player
 		this.setState({
+			isOpen: false,
 			isPlaying: false,
-			isPaused: false,
+			isLoop: false,
 			animTime: 0
 		});
 		// stop / cancel anim playback
 		if (null != this.props.animStop) {
 			this.props.animStop();
 		}
+	}
+
+	loopToggle() {
+		this.setState({
+			isLoop: !this.state.isLoop
+		});
+	}
+
+	playPause() {
+		this.setState({
+			isPlaying: !this.state.isPlaying
+		});
+	}
+
+	stop() {
+		this.setState({
+			isPlaying: false,
+			animTime: 0
+		});
 	}
 
 	animTotalTime() {
@@ -107,54 +119,47 @@ class AnimPlayer extends Component {
 	}
 
 	animStep(time) {
-		// anim is started time
-		if (0 === this.currentTime) {
-			this.currentTime = time;
-		}
+		// calc elapsed time from previous frame
 		const elapsedTime = time - this.currentTime;
 		this.currentTime = time;
 
-		let animTime = this.state.animTime;
+		const totalTime = this.animTotalTime();
+		const animTimeOld = this.state.animTime;
+		let animTimeNew = animTimeOld;
 
-		//console.log(time);
-		if (!this.state.isPaused) {
-			animTime += elapsedTime;
-			if (animTime > this.animTotalTime() ) {
-				animTime = 0;
+		if (this.state.isPlaying) {
+			animTimeNew += elapsedTime;
+			if (animTimeNew > totalTime) {
+				animTimeNew = 0;
 			}
 			this.setState({
-				animTime: animTime
+				animTime: animTimeNew
 			})
 		}
 
-		// show current frame
-		if (null != this.props.animFrame) {
-			this.props.animFrame(animTime);
+		// show current frame only when anim time changed
+		if (null != this.props.animFrame && animTimeNew !== animTimeOld) {
+			this.props.animFrame(animTimeNew);
 		}
 
-		if (this.state.isPlaying) {
+		if (this.state.isOpen) {
 			window.requestAnimationFrame(this.animStep);
 		}
 	}
 
-	show() {
-		this.setState({ isOpen: true });
-	}
-
-	handleClose() {
-		this.stop();
-		this.setState({ isOpen: false });
+	renderLoopColor() {
+		return this.state.isLoop ? "inherit" : "primary";
 	}
 
 	renderPlayPause() {
-		if (!this.state.isPlaying || this.state.isPaused) {
-			return (
-				<PlayArrowIcon />
-			);
+		if (this.state.isPlaying) {
+			return (<PauseIcon />);
 		}
-		return (
-			<PauseIcon />
-		);
+		return (<PlayArrowIcon />);
+	}
+
+	stopDisabled() {
+		return 0 === this.state.animTime;
 	}
 
 	render() {
@@ -168,12 +173,12 @@ class AnimPlayer extends Component {
 				<Grid container alignItems="center">
 					<Grid item>
 						<Tooltip title="Loop Animation">
-							<IconButton  aria-label="Loop Animation" color="inherit" >
+							<IconButton aria-label="Loop Animation" color={this.renderLoopColor()} onClick={this.loopToggle}>
 								<LoopIcon />
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Previous key frame">
-							<IconButton  aria-label="Previous key frame" color="inherit" >
+							<IconButton aria-label="Previous key frame" color="inherit">
 								<SkipPrevious />
 							</IconButton>
 						</Tooltip>
@@ -183,13 +188,13 @@ class AnimPlayer extends Component {
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Next key frame">
-							<IconButton  aria-label="Previous key frame" color="inherit" >
+							<IconButton aria-label="Previous key frame" color="inherit">
 								<SkipNext />
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Stop Animation">
 							<span>
-								<IconButton aria-label="Stop Animation" color="inherit" onClick={this.stop} disabled={!this.state.isPlaying}>
+								<IconButton aria-label="Stop Animation" color="inherit" onClick={this.stop} disabled={this.stopDisabled()}>
 									<StopIcon />
 								</IconButton>
 							</span>
