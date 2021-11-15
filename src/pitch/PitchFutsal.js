@@ -170,6 +170,26 @@ class PitchFutsal {
 		return true;
 	}
 
+	animKeyFrameDelete() {
+		let last = this.AnimKeyFrames.length - 1;
+		if (0 === last) {
+			return false;
+		}
+		if (last !== this.AnimKeyFrameCurrent) {
+			return false;
+		}
+		// remove last key frame
+		let kf = [];
+		for (let i = 0; i < last; i++) {
+			kf.push(this.AnimKeyFrames[i])
+		}
+		this.AnimKeyFrames = kf;
+		// position to last key frame
+		this.AnimKeyFrameCurrent = this.AnimKeyFrames.length - 1;
+		this._modified();
+		return true;
+	}
+
 	animKeyFrameNext() {
 		let next = this.AnimKeyFrameCurrent + 1;
 		if (next >= this.AnimKeyFrames.length) {

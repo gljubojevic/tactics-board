@@ -128,8 +128,11 @@ class AppTools extends Component {
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
 						<div className={this.props.classes.grow} />
-						<AnimControls keyFrameCurrent={this.props.animKeyFrameCurrent}
+						<AnimControls 
+							keyFrameCurrent={this.props.animKeyFrameCurrent}
+							keyFrameTotal={this.props.animKeyFrameTotal}
 							keyFrameAdd={this.props.animKeyFrameAdd}
+							keyFrameDelete={this.props.animKeyFrameDelete}
 							keyFrameNext={this.props.animKeyFrameNext}
 							keyFramePrevious={this.props.animKeyFramePrevious}
 							keyFrameDurationSet={this.props.animKeyFrameDurationSet}
@@ -190,7 +193,9 @@ AppTools.defaultProps = {
 	createNewAnimation: null,
 	snackbarOpen: null,
 	animKeyFrameCurrent: 0,
+	animKeyFrameTotal: 0,
 	animKeyFrameAdd: null,
+	animKeyFrameDelete: null,
 	animKeyFrameNext: null,
 	animKeyFramePrevious: null,
 	keyFrameDurationSet: null,
@@ -205,7 +210,9 @@ AppTools.propTypes = {
 	createNewAnimation: PropTypes.func,
 	snackbarOpen: PropTypes.func,
 	animKeyFrameCurrent: PropTypes.number,
+	animKeyFrameTotal: PropTypes.number,
 	animKeyFrameAdd: PropTypes.func,
+	animKeyFrameDelete: PropTypes.func,
 	animKeyFrameNext: PropTypes.func,
 	animKeyFramePrevious: PropTypes.func,
 	keyFrameDurationSet: PropTypes.func,

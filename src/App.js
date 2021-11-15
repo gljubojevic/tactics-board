@@ -32,6 +32,7 @@ class App extends Component {
 		this.SnackbarOpen=this.SnackbarOpen.bind(this);
 		this.SnackbarOnClose=this.SnackbarOnClose.bind(this);
 		this.AnimKeyFrameAdd=this.AnimKeyFrameAdd.bind(this);
+		this.AnimKeyFrameDelete=this.AnimKeyFrameDelete.bind(this);
 		this.AnimKeyFrameNext=this.AnimKeyFrameNext.bind(this);
 		this.AnimKeyFramePrevious=this.AnimKeyFramePrevious.bind(this);
 		this.AnimKeyFrameDurationSet=this.AnimKeyFrameDurationSet.bind(this);
@@ -166,6 +167,14 @@ class App extends Component {
 		}
 	}
 
+	AnimKeyFrameDelete() {
+		if (this.pitch.animKeyFrameDelete()) {
+			this.SnackbarOpen("success", "Key frame deleted from animation");
+ 		} else {
+			this.SnackbarOpen("error", "Can't delete key frame, only last can be deleted.");
+		}
+	}
+
 	AnimKeyFrameNext() {
 		if (!this.pitch.animKeyFrameNext()) {
 			this.SnackbarOpen("warning", "No more key frames to navigate");
@@ -217,7 +226,9 @@ class App extends Component {
 						createNewScheme={this.CreateNewScheme}
 						createNewAnimation={this.CreateNewAnimation}
 						animKeyFrameCurrent={this.state.pitch.AnimKeyFrameCurrent}
+						animKeyFrameTotal={this.state.pitch.AnimKeyFrames.length}
 						animKeyFrameAdd={this.AnimKeyFrameAdd}
+						animKeyFrameDelete={this.AnimKeyFrameDelete}
 						animKeyFrameNext={this.AnimKeyFrameNext}
 						animKeyFramePrevious={this.AnimKeyFramePrevious}
 						animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
