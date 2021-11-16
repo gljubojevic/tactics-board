@@ -7,12 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import StopIcon from '@material-ui/icons/Stop';
-import PauseIcon from '@material-ui/icons/Pause';
-import LoopIcon from '@material-ui/icons/Loop';
-import SkipNext from '@material-ui/icons/SkipNext';
-import SkipPrevious from '@material-ui/icons/SkipPrevious';
+import { PlayArrow, Stop, Pause, SkipNext, SkipPrevious, Repeat, RepeatOne } from '@material-ui/icons';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 const BorderLinearProgress = withStyles((theme) => ({
@@ -34,7 +29,7 @@ class AnimPlayer extends Component {
 		this.state = {
 			isOpen: false,
 			isPlaying: false,
-			isLoop: false,
+			isRepeat: false,
 			animTime: 0
 		}
 		this.currentTime = 0;
@@ -52,7 +47,7 @@ class AnimPlayer extends Component {
 		this.setState({ 
 			isOpen: true,
 			isPlaying: false,
-			isLoop: false,
+			isRepeat: false,
 			animTime: 0
 		});
 		// Prepare animation for playback
@@ -70,7 +65,7 @@ class AnimPlayer extends Component {
 		this.setState({
 			isOpen: false,
 			isPlaying: false,
-			isLoop: false,
+			isRepeat: false,
 			animTime: 0
 		});
 		// stop / cancel anim playback
@@ -81,7 +76,7 @@ class AnimPlayer extends Component {
 
 	loopToggle() {
 		this.setState({
-			isLoop: !this.state.isLoop
+			isRepeat: !this.state.isRepeat
 		});
 	}
 
@@ -172,7 +167,11 @@ class AnimPlayer extends Component {
 		if (this.state.isPlaying) {
 			animTime += elapsedTime;
 			if (animTime > totalTime) {
-				animTime = 0;
+				if (this.state.isRepeat) {
+					animTime = 0;
+				} else {
+					animTime = totalTime;
+				}
 			}
 			this.setState({
 				animTime: animTime
@@ -189,15 +188,18 @@ class AnimPlayer extends Component {
 		}
 	}
 
-	renderLoopColor() {
-		return this.state.isLoop ? "inherit" : "primary";
+	renderRepeat() {
+		if (this.state.isRepeat) {
+			return (<RepeatOne />);
+		}
+		return (<Repeat />);
 	}
 
 	renderPlayPause() {
 		if (this.state.isPlaying) {
-			return (<PauseIcon />);
+			return (<Pause />);
 		}
-		return (<PlayArrowIcon />);
+		return (<PlayArrow />);
 	}
 
 	stopDisabled() {
@@ -214,9 +216,9 @@ class AnimPlayer extends Component {
 			>
 				<Grid container alignItems="center">
 					<Grid item>
-						<Tooltip title="Loop Animation">
-							<IconButton aria-label="Loop Animation" color={this.renderLoopColor()} onClick={this.loopToggle}>
-								<LoopIcon />
+						<Tooltip title="Repeat Animation">
+							<IconButton aria-label="Repeat Animation" color="inherit" onClick={this.loopToggle}>
+								{this.renderRepeat()}
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Previous key frame">
@@ -241,7 +243,7 @@ class AnimPlayer extends Component {
 						<Tooltip title="Stop Animation">
 							<span>
 								<IconButton aria-label="Stop Animation" color="inherit" onClick={this.stop} disabled={this.stopDisabled()}>
-									<StopIcon />
+									<Stop />
 								</IconButton>
 							</span>
 						</Tooltip>
