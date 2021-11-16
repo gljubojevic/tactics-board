@@ -44,6 +44,8 @@ class AnimPlayer extends Component {
 		this.stop = this.stop.bind(this);
 		this.animStep = this.animStep.bind(this);
 		this.loopToggle = this.loopToggle.bind(this);
+		this.keyFrameNext = this.keyFrameNext.bind(this);
+		this.keyFramePrevious = this.keyFramePrevious.bind(this);
 	}
 
 	show() {
@@ -96,10 +98,51 @@ class AnimPlayer extends Component {
 		});
 	}
 
+	keyFrameDurationMs() {
+		return this.props.keyFrameDuration * 1000;
+	}
+
+	keyFrameLast() {
+		return this.props.keyFramesNo - 1;
+	}
+
+	keyFramePreviousDisabled() {
+		return 0 === this.state.animTime;
+	}
+
+	keyFramePrevious() {
+		const kfDuration = this.keyFrameDurationMs();
+		let animTime = this.state.animTime - kfDuration;
+		if (animTime < 0) {
+			animTime = 0;
+		}
+		animTime = Math.floor(animTime / kfDuration) * kfDuration;
+		this.setState({
+			animTime: animTime
+		});
+	}
+
+	keyFrameNextDisabled() {
+		return this.state.animTime >= this.animTotalTime();
+	}
+
+	keyFrameNext() {
+		const kfDuration = this.keyFrameDurationMs();
+		const totalTime = this.animTotalTime();
+		let animTime = this.state.animTime + kfDuration;
+		if (animTime > totalTime) {
+			animTime = totalTime;
+		}
+		animTime = Math.floor(animTime / kfDuration) * kfDuration;
+		this.setState({
+			animTime: animTime
+		});
+	}
+
 	animTotalTime() {
 		// note: first keyframe is only initial position so it is skipped
 		// total time is in milliseconds
-		return (this.props.keyFramesNo-1) * this.props.keyFrameDuration * 1000;
+		return this.keyFrameLast() * this.keyFrameDurationMs();
 	}
 
 	animProgress() {
@@ -124,25 +167,24 @@ class AnimPlayer extends Component {
 		this.currentTime = time;
 
 		const totalTime = this.animTotalTime();
-		const animTimeOld = this.state.animTime;
-		let animTimeNew = animTimeOld;
+		let animTime = this.state.animTime;
 
 		if (this.state.isPlaying) {
-			animTimeNew += elapsedTime;
-			if (animTimeNew > totalTime) {
-				animTimeNew = 0;
+			animTime += elapsedTime;
+			if (animTime > totalTime) {
+				animTime = 0;
 			}
 			this.setState({
-				animTime: animTimeNew
+				animTime: animTime
 			})
 		}
 
-		// show current frame only when anim time changed
-		if (null != this.props.animFrame && animTimeNew !== animTimeOld) {
-			this.props.animFrame(animTimeNew);
-		}
-
 		if (this.state.isOpen) {
+			// show current frame only when anim time changed
+			if (null != this.props.animFrame) {
+				this.props.animFrame(animTime);
+			}
+			// request next frame
 			window.requestAnimationFrame(this.animStep);
 		}
 	}
@@ -178,9 +220,11 @@ class AnimPlayer extends Component {
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Previous key frame">
-							<IconButton aria-label="Previous key frame" color="inherit">
-								<SkipPrevious />
-							</IconButton>
+							<span>
+								<IconButton aria-label="Previous key frame" color="inherit" onClick={this.keyFramePrevious} disabled={this.keyFramePreviousDisabled()}>
+									<SkipPrevious />
+								</IconButton>
+							</span>
 						</Tooltip>
 						<Tooltip title="Play/Pause Animation">
 							<IconButton aria-label="Play/Pause Animation" color="inherit" onClick={this.playPause}>
@@ -188,9 +232,11 @@ class AnimPlayer extends Component {
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Next key frame">
-							<IconButton aria-label="Previous key frame" color="inherit">
-								<SkipNext />
-							</IconButton>
+							<span>
+								<IconButton aria-label="Previous key frame" color="inherit" onClick={this.keyFrameNext} disabled={this.keyFrameNextDisabled()}>
+									<SkipNext />
+								</IconButton>
+							</span>
 						</Tooltip>
 						<Tooltip title="Stop Animation">
 							<span>
