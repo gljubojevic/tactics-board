@@ -32,7 +32,12 @@ class AnimKeyFrame {
 	// there are 3 cubic bezier splines forming a path
 	splinePathPos(keyFramePos) {
 		const scale = keyFramePos * 3;
-		const idx = Math.floor(scale);
+		let idx = Math.floor(scale);
+		// clip to last bezier spline
+		// Note: this happens when keyFramePos is 1 = max last position 
+		if (idx >= 3) {
+			idx = 2;
+		}
 		return {
 			idx: idx,		// bezier spline index
 			t: scale - idx	// bezier spline position

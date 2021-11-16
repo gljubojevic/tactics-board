@@ -227,10 +227,16 @@ class PitchFutsal {
 		const kfDuration = this.AnimKeyFrameDuration * 1000;
 		const keyFrame = Math.floor(time / kfDuration);
 		const kfTime = time - (keyFrame * kfDuration);
-		const kfPos = kfTime / kfDuration;
+		let kfPos = kfTime / kfDuration;
 		// keyFrame+1 is because paths are stored on next key frame
-		this.AnimPlayers = this.AnimKeyFrames[keyFrame+1].animatePlayersOnPaths(kfPos);
-		this.AnimBalls = this.AnimKeyFrames[keyFrame+1].animateBallsOnPaths(kfPos);
+		let keyFrameShow = keyFrame + 1;
+		// clip to last key frame end
+		if (keyFrameShow >= this.AnimKeyFrames.length) {
+			keyFrameShow = this.AnimKeyFrames.length - 1;
+			kfPos = 1.0;
+		}
+		this.AnimPlayers = this.AnimKeyFrames[keyFrameShow].animatePlayersOnPaths(kfPos);
+		this.AnimBalls = this.AnimKeyFrames[keyFrameShow].animateBallsOnPaths(kfPos);
 		this._modified();
 	}
 
