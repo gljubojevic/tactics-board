@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Popover from '@material-ui/core/Popover';
-import { withStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import { PlayArrow, Stop, Pause, SkipNext, SkipPrevious, Repeat, RepeatOne } from '@material-ui/icons';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import Popover from '@mui/material/Popover';
+import withStyles from '@mui/styles/withStyles';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import { PlayArrow, Stop, Pause, SkipNext, SkipPrevious, Repeat, RepeatOne } from '@mui/icons-material';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const BorderLinearProgress = withStyles((theme) => ({
 	root: {

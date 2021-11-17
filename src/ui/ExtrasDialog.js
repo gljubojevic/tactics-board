@@ -5,12 +5,12 @@ import Ladder from '../editors/Ladder';
 import Cone from '../editors/Cone';
 import Flag from '../editors/Flag';
 import { ExtrasDefaults, ExtrasType } from '../pitch/Constants';
-import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Radio from '@material-ui/core/Radio';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import withStyles from '@mui/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Radio from '@mui/material/Radio';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const styles = theme => ({
 	radio: {

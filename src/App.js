@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import PitchEdit from './editors/PitchEdit'
 import SvgToImg from './editors/SvgToImg'
 import AppTools from './ui/AppTools'
@@ -7,8 +7,8 @@ import AnimPlayer from './ui/AnimPlayer'
 import ConfirmDialog from './ui/ConfirmDialog'
 import PitchFutsal from './pitch/PitchFutsal'
 import DrawMode from './pitch/DrawMode'
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import './App.css';
 
 class App extends Component {
@@ -220,37 +220,39 @@ class App extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<ThemeProvider theme={this.appTheme}>
-					<AppTools drawMode={this.state.drawMode}
-						saveImage={this.SaveImage}
-						createNewScheme={this.CreateNewScheme}
-						createNewAnimation={this.CreateNewAnimation}
-						animKeyFrameCurrent={this.state.pitch.AnimKeyFrameCurrent}
-						animKeyFrameTotal={this.state.pitch.AnimKeyFrames.length}
-						animKeyFrameAdd={this.AnimKeyFrameAdd}
-						animKeyFrameDelete={this.AnimKeyFrameDelete}
-						animKeyFrameNext={this.AnimKeyFrameNext}
-						animKeyFramePrevious={this.AnimKeyFramePrevious}
-						animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
-						animPlayerShow={this.animPlayerShow}
-						extrasCreate={this.ExtrasCreate}
-					/>
-					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
-					<AnimPlayer
-						ref={this.refAnimPlayer} 
-						anchorEl={this.animPlayerAnchorEl}
-						keyFramesNo={this.state.pitch.AnimKeyFrames.length}
-						keyFrameDuration={this.state.pitch.AnimKeyFrameDuration}
-						animStart={this.AnimStart}
-						animStop={this.AnimStop}
-						animFrame={this.AnimFrame}
-					/>
-					<ConfirmDialog ref={this.refConfirmDialog} />
-					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
-						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
-					</Snackbar>
-					<SvgToImg ref={this.refSvgToImg} />
-				</ThemeProvider>
+				<StyledEngineProvider injectFirst>
+					<ThemeProvider theme={this.appTheme}>
+						<AppTools drawMode={this.state.drawMode}
+							saveImage={this.SaveImage}
+							createNewScheme={this.CreateNewScheme}
+							createNewAnimation={this.CreateNewAnimation}
+							animKeyFrameCurrent={this.state.pitch.AnimKeyFrameCurrent}
+							animKeyFrameTotal={this.state.pitch.AnimKeyFrames.length}
+							animKeyFrameAdd={this.AnimKeyFrameAdd}
+							animKeyFrameDelete={this.AnimKeyFrameDelete}
+							animKeyFrameNext={this.AnimKeyFrameNext}
+							animKeyFramePrevious={this.AnimKeyFramePrevious}
+							animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
+							animPlayerShow={this.animPlayerShow}
+							extrasCreate={this.ExtrasCreate}
+						/>
+						<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+						<AnimPlayer
+							ref={this.refAnimPlayer} 
+							anchorEl={this.animPlayerAnchorEl}
+							keyFramesNo={this.state.pitch.AnimKeyFrames.length}
+							keyFrameDuration={this.state.pitch.AnimKeyFrameDuration}
+							animStart={this.AnimStart}
+							animStop={this.AnimStop}
+							animFrame={this.AnimFrame}
+						/>
+						<ConfirmDialog ref={this.refConfirmDialog} />
+						<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
+							<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
+						</Snackbar>
+						<SvgToImg ref={this.refSvgToImg} />
+					</ThemeProvider>
+				</StyledEngineProvider>
 			</React.Fragment>
 		);
 	}

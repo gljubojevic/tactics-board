@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DrawMode from '../pitch/DrawMode';
-import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Radio from '@material-ui/core/Radio';
-import CheckIcon from '@material-ui/icons/Check';
+import withStyles from '@mui/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Radio from '@mui/material/Radio';
+import CheckIcon from '@mui/icons-material/Check';
 
 // this is for offset from toolbar and default class
 const styles = theme => ({

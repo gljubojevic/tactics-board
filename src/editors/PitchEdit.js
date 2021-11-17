@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PitchFutsal from '../pitch/PitchFutsal';
 import DrawMode from '../pitch/DrawMode';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import PlayerEdit from './PlayerEdit'
 import BallEdit from './BallEdit'
 import SquareEdit from './SquareEdit'

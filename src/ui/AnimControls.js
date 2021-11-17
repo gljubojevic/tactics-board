@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Tooltip from '@material-ui/core/Tooltip';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 class AnimControls extends Component {
 
@@ -47,7 +47,6 @@ class AnimControls extends Component {
 	render(){
 		return (
 			<React.Fragment>
-
 				<Tooltip title="Previous Frame">
 					<span>
 						<IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.props.keyFramePrevious} disabled={this.previousDisabled()}>
@@ -102,7 +101,6 @@ class AnimControls extends Component {
 						<MenuItem value={10}>10</MenuItem>
 					</Select>
 				</Tooltip>
-
 			</React.Fragment>
 		);
 	}
