@@ -6,7 +6,6 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -15,12 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import MovieCreationIcon from '@mui/icons-material/MovieCreation';
-import LinkIcon from '@mui/icons-material/Link';
-import GetAppIcon from '@mui/icons-material/GetApp';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import {Menu as MenuIcon, Link as LinkIcon, PhotoCamera, TextFields, SportsSoccer, OpenInNew, MovieCreation} from '@mui/icons-material';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui';
 import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
@@ -99,9 +93,9 @@ class AppTools extends Component {
 			case 'ellipse':
 				return (<ShapeOvalPlus />);
 			case 'text':
-				return (<TextFieldsIcon />);
+				return (<TextFields />);
 			case 'extras':
-				return (<SportsSoccerIcon />);
+				return (<SportsSoccer />);
 			case 'select':
 			default:
 				return (<CursorDefault />);
@@ -146,7 +140,7 @@ class AppTools extends Component {
 						</Tooltip>
 						<Tooltip title="Save picture">
 							<IconButton aria-label="Save picture" color="inherit" onClick={this.props.saveImage}>
-								<GetAppIcon />
+								<PhotoCamera />
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Share link">
@@ -164,13 +158,13 @@ class AppTools extends Component {
 						<List component="nav" aria-label="main mailbox folders">
 							<ListItem button onClick={this.createNewScheme}>
 								<ListItemIcon>
-									<OpenInNewIcon />
+									<OpenInNew />
 								</ListItemIcon>
 								<ListItemText primary="Create new scheme" />
 							</ListItem>
 							<ListItem button onClick={this.createNewAnimation}>
 								<ListItemIcon>
-									<MovieCreationIcon />
+									<MovieCreation />
 								</ListItemIcon>
 								<ListItemText primary="Create new animation" />
 							</ListItem>

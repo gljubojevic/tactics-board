@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import { ArrowBack, ArrowForward, Movie, Add, Delete } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
+import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -85,17 +86,19 @@ class AnimControls extends Component {
 						</IconButton>
 					</span>
 				</Tooltip>
-				<Tooltip data-delay-hide="1000" title="Select frame duration">
-					<Select
-						id="frameDurationSelect"
-						onChange={this.handleChange}
-						defaultValue={5}>
-						<MenuItem value={1}>1</MenuItem>
-						<MenuItem value={3}>3</MenuItem>
-						<MenuItem value={5}>5</MenuItem>
-						<MenuItem value={7}>7</MenuItem>
-						<MenuItem value={10}>10</MenuItem>
-					</Select>
+				<Tooltip data-delay-hide="1000" title="Select frame duration" placement="right">
+					<FormControl variant="standard">
+						<Select
+							id="frameDurationSelect"
+							onChange={this.handleChange}
+							defaultValue={5}>
+							<MenuItem value={1}>1</MenuItem>
+							<MenuItem value={3}>3</MenuItem>
+							<MenuItem value={5}>5</MenuItem>
+							<MenuItem value={7}>7</MenuItem>
+							<MenuItem value={10}>10</MenuItem>
+						</Select>
+					</FormControl>
 				</Tooltip>
 			</React.Fragment>
 		);

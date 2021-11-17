@@ -5,19 +5,15 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import List from '@mui/material/List';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Switch from '@mui/material/Switch';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import PaletteIcon from '@mui/icons-material/Palette';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import { TextFields, Palette, SportsSoccer, ExpandLess, ExpandMore } from '@mui/icons-material';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
 
 class DrawMenu extends Component {
@@ -211,14 +207,14 @@ class DrawMenu extends Component {
 			<Divider />
 			<MenuItem onClick={this.colorSelect}>
 				<ListItemIcon>
-					<PaletteIcon style={{ color: colorSelected }} />
+					<Palette style={{ color: colorSelected }} />
 				</ListItemIcon>
 				<ListItemText primary={colorNameSelected} />
 			</MenuItem>
 			<Divider />
 			<MenuItem onClick={this.extrasSelect}>
 				<ListItemIcon>
-					<SportsSoccerIcon/>
+					<SportsSoccer />
 				</ListItemIcon>
 				<ListItemText primary="Extras" />
 			</MenuItem>
@@ -298,7 +294,7 @@ class DrawMenu extends Component {
 			<Divider />
 			<MenuItem data-value="text" onClick={this.close}>
 				<ListItemIcon>
-					<TextFieldsIcon />
+					<TextFields />
 				</ListItemIcon>
 				<ListItemText primary="Write text" />
 			</MenuItem>
