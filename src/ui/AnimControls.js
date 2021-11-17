@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { ArrowBack, ArrowForward, Movie, Add, Delete } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -50,7 +46,7 @@ class AnimControls extends Component {
 				<Tooltip title="Previous Frame">
 					<span>
 						<IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.props.keyFramePrevious} disabled={this.previousDisabled()}>
-							<ArrowBackIcon fontSize="small"/>
+							<ArrowBack />
 						</IconButton>
 					</span>
 				</Tooltip>
@@ -62,7 +58,7 @@ class AnimControls extends Component {
 				<Tooltip title="Next Frame">
 					<span>
 						<IconButton edge="start" color="inherit" aria-label="Next Frame" onClick={this.props.keyFrameNext} disabled={this.nextDisabled()}>
-							<ArrowForwardIcon fontSize="small"/>
+							<ArrowForward />
 						</IconButton>
 					</span>
 				</Tooltip>
@@ -70,14 +66,14 @@ class AnimControls extends Component {
 				<Tooltip title="Add Frame">
 					<span>
 						<IconButton color="inherit" aria-label="Add Frame" onClick={this.props.keyFrameAdd} disabled={this.addDisabled()}>
-							<AddIcon />
+							<Add />
 						</IconButton>
 					</span>
 				</Tooltip>
 				<Tooltip title="Delete Frame">
 					<span>
 						<IconButton color="inherit" aria-label="Add Frame" onClick={this.props.keyFrameDelete} disabled={this.deleteDisabled()}>
-							<DeleteIcon />
+							<Delete />
 						</IconButton>
 					</span>
 				</Tooltip>
@@ -85,7 +81,7 @@ class AnimControls extends Component {
 				<Tooltip title="Play Animation">
 					<span>
 						<IconButton aria-label="Play Animation" color="inherit" onClick={this.props.animPlayerShow} disabled={this.playDisabled()}>
-							<PlayArrowIcon />
+							<Movie />
 						</IconButton>
 					</span>
 				</Tooltip>

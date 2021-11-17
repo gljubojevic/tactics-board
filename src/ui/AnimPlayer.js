@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import { PlayArrow, Stop, Pause, SkipNext, SkipPrevious, Repeat, RepeatOne } from '@mui/icons-material';
+import { PlayArrow, Stop, Pause, SkipNext, SkipPrevious, Repeat, RepeatOn } from '@mui/icons-material';
 import LinearProgress from '@mui/material/LinearProgress';
 
 const BorderLinearProgress = withStyles((theme) => ({
@@ -38,7 +38,7 @@ class AnimPlayer extends Component {
 		this.playPause = this.playPause.bind(this);
 		this.stop = this.stop.bind(this);
 		this.animStep = this.animStep.bind(this);
-		this.loopToggle = this.loopToggle.bind(this);
+		this.repeatToggle = this.repeatToggle.bind(this);
 		this.keyFrameNext = this.keyFrameNext.bind(this);
 		this.keyFramePrevious = this.keyFramePrevious.bind(this);
 	}
@@ -74,7 +74,7 @@ class AnimPlayer extends Component {
 		}
 	}
 
-	loopToggle() {
+	repeatToggle() {
 		this.setState({
 			isRepeat: !this.state.isRepeat
 		});
@@ -190,7 +190,7 @@ class AnimPlayer extends Component {
 
 	renderRepeat() {
 		if (this.state.isRepeat) {
-			return (<RepeatOne />);
+			return (<RepeatOn />);
 		}
 		return (<Repeat />);
 	}
@@ -217,7 +217,7 @@ class AnimPlayer extends Component {
 				<Grid container alignItems="center">
 					<Grid item>
 						<Tooltip title="Repeat Animation">
-							<IconButton aria-label="Repeat Animation" color="inherit" onClick={this.loopToggle}>
+							<IconButton aria-label="Repeat Animation" color="inherit" onClick={this.repeatToggle}>
 								{this.renderRepeat()}
 							</IconButton>
 						</Tooltip>
