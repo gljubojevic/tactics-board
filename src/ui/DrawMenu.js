@@ -212,7 +212,7 @@ class DrawMenu extends Component {
 				<ListItemText primary={colorNameSelected} />
 			</MenuItem>
 			<Divider />
-			<MenuItem onClick={this.extrasSelect}>
+			<MenuItem data-value="select" onClick={this.extrasSelect}>
 				<ListItemIcon>
 					<SportsSoccer />
 				</ListItemIcon>
