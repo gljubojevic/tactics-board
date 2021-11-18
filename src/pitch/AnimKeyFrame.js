@@ -1,14 +1,70 @@
 import Line from "./Line";
 import { ElementIDPrefix } from "./Constants";
+import Player from "./Player";
+import Point from "./Point";
+import Ball from "./Ball";
 
 class AnimKeyFrame {
 	constructor(players=null, playerPaths=null, balls=null, ballPaths=null){
 		this.players = players;
 		this.playerPaths = playerPaths;
-		this.playerPathSplines = [];
 		this.balls = balls;
 		this.ballPaths = ballPaths;
+
+		this.playerPathSplines = [];
 		this.ballPathSplines = [];
+	}
+
+	save() {
+		return {
+			players: this.players.map(p => p.save()),
+			playerPaths: this.playerPaths.map(pp => pp.save()),
+			balls: this.balls.map(b => b.save()),
+			ballPaths: this.ballPaths.map(bp => bp.save())
+		}
+	}
+
+	load(data) {
+		this.players = data.players.map(p => {
+			return new Player(
+				p.id, p.no, p.color,
+				new Point(p.pos.x, p.pos.y), p.rotation,
+				new Point(p.posDefault.x, p.posDefault.y),
+				p.noDefault
+			);
+		});
+
+		this.playerPaths = data.playerPaths.map(l => {
+			return new Line(
+				l.id, l.color, 
+				new Point(l.p1.x, l.p1.y),
+				new Point(l.p2.x, l.p2.y),
+				new Point(l.c1.x, l.c1.y),
+				new Point(l.c2.x, l.c2.y),
+				l.arrowStart, l.arrowEnd, l.dashed,
+				false
+			);
+		});
+
+		this.balls = data.balls.map(b => {
+			return new Ball(
+				b.id, b.color,
+				new Point(b.pos.x, b.pos.y),
+				new Point(b.posDefault.x, b.posDefault.y)
+			);
+		});
+
+		this.ballPaths = data.ballPaths.map(l => {
+			return new Line(
+				l.id, l.color, 
+				new Point(l.p1.x, l.p1.y),
+				new Point(l.p2.x, l.p2.y),
+				new Point(l.c1.x, l.c1.y),
+				new Point(l.c2.x, l.c2.y),
+				l.arrowStart, l.arrowEnd, l.dashed,
+				false
+			);
+		});
 	}
 
 	playerPathID(index) {

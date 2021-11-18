@@ -8,6 +8,15 @@ class Ball {
 		this.posDefault = posDefault;
 	}
 
+	save() {
+		return {
+			id: this.id,
+			color: this.color,
+			pos: this.pos.clone(),
+			posDefault: this.posDefault.clone()
+		};
+	}
+
 	reset() {
 		this.pos = this.posDefault.clone();
 	}

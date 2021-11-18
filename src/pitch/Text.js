@@ -17,6 +17,18 @@ class Text {
 		this.isTextEdit = isTextEdit;
 	}
 
+	save() {
+		return {
+			id: this.id,
+			color: this.color,
+			size: this.size,
+			text: this.text,
+			x: this.x,
+			y: this.y,
+			rotation: this.rotation
+		};
+	}
+
 	get box() {
 		return new Box(
 			this.id,

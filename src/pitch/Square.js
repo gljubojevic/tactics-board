@@ -13,6 +13,19 @@ class Square {
 		this.isEdit = isEdit;
 	}
 
+	save() {
+		return {
+			id: this.id,
+			color: this.color,
+			x1: this.x1,
+			y1: this.y1,
+			width: this.width,
+			height: this.height,
+			rotation: this.rotation,
+			dashed: this.dashed
+		};
+	}
+
 	get box() {
 		return new Box(
 			this.id,

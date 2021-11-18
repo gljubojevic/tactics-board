@@ -117,6 +117,104 @@ class PitchFutsal {
 		}
 	}
 
+	// saving only parameters
+	save() {
+		return {
+			id: this.id,
+			width: this.width,
+			height: this.height,
+			AnimKeyFrameCurrent: this.AnimKeyFrameCurrent,
+			AnimKeyFrameDuration:this.AnimKeyFrameDuration,
+			AnimKeyFrames: this.AnimKeyFrames.map(kf => kf.save()),
+			squareID: this.squareID,
+			squares: this.squares.map(sq => sq.save()),
+			ellipseID: this.ellipseID,
+			ellipses: this.ellipses.map(el => el.save()),
+			lineID: this.lineID,
+			lines: this.lines.map(l => l.save()),
+			textID: this.textID,
+			texts: this.texts.map(t => t.save()),
+			extrasID: this.extrasID,
+			extras: this.extras.map(ex => ex.save()),
+			overlay: this.overlay
+		};
+	}
+
+	load(data) {
+		this.id = data.id;
+
+		this.width = data.width;
+		this.height = data.height;
+
+		this.AnimKeyFrameCurrent = data.AnimKeyFrameCurrent;
+		this.AnimKeyFrameDuration = data.AnimKeyFrameDuration;
+		this.AnimKeyFrames = data.AnimKeyFrames.map(kf => {
+			let k = new AnimKeyFrame(null, null, null, null);
+			k.load(kf);
+			return k;
+		});
+		
+		this.squareID = data.squareID;
+		this.squares = data.squares.map(sq => {
+			return new Square(
+				sq.id, sq.color, 
+				sq.x1, sq.y1, 
+				sq.width, sq.height, 
+				sq.rotation, sq.dashed, 
+				false
+			);
+		});
+		
+		this.ellipseID = data.ellipseID;
+		this.ellipses = data.ellipses.map(el => {
+			return new Ellipse(
+				el.id, el.color, 
+				el.x1, el.y1, 
+				el.rx, el.ry, 
+				el.rotation, el.dashed, 
+				false
+			);
+		});
+
+		this.lineID = data.lineID;
+		this.lines = data.lines.map(l => {
+			return new Line(
+				l.id, l.color, 
+				new Point(l.p1.x, l.p1.y),
+				new Point(l.p2.x, l.p2.y),
+				new Point(l.c1.x, l.c1.y),
+				new Point(l.c2.x, l.c2.y),
+				l.arrowStart, l.arrowEnd, l.dashed,
+				false
+			);
+		});
+
+		this.textID = data.textID;
+		this.texts = data.texts.map(t => {
+			return new Text(
+				t.id, t.color, 
+				t.size, t.text, 
+				t.x, t.y, t.rotation, 
+				false, false
+			);
+		});
+
+		this.extrasID = data.extrasID;
+		this.extras = data.extras.map(ex => {
+			return new Extras(
+				ex.id, ex.t, 
+				ex.x, ex.y, 
+				ex.width, ex.height, ex.rotation, 
+				false
+			);
+		});
+
+		this.overlay = data.overlay;
+
+		// trigger event modified
+		this._modified();
+	}
+
 	playersCurrentKeyFrame() {
 		if (this.AnimPlaying) {
 			return null;

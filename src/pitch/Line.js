@@ -17,6 +17,20 @@ class Line {
 		this.isEdit = isEdit;
 	}
 
+	save() {
+		return {
+			id: this.id,
+			color: this.color,
+			p1: this.p1.clone(),
+			p2: this.p2.clone(),
+			c1: this.c1.clone(),
+			c2: this.c2.clone(),
+			arrowStart: this.arrowStart,
+			arrowEnd: this.arrowEnd,
+			dashed: this.dashed
+		};
+	}
+
 	empty() {
 		return this.p1.equalTo(this.p2) 
 			&& this.p1.equalTo(this.c1)

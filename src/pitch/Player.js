@@ -10,7 +10,20 @@ class Player {
 		this.rotation = rotation;
 		this.posDefault = posDefault;
 		this.noDefault = noDefault;
-	}	
+	}
+
+	save() {
+		return {
+			id: this.id,
+			no: this.no,
+			name: this.name,
+			color: this.color,
+			pos: this.pos.clone(),
+			rotation: this.rotation,
+			posDefault: this.posDefault.clone(),
+			noDefault: this.noDefault
+		};
+	}
 
 	reset() {
 		this.pos = this.posDefault.clone();

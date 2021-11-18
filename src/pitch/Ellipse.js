@@ -13,6 +13,19 @@ class Ellipse {
 		this.isEdit = isEdit;
 	}
 
+	save() {
+		return {
+			id: this.id,
+			color: this.color,
+			x1: this.x1,
+			y1: this.y1,
+			rx: this.rx,
+			ry: this.ry,
+			rotation: this.rotation,
+			dashed: this.dashed
+		};
+	}
+
 	get cx() {
 		return (this.x1 < this.x2 ? this.x1 : this.x2) + this.rx;
 	}

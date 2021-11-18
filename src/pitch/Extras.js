@@ -13,6 +13,18 @@ class Extras {
 		this.isEdit = isEdit;
 	}
 
+	save() {
+		return {
+			id: this.id,
+			t: this.t,
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height,
+			rotation: this.rotation
+		};
+	}
+
 	get isBoxVisible() {
 		switch (this.t) {
 			case ExtrasType.Cone:
