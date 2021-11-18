@@ -2,8 +2,9 @@ import Box from './Box';
 import { ExtrasType } from './Constants';
 
 class Extras {
-	constructor(id="", t=ExtrasType.Goal, x=0, y=0, width=0, height=0, rotation=0, isEdit=false){
+	constructor(id="", color=0, t=ExtrasType.Goal, x=0, y=0, width=0, height=0, rotation=0, isEdit=false){
 		this.id = id;
+		this.color = color;
 		this.t = t;
 		this.x = x;
 		this.y = y;
@@ -16,6 +17,7 @@ class Extras {
 	save() {
 		return {
 			id: this.id,
+			color: this.color,
 			t: this.t,
 			x: this.x,
 			y: this.y,

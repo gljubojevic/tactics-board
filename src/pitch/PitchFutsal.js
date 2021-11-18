@@ -816,10 +816,10 @@ class PitchFutsal {
 		return ElementIDPrefix.Extras + this.extrasID;
 	}
 
-	extrasCreate(t, width, height) {
+	extrasCreate(t, color, width, height) {
 		// note: extras is always added to center of pitch with edit mode selected
 		let ex = new Extras(
-			this.extrasNewID(),t,
+			this.extrasNewID(),color,t,
 			this.width / 2,
 			this.height / 2,
 			width,height,0,

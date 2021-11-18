@@ -158,7 +158,10 @@ class App extends Component {
 	}
 
 	ExtrasCreate(t, width, height) {
-		this.pitch.extrasCreate(t, width, height);
+		this.pitch.extrasCreate(
+			t, this.state.drawMode.color, 
+			width, height
+		);
 	}
 
 	AnimKeyFrameAdd() {
