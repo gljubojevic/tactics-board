@@ -9,6 +9,7 @@ import PitchFutsal from './pitch/PitchFutsal'
 import DrawMode from './pitch/DrawMode'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 
 class App extends Component {
@@ -59,7 +60,8 @@ class App extends Component {
 	}
 	
 	DefaultPitch() {
-		let pitch = new PitchFutsal();
+		const id = uuidv4();
+		const pitch = new PitchFutsal(id);
 		pitch.initDefault(
 			200, 8, 120, 
 			100, 5, 80

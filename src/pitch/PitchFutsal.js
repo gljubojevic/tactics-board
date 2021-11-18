@@ -11,7 +11,9 @@ import { ElementIDPrefix } from "./Constants";
 
 class PitchFutsal {
 
-	constructor() {
+	constructor(uuid="") {
+		this.id = uuid;
+
 		this.width = 4500;	// pitch width in cm
 		this.height = 2500;	// pitch height in cm
 
