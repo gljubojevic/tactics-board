@@ -79,12 +79,12 @@ class Path {
 
 		const vx = t5.x - t4.x;
 		const vy = t5.y - t4.y;
-		let angle = Math.atan2(vx, vy) * 180 / Math.PI;
-		//angle += 90;
+		let angle = Math.atan2(vy, vx) * 180 / Math.PI;
+		angle += 90;
 		if (angle < 0) {
 			angle += 360;
 		}
-		console.log(angle);
+		//console.log(angle);
 		return angle;
 	}
 
