@@ -45,6 +45,9 @@ class App extends Component {
 		this.AnimFrame=this.AnimFrame.bind(this);
 		this.animPlayerAnchorEl=this.animPlayerAnchorEl.bind(this);
 		this.animPlayerShow=this.animPlayerShow.bind(this);
+		this.LocalStorageLoad = this.LocalStorageLoad.bind(this);
+		this.LocalStorageSave = this.LocalStorageSave.bind(this);
+		this.LocalStorageDelete = this.LocalStorageDelete.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -60,6 +63,10 @@ class App extends Component {
 				Message: ''
 			}
 		}
+	}
+
+	componentDidMount() {
+		this.LocalStorageLoad();
 	}
 	
 	DefaultPitch() {
@@ -84,6 +91,7 @@ class App extends Component {
 			pitch: this.pitch,
 			drawMode: this.drawMode
 		});
+		this.LocalStorageDelete();
 	}
 
 	OnPitchModified(newPitch) {
@@ -139,6 +147,26 @@ class App extends Component {
 			svg.width, svg.height, 
 			svg.width/2, svg.height/2
 		);
+	}
+
+	LocalStorageSave() {
+		console.log("Saving to localStorage.");
+		let data = this.state.pitch.save();
+		localStorage.setItem("tactics-board-current", JSON.stringify(data));
+	}
+
+	LocalStorageLoad() {
+		console.log("Loading from localStorage.");
+		let json = localStorage.getItem("tactics-board-current");
+		if (null === json) {
+			return;
+		}
+		this.state.pitch.load(JSON.parse(json));
+	}
+
+	LocalStorageDelete() {
+		console.log("Deleting from localStorage.");
+		localStorage.removeItem("tactics-board-current");
 	}
 
 	// function to open Snackbar
@@ -246,6 +274,7 @@ class App extends Component {
 				<StyledEngineProvider injectFirst>
 					<ThemeProvider theme={this.appTheme}>
 						<AppTools drawMode={this.state.drawMode}
+							save={this.LocalStorageSave}
 							saveImage={this.SaveImage}
 							createNewScheme={this.CreateNewScheme}
 							createNewAnimation={this.CreateNewAnimation}

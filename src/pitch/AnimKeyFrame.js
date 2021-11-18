@@ -18,33 +18,35 @@ class AnimKeyFrame {
 	save() {
 		return {
 			players: this.players.map(p => p.save()),
-			playerPaths: this.playerPaths.map(pp => pp.save()),
+			playerPaths: null === this.playerPaths ? null : this.playerPaths.map(pp => pp.save()),
 			balls: this.balls.map(b => b.save()),
-			ballPaths: this.ballPaths.map(bp => bp.save())
+			ballPaths: null == this.ballPaths ? null : this.ballPaths.map(bp => bp.save())
 		}
 	}
 
 	load(data) {
 		this.players = data.players.map(p => {
 			return new Player(
-				p.id, p.no, p.color,
+				p.id, p.no, p.name, p.color,
 				new Point(p.pos.x, p.pos.y), p.rotation,
 				new Point(p.posDefault.x, p.posDefault.y),
 				p.noDefault
 			);
 		});
 
-		this.playerPaths = data.playerPaths.map(l => {
-			return new Line(
-				l.id, l.color, 
-				new Point(l.p1.x, l.p1.y),
-				new Point(l.p2.x, l.p2.y),
-				new Point(l.c1.x, l.c1.y),
-				new Point(l.c2.x, l.c2.y),
-				l.arrowStart, l.arrowEnd, l.dashed,
-				false
-			);
-		});
+		if (null !== data.playerPaths) {
+			this.playerPaths = data.playerPaths.map(l => {
+				return new Line(
+					l.id, l.color, 
+					new Point(l.p1.x, l.p1.y),
+					new Point(l.p2.x, l.p2.y),
+					new Point(l.c1.x, l.c1.y),
+					new Point(l.c2.x, l.c2.y),
+					l.arrowStart, l.arrowEnd, l.dashed,
+					true
+				);
+			});
+		}
 
 		this.balls = data.balls.map(b => {
 			return new Ball(
@@ -54,17 +56,19 @@ class AnimKeyFrame {
 			);
 		});
 
-		this.ballPaths = data.ballPaths.map(l => {
-			return new Line(
-				l.id, l.color, 
-				new Point(l.p1.x, l.p1.y),
-				new Point(l.p2.x, l.p2.y),
-				new Point(l.c1.x, l.c1.y),
-				new Point(l.c2.x, l.c2.y),
-				l.arrowStart, l.arrowEnd, l.dashed,
-				false
-			);
-		});
+		if (null !== data.ballPaths) {
+			this.ballPaths = data.ballPaths.map(l => {
+				return new Line(
+					l.id, l.color, 
+					new Point(l.p1.x, l.p1.y),
+					new Point(l.p2.x, l.p2.y),
+					new Point(l.c1.x, l.c1.y),
+					new Point(l.c2.x, l.c2.y),
+					l.arrowStart, l.arrowEnd, l.dashed,
+					true
+				);
+			});
+		}
 	}
 
 	playerPathID(index) {

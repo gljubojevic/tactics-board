@@ -11,7 +11,7 @@ import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
-import {Menu as MenuIcon, Link as LinkIcon, PhotoCamera, TextFields, SportsSoccer, OpenInNew, MovieCreation, Delete} from '@mui/icons-material';
+import {Menu as MenuIcon, Link as LinkIcon, PhotoCamera, TextFields, SportsSoccer, OpenInNew, MovieCreation, Delete, Save} from '@mui/icons-material';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui';
 import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
@@ -43,6 +43,7 @@ class AppTools extends Component {
 		this.createNewScheme = this.createNewScheme.bind(this);
 		this.createNewAnimation = this.createNewAnimation.bind(this);
 		this.deleteAnimation = this.deleteAnimation.bind(this);
+		this.save = this.save.bind(this);
 
 		// palette dialog
 		this._refPaletteDialog = React.createRef();
@@ -72,6 +73,11 @@ class AppTools extends Component {
 	createNewAnimation() {
 		this.setDrawer(false);
 		this.props.createNewAnimation();
+	}
+
+	save() {
+		this.setDrawer(false);
+		this.props.save();
 	}
 
 	deleteAnimation() {
@@ -195,6 +201,15 @@ class AppTools extends Component {
 									<ListItemText primary="Delete animation" />
 								</ListItemButton>
 							</ListItem>
+							<Divider />
+							<ListItem>
+								<ListItemButton onClick={this.save}>
+									<ListItemIcon>
+										<Save />
+									</ListItemIcon>
+									<ListItemText primary="Save tactics board" />
+								</ListItemButton>
+							</ListItem>
 						</List>
 					</Box>
 				</Drawer>
@@ -209,6 +224,7 @@ class AppTools extends Component {
 
 AppTools.defaultProps = {
 	drawMode: null,
+	save: null,
 	saveImage: null,
 	createNewScheme: null,
 	createNewAnimation: null,
@@ -228,6 +244,7 @@ AppTools.defaultProps = {
 
 AppTools.propTypes = {
 	drawMode: PropTypes.instanceOf(DrawMode),
+	save: PropTypes.func,
 	saveImage: PropTypes.func,
 	createNewScheme: PropTypes.func,
 	createNewAnimation: PropTypes.func,

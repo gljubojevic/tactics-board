@@ -91,6 +91,8 @@ class PitchFutsal {
 		let cp = new PitchFutsal();
 		cp.isModified = true;
 
+		cp.id = this.id;
+
 		cp.width = this.width;
 		cp.height = this.height;
 
@@ -206,7 +208,7 @@ class PitchFutsal {
 		this.extrasID = data.extrasID;
 		this.extras = data.extras.map(ex => {
 			return new Extras(
-				ex.id, ex.t, 
+				ex.id, ex.color, ex.t, 
 				ex.x, ex.y, 
 				ex.width, ex.height, ex.rotation, 
 				false
