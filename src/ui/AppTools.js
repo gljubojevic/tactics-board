@@ -9,12 +9,9 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
-import {Menu as MenuIcon, Link as LinkIcon, PhotoCamera, TextFields, SportsSoccer, OpenInNew, MovieCreation} from '@mui/icons-material';
+import {Menu as MenuIcon, Link as LinkIcon, PhotoCamera, TextFields, SportsSoccer, OpenInNew, MovieCreation, Delete} from '@mui/icons-material';
 import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui';
 import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
@@ -45,6 +42,7 @@ class AppTools extends Component {
 		this.drawMenuOpen = this.drawMenuOpen.bind(this);
 		this.createNewScheme = this.createNewScheme.bind(this);
 		this.createNewAnimation = this.createNewAnimation.bind(this);
+		this.deleteAnimation = this.deleteAnimation.bind(this);
 
 		// palette dialog
 		this._refPaletteDialog = React.createRef();
@@ -74,6 +72,11 @@ class AppTools extends Component {
 	createNewAnimation() {
 		this.setDrawer(false);
 		this.props.createNewAnimation();
+	}
+
+	deleteAnimation() {
+		this.setDrawer(false);
+		this.props.deleteAnimation();
 	}
 
 	drawMenuAnchorEl() {
@@ -110,6 +113,27 @@ class AppTools extends Component {
 		return this._refExtrasDialog.current;
 	}
 
+	renderAnimControls() {
+		if (!this.props.animExists) {
+			return null;
+		}
+		return (
+			<React.Fragment>
+				<div className={this.props.classes.grow} />
+				<AnimControls 
+					keyFrameCurrent={this.props.animKeyFrameCurrent}
+					keyFrameTotal={this.props.animKeyFrameTotal}
+					keyFrameAdd={this.props.animKeyFrameAdd}
+					keyFrameDelete={this.props.animKeyFrameDelete}
+					keyFrameNext={this.props.animKeyFrameNext}
+					keyFramePrevious={this.props.animKeyFramePrevious}
+					keyFrameDurationSet={this.props.animKeyFrameDurationSet}
+					animPlayerShow={this.props.animPlayerShow}
+				/>
+			</React.Fragment>
+		);
+	}
+
 	render() {
 		const drawingModeIcon = this.drawingModeIcon();
 
@@ -121,17 +145,7 @@ class AppTools extends Component {
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
-						<div className={this.props.classes.grow} />
-						<AnimControls 
-							keyFrameCurrent={this.props.animKeyFrameCurrent}
-							keyFrameTotal={this.props.animKeyFrameTotal}
-							keyFrameAdd={this.props.animKeyFrameAdd}
-							keyFrameDelete={this.props.animKeyFrameDelete}
-							keyFrameNext={this.props.animKeyFrameNext}
-							keyFramePrevious={this.props.animKeyFramePrevious}
-							keyFrameDurationSet={this.props.animKeyFrameDurationSet}
-							animPlayerShow={this.props.animPlayerShow}
-						/>
+						{this.renderAnimControls()}
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
 							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
@@ -156,17 +170,30 @@ class AppTools extends Component {
 						<Typography variant="h4" component="h2">Tactics board</Typography>
 						<Divider />
 						<List component="nav" aria-label="main mailbox folders">
-							<ListItem button onClick={this.createNewScheme}>
-								<ListItemIcon>
-									<OpenInNew />
-								</ListItemIcon>
-								<ListItemText primary="Create new scheme" />
+							<ListItem>
+								<ListItemButton onClick={this.createNewScheme}>
+									<ListItemIcon>
+										<OpenInNew />
+									</ListItemIcon>
+									<ListItemText primary="Create new scheme" />
+								</ListItemButton>
 							</ListItem>
-							<ListItem button onClick={this.createNewAnimation}>
-								<ListItemIcon>
-									<MovieCreation />
-								</ListItemIcon>
-								<ListItemText primary="Create new animation" />
+							<Divider />
+							<ListItem>
+								<ListItemButton onClick={this.createNewAnimation} disabled={this.props.animExists}>
+									<ListItemIcon>
+										<MovieCreation />
+									</ListItemIcon>
+									<ListItemText primary="Create new animation" />
+								</ListItemButton>
+							</ListItem>
+							<ListItem>
+								<ListItemButton onClick={this.deleteAnimation} disabled={!this.props.animExists}>
+									<ListItemIcon>
+										<Delete />
+									</ListItemIcon>
+									<ListItemText primary="Delete animation" />
+								</ListItemButton>
 							</ListItem>
 						</List>
 					</Box>
@@ -185,7 +212,9 @@ AppTools.defaultProps = {
 	saveImage: null,
 	createNewScheme: null,
 	createNewAnimation: null,
+	deleteAnimation: null,
 	snackbarOpen: null,
+	animExists: false,
 	animKeyFrameCurrent: 0,
 	animKeyFrameTotal: 0,
 	animKeyFrameAdd: null,
@@ -202,7 +231,9 @@ AppTools.propTypes = {
 	saveImage: PropTypes.func,
 	createNewScheme: PropTypes.func,
 	createNewAnimation: PropTypes.func,
+	deleteAnimation: PropTypes.func,
 	snackbarOpen: PropTypes.func,
+	animExists: PropTypes.bool,
 	animKeyFrameCurrent: PropTypes.number,
 	animKeyFrameTotal: PropTypes.number,
 	animKeyFrameAdd: PropTypes.func,

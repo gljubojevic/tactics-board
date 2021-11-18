@@ -26,6 +26,9 @@ class App extends Component {
 		this.SaveImage = this.SaveImage.bind(this);
 		this.CreateNewScheme = this.CreateNewScheme.bind(this);
 		this.CreateNewAnimation = this.CreateNewAnimation.bind(this);
+		this.AnimCreate = this.AnimCreate.bind(this);
+		this.DeleteAnimation = this.DeleteAnimation.bind(this);
+		this.AnimDelete = this.AnimDelete.bind(this);
 		this.PitchReset = this.PitchReset.bind(this);
 		this.ExtrasCreate = this.ExtrasCreate.bind(this);
 		this.OnPitchModified = this.OnPitchModified.bind(this);
@@ -117,7 +120,14 @@ class App extends Component {
 	CreateNewAnimation() {
 		this.refConfirmDialog.current.Show(
 			"Create new animation", "Are you sure you want to create new animation?",
-			null
+			this.AnimCreate
+		);
+	}
+
+	DeleteAnimation() {
+		this.refConfirmDialog.current.Show(
+			"Delete animation", "Are you sure you want to delete animation, only first key frame will be kept?",
+			this.AnimDelete
 		);
 	}
 
@@ -162,6 +172,14 @@ class App extends Component {
 			t, this.state.drawMode.color, 
 			width, height
 		);
+	}
+
+	AnimCreate() {
+		this.pitch.animCreate();
+	}
+
+	AnimDelete() {
+		this.pitch.animDelete();
 	}
 
 	AnimKeyFrameAdd() {
@@ -231,6 +249,8 @@ class App extends Component {
 							saveImage={this.SaveImage}
 							createNewScheme={this.CreateNewScheme}
 							createNewAnimation={this.CreateNewAnimation}
+							deleteAnimation={this.DeleteAnimation}
+							animExists={this.state.pitch.AnimExists}
 							animKeyFrameCurrent={this.state.pitch.AnimKeyFrameCurrent}
 							animKeyFrameTotal={this.state.pitch.AnimKeyFrames.length}
 							animKeyFrameAdd={this.AnimKeyFrameAdd}

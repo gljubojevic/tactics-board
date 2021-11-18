@@ -44,49 +44,42 @@ class AnimControls extends Component {
 	render(){
 		return (
 			<React.Fragment>
-				<Tooltip title="Previous Frame">
+				<Tooltip title="Previous Key Frame">
 					<span>
-						<IconButton edge="end" color="inherit" aria-label="Previous Frame" onClick={this.props.keyFramePrevious} disabled={this.previousDisabled()}>
+						<IconButton edge="end" color="inherit" aria-label="Previous Key Frame" onClick={this.props.keyFramePrevious} disabled={this.previousDisabled()}>
 							<ArrowBack />
 						</IconButton>
 					</span>
 				</Tooltip>
-				<Tooltip title="Current Frame">
-					<IconButton color="inherit" aria-label="Current Frame">
+				<Tooltip title="Current Key Frame">
+					<IconButton color="inherit" aria-label="Current Key Frame">
 						{this.props.keyFrameCurrent}
 					</IconButton>
 				</Tooltip>
-				<Tooltip title="Next Frame">
+				<Tooltip title="Next Key Frame">
 					<span>
-						<IconButton edge="start" color="inherit" aria-label="Next Frame" onClick={this.props.keyFrameNext} disabled={this.nextDisabled()}>
+						<IconButton edge="start" color="inherit" aria-label="Next Key Frame" onClick={this.props.keyFrameNext} disabled={this.nextDisabled()}>
 							<ArrowForward />
 						</IconButton>
 					</span>
 				</Tooltip>
 
-				<Tooltip title="Add Frame">
+				<Tooltip title="Add Key Frame">
 					<span>
-						<IconButton color="inherit" aria-label="Add Frame" onClick={this.props.keyFrameAdd} disabled={this.addDisabled()}>
+						<IconButton color="inherit" aria-label="Add Key Frame" onClick={this.props.keyFrameAdd} disabled={this.addDisabled()}>
 							<Add />
 						</IconButton>
 					</span>
 				</Tooltip>
-				<Tooltip title="Delete Frame">
+				<Tooltip title="Delete Key Frame">
 					<span>
-						<IconButton color="inherit" aria-label="Add Frame" onClick={this.props.keyFrameDelete} disabled={this.deleteDisabled()}>
+						<IconButton color="inherit" aria-label="Add Key Frame" onClick={this.props.keyFrameDelete} disabled={this.deleteDisabled()}>
 							<Delete />
 						</IconButton>
 					</span>
 				</Tooltip>
 
-				<Tooltip title="Play Animation">
-					<span>
-						<IconButton aria-label="Play Animation" color="inherit" onClick={this.props.animPlayerShow} disabled={this.playDisabled()}>
-							<Movie />
-						</IconButton>
-					</span>
-				</Tooltip>
-				<Tooltip data-delay-hide="1000" title="Select frame duration" placement="right">
+				<Tooltip data-delay-hide="1000" title="Select key frame duration" placement="right">
 					<FormControl variant="standard">
 						<Select
 							id="frameDurationSelect"
@@ -99,6 +92,14 @@ class AnimControls extends Component {
 							<MenuItem value={10}>10</MenuItem>
 						</Select>
 					</FormControl>
+				</Tooltip>
+
+				<Tooltip title="Play Animation">
+					<span>
+						<IconButton aria-label="Play Animation" color="inherit" onClick={this.props.animPlayerShow} disabled={this.playDisabled()}>
+							<Movie />
+						</IconButton>
+					</span>
 				</Tooltip>
 			</React.Fragment>
 		);

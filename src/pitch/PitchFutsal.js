@@ -17,6 +17,7 @@ class PitchFutsal {
 		this.width = 4500;	// pitch width in cm
 		this.height = 2500;	// pitch height in cm
 
+		this.AnimExists = false;
 		this.AnimKeyFrameCurrent = 0;
 		this.AnimKeyFrameDuration = 5;	// duration of each key frame in seconds
 		this.AnimKeyFrames = [];
@@ -93,6 +94,7 @@ class PitchFutsal {
 		cp.width = this.width;
 		cp.height = this.height;
 
+		cp.AnimExists = this.AnimExists;
 		cp.AnimKeyFrameCurrent = this.AnimKeyFrameCurrent;
 		cp.AnimKeyFrameDuration = this.AnimKeyFrameDuration;
 		cp.AnimKeyFrames = this.AnimKeyFrames;
@@ -123,6 +125,7 @@ class PitchFutsal {
 			id: this.id,
 			width: this.width,
 			height: this.height,
+			AnimExists: this.AnimExists,
 			AnimKeyFrameCurrent: this.AnimKeyFrameCurrent,
 			AnimKeyFrameDuration:this.AnimKeyFrameDuration,
 			AnimKeyFrames: this.AnimKeyFrames.map(kf => kf.save()),
@@ -146,6 +149,7 @@ class PitchFutsal {
 		this.width = data.width;
 		this.height = data.height;
 
+		this.AnimExists = data.AnimExists;
 		this.AnimKeyFrameCurrent = data.AnimKeyFrameCurrent;
 		this.AnimKeyFrameDuration = data.AnimKeyFrameDuration;
 		this.AnimKeyFrames = data.AnimKeyFrames.map(kf => {
@@ -237,6 +241,22 @@ class PitchFutsal {
 			return null;
 		}
 		return this.AnimKeyFrames[this.AnimKeyFrameCurrent-1].players;
+	}
+
+	animCreate() {
+		this.AnimExists = true;
+		this._modified();
+	}
+
+	animDelete() {
+		this.AnimExists = false;
+		this.AnimKeyFrameCurrent = 0;
+		this.AnimKeyFrameDuration = 5;
+		// keep only 1 key frame
+		this.AnimKeyFrames = [
+			this.AnimKeyFrames[0]
+		]
+		this._modified();
 	}
 
 	animKeyFrameDurationSet(duration) {
