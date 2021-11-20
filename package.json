@@ -14,6 +14,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "browser-filesaver": "^1.1.1",
+    "firebase": "^9.5.0",
     "gh-pages": "^2.2.0",
     "mdi-material-ui": "^6.22.1",
     "react": "^17.0.2",
