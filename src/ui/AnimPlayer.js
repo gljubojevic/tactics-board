@@ -7,8 +7,14 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import { PlayArrow, Stop, Pause, SkipNext, SkipPrevious, Repeat, RepeatOn } from '@mui/icons-material';
 import LinearProgress from '@mui/material/LinearProgress';
+import PlayArrow from '@mui/icons-material/PlayArrow';
+import Stop from '@mui/icons-material/Stop';
+import Pause from '@mui/icons-material/Pause';
+import SkipNext from '@mui/icons-material/SkipNext';
+import SkipPrevious from '@mui/icons-material/SkipPrevious';
+import Repeat from '@mui/icons-material/Repeat';
+import RepeatOn from '@mui/icons-material/RepeatOn';
 
 const BorderLinearProgress = withStyles((theme) => ({
 	root: {

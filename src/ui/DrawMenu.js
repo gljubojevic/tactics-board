@@ -13,8 +13,20 @@ import Switch from '@mui/material/Switch';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { TextFields, Palette, SportsSoccer, ExpandLess, ExpandMore } from '@mui/icons-material';
-import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus, ArrowLeft, ArrowRight, ArrowLeftRight, Minus, DotsHorizontal } from 'mdi-material-ui'
+import TextFields from '@mui/icons-material/TextFields';
+import Palette from '@mui/icons-material/Palette';
+import SportsSoccer from '@mui/icons-material/SportsSoccer';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import CursorDefault from 'mdi-material-ui/CursorDefault';
+import VectorLine from 'mdi-material-ui/VectorLine';
+import ShapeSquarePlus from 'mdi-material-ui/ShapeSquarePlus';
+import ShapeOvalPlus from 'mdi-material-ui/ShapeOvalPlus';
+import ArrowLeft from 'mdi-material-ui/ArrowLeft';
+import ArrowRight from 'mdi-material-ui/ArrowRight';
+import ArrowLeftRight from 'mdi-material-ui/ArrowLeftRight';
+import Minus from 'mdi-material-ui/Minus';
+import DotsHorizontal from 'mdi-material-ui/DotsHorizontal';
 
 class DrawMenu extends Component {
 	constructor(props) {

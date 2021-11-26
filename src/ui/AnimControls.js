@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
-import { ArrowBack, ArrowForward, Movie, Add, Delete } from '@mui/icons-material';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import ArrowForward from '@mui/icons-material/ArrowForward';
+import Movie from '@mui/icons-material/Movie';
+import Add from '@mui/icons-material/Add';
+import Delete from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
