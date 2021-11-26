@@ -10,12 +10,14 @@ import DrawMode from './pitch/DrawMode'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { v4 as uuidv4 } from 'uuid';
-import './App.css';
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+// For auth using: https://github.com/firebase/firebaseui-web-react
+import './App.css';
+import './firebaseui-styling.global.css';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -30,8 +32,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+//const analytics = getAnalytics(firebaseApp);
+
 
 class App extends Component {
 	constructor(props) {
@@ -76,6 +79,7 @@ class App extends Component {
 		this.drawMode = new DrawMode();
 		this.drawMode.onModified = this.OnDrawModeModified;
 		this.state = {
+			isSignedIn: false,
 			pitch: this.pitch,
 			drawMode: this.drawMode,
 			snackBar: {
@@ -87,9 +91,21 @@ class App extends Component {
 	}
 
 	componentDidMount() {
+		// mount handler for authentication
+		this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
+			console.log("Current user",user);
+			this.setState({
+				isSignedIn: !!user
+			});
+		});
+		// load previous board editing
 		this.LocalStorageLoad();
 	}
-	
+
+	componentWillUnmount() {
+		this.unregisterAuthObserver();
+	}
+
 	DefaultPitch() {
 		const id = uuidv4();
 		const pitch = new PitchFutsal(id);
@@ -310,6 +326,8 @@ class App extends Component {
 							animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
 							animPlayerShow={this.animPlayerShow}
 							extrasCreate={this.ExtrasCreate}
+							isSignedIn={this.state.isSignedIn}
+							firebaseApp={firebaseApp}
 						/>
 						<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
 						<AnimPlayer

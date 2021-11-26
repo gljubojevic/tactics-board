@@ -9,15 +9,31 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
-import {Menu as MenuIcon, Link as LinkIcon, PhotoCamera, TextFields, SportsSoccer, OpenInNew, MovieCreation, Delete, Save} from '@mui/icons-material';
-import { CursorDefault, VectorLine, ShapeSquarePlus, ShapeOvalPlus } from 'mdi-material-ui';
+import MenuIcon from '@mui/icons-material/Menu';
+import LinkIcon from '@mui/icons-material/Link';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import TextFields from '@mui/icons-material/TextFields';
+import SportsSoccer from '@mui/icons-material/SportsSoccer';
+import OpenInNew from '@mui/icons-material/OpenInNew';
+import MovieCreation from '@mui/icons-material/MovieCreation';
+import Delete from '@mui/icons-material/Delete';
+import Save from '@mui/icons-material/Save';
+import CursorDefault from 'mdi-material-ui/CursorDefault';
+import VectorLine from 'mdi-material-ui/VectorLine';
+import ShapeSquarePlus from 'mdi-material-ui/ShapeSquarePlus';
+import ShapeOvalPlus from 'mdi-material-ui/ShapeOvalPlus';
 import DrawMenu from './DrawMenu';
 import PaletteDialog from './PaletteDialog';
 import FullscreenToggle from './FullscreenToggle';
 import AnimControls from './AnimControls';
 import ExtrasDialog from './ExtrasDialog';
+import UserAccount from './UserAccount';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -169,6 +185,7 @@ class AppTools extends Component {
 							</IconButton>
 						</Tooltip>
 						<FullscreenToggle />
+						<UserAccount firebaseApp={this.props.firebaseApp} isSignedIn={this.props.isSignedIn} />
 					</Toolbar>
 				</AppBar>
 				<Drawer anchor="left" open={this.state.drawerOpen} onClose={this.toggleDrawer}>
@@ -203,7 +220,7 @@ class AppTools extends Component {
 							</ListItem>
 							<Divider />
 							<ListItem>
-								<ListItemButton onClick={this.save}>
+								<ListItemButton onClick={this.save} disabled={!this.props.isSignedIn}>
 									<ListItemIcon>
 										<Save />
 									</ListItemIcon>
@@ -240,6 +257,8 @@ AppTools.defaultProps = {
 	keyFrameDurationSet: null,
 	animPlayerShow: null,
 	extrasCreate: null,
+	isSignedIn: false,
+	firebaseApp: null
 }
 
 AppTools.propTypes = {
@@ -259,7 +278,9 @@ AppTools.propTypes = {
 	animKeyFramePrevious: PropTypes.func,
 	keyFrameDurationSet: PropTypes.func,
 	animPlayerShow: PropTypes.func,
-	extrasCreate: PropTypes.func
+	extrasCreate: PropTypes.func,
+	isSignedIn: PropTypes.bool,
+	firebaseApp: PropTypes.object
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);
