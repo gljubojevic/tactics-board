@@ -89,6 +89,14 @@ class DrawMode {
 		return this._color;
 	}
 
+	get colorSelected() {
+		return this.colorOptions[this._color];
+	}
+
+	get colorSelectedName() {
+		return "Color " + this._color;
+	}
+
 	set color(value) {
 		this._color = value;
 		this._modified();
@@ -100,6 +108,10 @@ class DrawMode {
 
 	get textSize() {
 		return this._textSize;
+	}
+
+	get textSizeName() {
+		return "Size: " + this.textSizeOptions[this._textSize];
 	}
 
 	set textSize(value) {
@@ -118,6 +130,7 @@ class DrawMode {
 	get pitchOverlay() {
 		return this._pitchOverlay;
 	}
+
 	set pitchOverlay(value) {
 		this._pitchOverlay = value;
 		this._modified();
