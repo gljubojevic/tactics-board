@@ -32,31 +32,29 @@ const styles = theme => ({
 class AppTools extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			drawerOpen: false
-		}
 
 		// Drawing menu
-		this._refDrawMenu = React.createRef();
-		this._refOpenDrawMenu = React.createRef();
+		this.refDrawMenu = React.createRef();
+		this.refDrawMenuAnchorEl = React.createRef();
+		this.drawMenuOpen = this.drawMenuOpen.bind(this);
 		this.drawingModeIcon = this.drawingModeIcon.bind(this);
 		this.drawMenuAnchorEl = this.drawMenuAnchorEl.bind(this);
 
 		// palette dialog
-		this._refPaletteDialog = React.createRef();
+		this.refPaletteDialog = React.createRef();
 		this.paletteDialogRef = this.paletteDialogRef.bind(this);
 
 		// extras dialog
-		this._refExtrasDialog = React.createRef();
+		this.refExtrasDialog = React.createRef();
 		this.extrasDialogRef = this.extrasDialogRef.bind(this);
 	}
 
 	drawMenuAnchorEl() {
-		return this._refOpenDrawMenu.current;
+		return this.refDrawMenuAnchorEl.current;
 	}
 
 	drawMenuOpen() {
-		this._refDrawMenu.current.open();
+		this.refDrawMenu.current.open();
 	}
 
 	drawingModeIcon() {
@@ -78,11 +76,11 @@ class AppTools extends Component {
 	}
 
 	paletteDialogRef() {
-		return this._refPaletteDialog.current;
+		return this.refPaletteDialog.current;
 	}
 
 	extrasDialogRef() {
-		return this._refExtrasDialog.current;
+		return this.refExtrasDialog.current;
 	}
 
 	renderAnimControls() {
@@ -107,8 +105,6 @@ class AppTools extends Component {
 	}
 
 	render() {
-		const drawingModeIcon = this.drawingModeIcon();
-
 		return (
 			<React.Fragment>
 				<AppBar position="fixed">
@@ -120,8 +116,8 @@ class AppTools extends Component {
 						{this.renderAnimControls()}
 						<div className={this.props.classes.grow} />
 						<Tooltip title="Selected draw mode">
-							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
-								{drawingModeIcon}
+							<IconButton ref={this.refDrawMenuAnchorEl} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
+								{this.drawingModeIcon()}
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Share link">
@@ -134,9 +130,9 @@ class AppTools extends Component {
 					</Toolbar>
 				</AppBar>
 				
-				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} extrasDialogRef={this.extrasDialogRef} />
-				<PaletteDialog ref={this._refPaletteDialog} drawMode={this.props.drawMode} />
-				<ExtrasDialog ref={this._refExtrasDialog} extrasCreate={this.props.extrasCreate} />
+				<DrawMenu ref={this.refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} extrasDialogRef={this.extrasDialogRef} />
+				<PaletteDialog ref={this.refPaletteDialog} drawMode={this.props.drawMode} />
+				<ExtrasDialog ref={this.refExtrasDialog} extrasCreate={this.props.extrasCreate} />
 			</React.Fragment>
 		);
 	}
@@ -144,7 +140,6 @@ class AppTools extends Component {
 
 AppTools.defaultProps = {
 	drawMode: null,
-	snackbarOpen: null,
 	animExists: false,
 	animKeyFrameCurrent: 0,
 	animKeyFrameTotal: 0,
@@ -162,7 +157,6 @@ AppTools.defaultProps = {
 
 AppTools.propTypes = {
 	drawMode: PropTypes.instanceOf(DrawMode),
-	snackbarOpen: PropTypes.func,
 	animExists: PropTypes.bool,
 	animKeyFrameCurrent: PropTypes.number,
 	animKeyFrameTotal: PropTypes.number,

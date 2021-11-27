@@ -201,9 +201,7 @@ class DrawMenu extends Component {
 		return (
 		<Menu id="drawingMenu" anchorEl={this.props.anchorEl} keepMounted open={this.state.open} onClose={this.close}>
 			<MenuItem data-value="select" onClick={this.close}>
-				<ListItemIcon>
-					<CursorDefault />
-				</ListItemIcon>
+				<ListItemIcon><CursorDefault /></ListItemIcon>
 				<ListItemText primary="Select / Move" />
 			</MenuItem>
 			<Divider />
@@ -218,47 +216,35 @@ class DrawMenu extends Component {
 			</Collapse>
 			<Divider />
 			<MenuItem onClick={this.colorSelect}>
-				<ListItemIcon>
-					<Palette style={{ color: colorSelected }} />
-				</ListItemIcon>
+				<ListItemIcon><Palette style={{ color: colorSelected }} /></ListItemIcon>
 				<ListItemText primary={colorNameSelected} />
 			</MenuItem>
 			<Divider />
 			<MenuItem data-value="select" onClick={this.extrasSelect}>
-				<ListItemIcon>
-					<SportsSoccer />
-				</ListItemIcon>
+				<ListItemIcon><SportsSoccer /></ListItemIcon>
 				<ListItemText primary="Extras" />
 			</MenuItem>
 			<Divider />
 			<MenuItem data-value="line" onClick={this.close}>
-				<ListItemIcon>
-					<VectorLine />
-				</ListItemIcon>
+				<ListItemIcon><VectorLine /></ListItemIcon>
 				<ListItemText primary="Draw line" />
 			</MenuItem>
 			<MenuItem onClick={this.lineArrowsToggle}>
-				<ListItemIcon>
-					{arrowsIcon}
-				</ListItemIcon>
+				<ListItemIcon>{arrowsIcon}</ListItemIcon>
 				<ListItemText primary="Line arrows" />
 				{this.state.lineArrows ? <ExpandLess /> : <ExpandMore />}
 			</MenuItem>
 			<Collapse in={this.state.lineArrows} timeout="auto" unmountOnExit>
 				<List component="div" disablePadding>
 					<MenuItem onClick={this.lineArrowEndToggle}>
-						<ListItemIcon>
-							<ArrowRight />
-						</ListItemIcon>
+						<ListItemIcon><ArrowRight /></ListItemIcon>
 						<ListItemText primary="End" />
 						<ListItemSecondaryAction>
 							<Switch edge="end" onChange={this.lineArrowEndToggle} checked={this.props.drawMode.lineArrowEnd} />
 						</ListItemSecondaryAction>
 					</MenuItem>
 					<MenuItem onClick={this.lineArrowStartToggle}>
-						<ListItemIcon>
-							<ArrowLeft />
-						</ListItemIcon>
+						<ListItemIcon><ArrowLeft /></ListItemIcon>
 						<ListItemText primary="Start" />
 						<ListItemSecondaryAction>
 							<Switch edge="end" onChange={this.lineArrowStartToggle} checked={this.props.drawMode.lineArrowStart} />
@@ -267,47 +253,35 @@ class DrawMenu extends Component {
 				</List>
 			</Collapse>
 			<MenuItem onClick={this.linePatternToggle}>
-				<ListItemIcon>
-					{patternIcon}
-				</ListItemIcon>
+				<ListItemIcon>{patternIcon}</ListItemIcon>
 				<ListItemText primary="Line pattern" />
 				{this.state.linePattern ? <ExpandLess /> : <ExpandMore />}
 			</MenuItem>
 			<Collapse in={this.state.linePattern} timeout="auto" unmountOnExit>
 				<List component="div" disablePadding>
 					<MenuItem onClick={this.lineDashedOff}>
-						<ListItemIcon>
-							<Minus />
-						</ListItemIcon>
+						<ListItemIcon><Minus /></ListItemIcon>
 						<ListItemText primary="Solid" />
 					</MenuItem>
 					<MenuItem onClick={this.lineDashedOn}>
-						<ListItemIcon>
-							<DotsHorizontal />
-						</ListItemIcon>
+						<ListItemIcon><DotsHorizontal /></ListItemIcon>
 						<ListItemText primary="Dashed" />
 					</MenuItem>
 				</List>
 			</Collapse>
 			<Divider />
 			<MenuItem data-value="square" onClick={this.close}>
-				<ListItemIcon>
-					<ShapeSquarePlus />
-				</ListItemIcon>
+				<ListItemIcon><ShapeSquarePlus /></ListItemIcon>
 				<ListItemText primary="Draw square" />
 			</MenuItem>
 			<Divider />
 			<MenuItem data-value="ellipse" onClick={this.close}>
-				<ListItemIcon>
-					<ShapeOvalPlus />
-				</ListItemIcon>
+				<ListItemIcon><ShapeOvalPlus /></ListItemIcon>
 				<ListItemText primary="Draw ellipse" />
 			</MenuItem>
 			<Divider />
 			<MenuItem data-value="text" onClick={this.close}>
-				<ListItemIcon>
-					<TextFields />
-				</ListItemIcon>
+				<ListItemIcon><TextFields /></ListItemIcon>
 				<ListItemText primary="Write text" />
 			</MenuItem>
 			<MenuItem onClick={this.textSizesToggle}>
