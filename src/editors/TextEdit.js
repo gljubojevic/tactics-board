@@ -160,7 +160,7 @@ class TextEdit extends Component {
 
 	render() {
 		const tx = this.props.text;
-        const className = 'txt'+ tx.size + ' pc' + tx.color;
+        const className = 'txt'+ tx.size + ' ec' + tx.color;
         let transform = 'translate('+ tx.x + ',' + tx.y + ')';
         if (0 !== tx.rotation) {
 			let cx = tx.bx + tx.bwidth / 2;

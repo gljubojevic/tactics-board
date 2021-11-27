@@ -16,7 +16,7 @@ class EllipseEdit extends Component {
 
 	render() {
 		const el = this.props.ellipse;
-		const className = (el.dashed ? 'ellipse dashed pc' : 'ellipse pc') + el.color;
+		const className = (el.dashed ? 'ellipse dashed ec' : 'ellipse ec') + el.color;
 		const transform = 'rotate('+ el.rotation + ',' + el.cx + ',' + el.cy + ')';
 		return (
 			<g className={className} transform={transform}>

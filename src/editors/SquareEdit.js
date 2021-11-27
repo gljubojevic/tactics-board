@@ -16,7 +16,7 @@ class SquareEdit extends Component {
 
 	render() {
 		const sq = this.props.square;
-		const className = (sq.dashed ? 'square dashed pc' : 'square pc') + sq.color;
+		const className = (sq.dashed ? 'square dashed ec' : 'square ec') + sq.color;
 		const transform = 'rotate('+ sq.rotation + ',' + sq.cx + ',' + sq.cy + ')';
 		return (
 			<g className={className} transform={transform}>

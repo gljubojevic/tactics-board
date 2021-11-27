@@ -432,22 +432,32 @@ class PitchEdit extends Component {
 	}
 
 	generatePicthStyles() {
-		// default colors list
-		const colors = this.props.drawMode.colorOptions.map((col, index) => {
-			return '.pc'+ index +' { fill: '+col+'; stroke: '+ col +'; }';
-		});
+		const dm = this.props.drawMode;
 
-		// edit color
-		const allColors = colors.concat([
-			'.pc' + this.props.drawMode.editColorIndex  + ' { fill: '+ this.props.drawMode.editColor +'; stroke: '+ this.props.drawMode.editColor +'; }'
+		// object colors
+		const colorsEdit = dm.colorOptions.map((col, index) => {
+			return '.ec'+ index +' { fill: '+ col +'; stroke: '+ col +'; }';
+		});
+		// editors default color
+		const colorsEditAll = colorsEdit.concat([
+			'.ec' + dm.editColorIndex  + ' { fill: '+ dm.editColor +'; stroke: '+ dm.editColor +'; }'
 		]);
 
-		return allColors.concat([
-			'.bc0 { fill: #ffa500; }',
-			'.bc1 { fill: #cc3333; }',
-			'.bc2 { fill: #222333; }',
-			'.bc3 { fill: #0000ff; }',
-			'.bc4 { fill: #ffffff; }',
+		// player colors
+		const colorsPlayer = colorsEditAll.concat(
+			dm.colorOptionsPlayer.map((col, index) => {
+				return '.pc'+ index +' { fill: '+ col +'; stroke: '+ col +'; }';
+			})
+		);
+
+		// ball colors
+		const ballColors = colorsPlayer.concat(
+			dm.colorOptionsBall.map((col, index) => {
+				return '.bc'+ index + ' { fill: '+ col +'; }';
+			})
+		);
+
+		return ballColors.concat([
 			'.bc4 svg { fill: #000000; }',
 			'#texts { font-family: sans-serif; font-size: 10em; cursor: default; user-select: none; }',
 			'.txt0 text { font-size: 0.5em; }',
@@ -484,12 +494,12 @@ class PitchEdit extends Component {
 		const pitchTop = (this._orgHeight - 2000) / 2;
 		const pitchTransform = 'translate(' + pitchLeft + ' ' + pitchTop + ')';
 
-		// calculate players position in viewbox
+		// calculate players position in view box
 		const playersLeft = pitchLeft + 50;
 		const playersTop = pitchTop + 2000 + 50 + 25;
 		const playersTransform = 'translate(' + playersLeft + ' ' + playersTop + ')';
 
-		// calculate balls position in viewBox
+		// calculate balls position in view box
 		const ballsLeft = pitchLeft + 1050
 		const ballsTop = pitchTop + 2000 + 90;
 		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"

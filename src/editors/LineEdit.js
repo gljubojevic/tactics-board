@@ -41,7 +41,7 @@ class LineEdit extends Component {
 	render() {
 		const l = this.props.line;
 		const lineType = this.props.isPath ? 'path' : 'line';
-		const className = lineType + (l.dashed ? ' dashed pc' : ' pc') + l.color;
+		const className = lineType + (l.dashed ? ' dashed ec' : ' ec') + l.color;
 		const allPaths = l.paths().map((p, index) => this.renderPath(p, index.toString()));
 		return (
 			<g className={className}>

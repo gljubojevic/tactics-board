@@ -7,6 +7,9 @@ class DrawMode {
 		this._color = 0;
 		this._textSize = 2;
 		this._pitchOverlay = 'none';
+		this._objectColors = ['#8b2323','#e7e739','#912cee','#04b804','#1d4ba0','#ee2c2c','#ff7f50','#56c6eb'];
+		this._playerColors = ['#8b2323','#e7e739','#912cee','#04b804','#1d4ba0','#ee2c2c','#ff7f50','#56c6eb'];
+		this._ballColors = ['#ffa500','#cc3333','#222333','#0000ff','#ffffff'];
 		this.onModified = null;
 	}
 
@@ -19,6 +22,9 @@ class DrawMode {
 		dm._color = this.color;
 		dm._textSize = this.textSize;
 		dm._pitchOverlay = this.pitchOverlay;
+		dm._objectColors = this._objectColors;
+		dm._playerColors = this._playerColors;
+		dm._ballColors = this._ballColors;
 		// trigger event modified
 		if (null !== this.onModified) {
 			this.onModified(dm);
@@ -72,7 +78,15 @@ class DrawMode {
 	}
 
 	get colorOptions() {
-		return ['#8b2323','#e7e739','#912cee','#04b804','#1d4ba0','#ee2c2c','#ff7f50','#56c6eb'];
+		return this._objectColors;
+	}
+
+	get colorOptionsPlayer() {
+		return this._playerColors;
+	}
+
+	get colorOptionsBall() {
+		return this._ballColors;
 	}
 
 	// hardcoded edit color
@@ -90,7 +104,7 @@ class DrawMode {
 	}
 
 	get colorSelected() {
-		return this.colorOptions[this._color];
+		return this._objectColors[this._color];
 	}
 
 	get colorSelectedName() {
