@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-import PitchEdit from './editors/PitchEdit'
-import SvgToImg from './editors/SvgToImg'
-import AppTools from './ui/AppTools'
-import AnimPlayer from './ui/AnimPlayer'
-import ConfirmDialog from './ui/ConfirmDialog'
-import PitchFutsal from './pitch/PitchFutsal'
-import DrawMode from './pitch/DrawMode'
+import PitchEdit from './editors/PitchEdit';
+import SvgToImg from './editors/SvgToImg';
+import AppTools from './ui/AppTools';
+import AnimPlayer from './ui/AnimPlayer';
+import ConfirmDialog from './ui/ConfirmDialog';
+import PitchFutsal from './pitch/PitchFutsal';
+import DrawerMenu from './ui/DrawerMenu';
+import DrawMode from './pitch/DrawMode';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { v4 as uuidv4 } from 'uuid';
@@ -46,10 +47,12 @@ class App extends Component {
 		this.refSvgToImg = React.createRef();
 		this.refConfirmDialog = React.createRef();
 		this.refAnimPlayer = React.createRef();
+		this.refDrawerMenu = React.createRef();
 		// event handlers
+		this.ToggleDrawer = this.ToggleDrawer.bind(this);
 		this.SaveImage = this.SaveImage.bind(this);
-		this.CreateNewScheme = this.CreateNewScheme.bind(this);
-		this.CreateNewAnimation = this.CreateNewAnimation.bind(this);
+		this.NewScheme = this.NewScheme.bind(this);
+		this.NewAnimation = this.NewAnimation.bind(this);
 		this.AnimCreate = this.AnimCreate.bind(this);
 		this.DeleteAnimation = this.DeleteAnimation.bind(this);
 		this.AnimDelete = this.AnimDelete.bind(this);
@@ -152,7 +155,11 @@ class App extends Component {
 		this.pitch.overlay = this.drawMode.pitchOverlay;
 	}
 
-	CreateNewScheme() {
+	ToggleDrawer(e) {
+		this.refDrawerMenu.current.ToggleDrawer(e);
+	}
+
+	NewScheme() {
 		if (!this.state.pitch.isModified) {
 			return;
 		}
@@ -162,7 +169,7 @@ class App extends Component {
 		);
 	}
 
-	CreateNewAnimation() {
+	NewAnimation() {
 		this.refConfirmDialog.current.Show(
 			"Create new animation", "Are you sure you want to create new animation?",
 			this.AnimCreate
@@ -307,46 +314,49 @@ class App extends Component {
 
 	render() {
 		return (
-			<React.Fragment>
-				<StyledEngineProvider injectFirst>
-					<ThemeProvider theme={this.appTheme}>
-						<AppTools drawMode={this.state.drawMode}
-							save={this.LocalStorageSave}
-							saveImage={this.SaveImage}
-							createNewScheme={this.CreateNewScheme}
-							createNewAnimation={this.CreateNewAnimation}
-							deleteAnimation={this.DeleteAnimation}
-							animExists={this.state.pitch.AnimExists}
-							animKeyFrameCurrent={this.state.pitch.AnimKeyFrameCurrent}
-							animKeyFrameTotal={this.state.pitch.AnimKeyFrames.length}
-							animKeyFrameAdd={this.AnimKeyFrameAdd}
-							animKeyFrameDelete={this.AnimKeyFrameDelete}
-							animKeyFrameNext={this.AnimKeyFrameNext}
-							animKeyFramePrevious={this.AnimKeyFramePrevious}
-							animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
-							animPlayerShow={this.animPlayerShow}
-							extrasCreate={this.ExtrasCreate}
-							isSignedIn={this.state.isSignedIn}
-							firebaseApp={firebaseApp}
-						/>
-						<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
-						<AnimPlayer
-							ref={this.refAnimPlayer} 
-							anchorEl={this.animPlayerAnchorEl}
-							keyFramesNo={this.state.pitch.AnimKeyFrames.length}
-							keyFrameDuration={this.state.pitch.AnimKeyFrameDuration}
-							animStart={this.AnimStart}
-							animStop={this.AnimStop}
-							animFrame={this.AnimFrame}
-						/>
-						<ConfirmDialog ref={this.refConfirmDialog} />
-						<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
-							<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
-						</Snackbar>
-						<SvgToImg ref={this.refSvgToImg} />
-					</ThemeProvider>
-				</StyledEngineProvider>
-			</React.Fragment>
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={this.appTheme}>
+					<AppTools drawMode={this.state.drawMode}
+						saveImage={this.SaveImage}
+						animExists={this.state.pitch.AnimExists}
+						animKeyFrameCurrent={this.state.pitch.AnimKeyFrameCurrent}
+						animKeyFrameTotal={this.state.pitch.AnimKeyFrames.length}
+						animKeyFrameAdd={this.AnimKeyFrameAdd}
+						animKeyFrameDelete={this.AnimKeyFrameDelete}
+						animKeyFrameNext={this.AnimKeyFrameNext}
+						animKeyFramePrevious={this.AnimKeyFramePrevious}
+						animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
+						animPlayerShow={this.animPlayerShow}
+						extrasCreate={this.ExtrasCreate}
+						isSignedIn={this.state.isSignedIn}
+						firebaseApp={firebaseApp}
+						toggleDrawer={this.ToggleDrawer}
+					/>
+					<DrawerMenu ref={this.refDrawerMenu} 
+						save={this.LocalStorageSave} 
+						saveImage={this.SaveImage} 
+						newScheme={this.NewScheme}
+						newAnimation={this.NewAnimation}
+						deleteAnimation={this.DeleteAnimation}
+						animExists={this.state.pitch.AnimExists}
+						isSignedIn={this.state.isSignedIn}
+					/>
+					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+					<AnimPlayer ref={this.refAnimPlayer} 
+						anchorEl={this.animPlayerAnchorEl}
+						keyFramesNo={this.state.pitch.AnimKeyFrames.length}
+						keyFrameDuration={this.state.pitch.AnimKeyFrameDuration}
+						animStart={this.AnimStart}
+						animStop={this.AnimStop}
+						animFrame={this.AnimFrame}
+					/>
+					<ConfirmDialog ref={this.refConfirmDialog} />
+					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
+						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
+					</Snackbar>
+					<SvgToImg ref={this.refSvgToImg} />
+				</ThemeProvider>
+			</StyledEngineProvider>
 		);
 	}
 }

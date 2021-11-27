@@ -6,24 +6,11 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
 import LinkIcon from '@mui/icons-material/Link';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import TextFields from '@mui/icons-material/TextFields';
 import SportsSoccer from '@mui/icons-material/SportsSoccer';
-import OpenInNew from '@mui/icons-material/OpenInNew';
-import MovieCreation from '@mui/icons-material/MovieCreation';
-import Delete from '@mui/icons-material/Delete';
-import Save from '@mui/icons-material/Save';
 import CursorDefault from 'mdi-material-ui/CursorDefault';
 import VectorLine from 'mdi-material-ui/VectorLine';
 import ShapeSquarePlus from 'mdi-material-ui/ShapeSquarePlus';
@@ -48,57 +35,20 @@ class AppTools extends Component {
 		this.state = {
 			drawerOpen: false
 		}
-		this.toggleDrawer = this.toggleDrawer.bind(this);
 
 		// Drawing menu
 		this._refDrawMenu = React.createRef();
 		this._refOpenDrawMenu = React.createRef();
 		this.drawingModeIcon = this.drawingModeIcon.bind(this);
 		this.drawMenuAnchorEl = this.drawMenuAnchorEl.bind(this);
-		this.drawMenuOpen = this.drawMenuOpen.bind(this);
-		this.createNewScheme = this.createNewScheme.bind(this);
-		this.createNewAnimation = this.createNewAnimation.bind(this);
-		this.deleteAnimation = this.deleteAnimation.bind(this);
-		this.save = this.save.bind(this);
 
 		// palette dialog
 		this._refPaletteDialog = React.createRef();
 		this.paletteDialogRef = this.paletteDialogRef.bind(this);
-		this.extrasDialogRef = this.extrasDialogRef.bind(this);
+
+		// extras dialog
 		this._refExtrasDialog = React.createRef();
-	}
-
-	setDrawer(isOpen) {
-		this.setState({
-			drawerOpen:isOpen
-		});
-	}
-
-	toggleDrawer(e) {
-		if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
-			return;
-		}
-		this.setDrawer(!this.state.drawerOpen);
-	}
-
-	createNewScheme() {
-		this.setDrawer(false);
-		this.props.createNewScheme();
-	}
-
-	createNewAnimation() {
-		this.setDrawer(false);
-		this.props.createNewAnimation();
-	}
-
-	save() {
-		this.setDrawer(false);
-		this.props.save();
-	}
-
-	deleteAnimation() {
-		this.setDrawer(false);
-		this.props.deleteAnimation();
+		this.extrasDialogRef = this.extrasDialogRef.bind(this);
 	}
 
 	drawMenuAnchorEl() {
@@ -163,7 +113,7 @@ class AppTools extends Component {
 			<React.Fragment>
 				<AppBar position="fixed">
 					<Toolbar variant="regular">
-						<IconButton edge="start" color="inherit" aria-label="menu" onClick={this.toggleDrawer}>
+						<IconButton edge="start" color="inherit" aria-label="menu" onClick={this.props.toggleDrawer}>
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
@@ -172,11 +122,6 @@ class AppTools extends Component {
 						<Tooltip title="Selected draw mode">
 							<IconButton ref={this._refOpenDrawMenu} aria-label="Selected draw mode" color="inherit" onClick={this.drawMenuOpen}>
 								{drawingModeIcon}
-							</IconButton>
-						</Tooltip>
-						<Tooltip title="Save picture">
-							<IconButton aria-label="Save picture" color="inherit" onClick={this.props.saveImage}>
-								<PhotoCamera />
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Share link">
@@ -188,48 +133,6 @@ class AppTools extends Component {
 						<UserAccount firebaseApp={this.props.firebaseApp} isSignedIn={this.props.isSignedIn} />
 					</Toolbar>
 				</AppBar>
-				<Drawer anchor="left" open={this.state.drawerOpen} onClose={this.toggleDrawer}>
-					<Box p={2}>
-						<Typography variant="h4" component="h2">Tactics board</Typography>
-						<Divider />
-						<List component="nav" aria-label="main mailbox folders">
-							<ListItem>
-								<ListItemButton onClick={this.createNewScheme}>
-									<ListItemIcon>
-										<OpenInNew />
-									</ListItemIcon>
-									<ListItemText primary="Create new scheme" />
-								</ListItemButton>
-							</ListItem>
-							<Divider />
-							<ListItem>
-								<ListItemButton onClick={this.createNewAnimation} disabled={this.props.animExists}>
-									<ListItemIcon>
-										<MovieCreation />
-									</ListItemIcon>
-									<ListItemText primary="Create new animation" />
-								</ListItemButton>
-							</ListItem>
-							<ListItem>
-								<ListItemButton onClick={this.deleteAnimation} disabled={!this.props.animExists}>
-									<ListItemIcon>
-										<Delete />
-									</ListItemIcon>
-									<ListItemText primary="Delete animation" />
-								</ListItemButton>
-							</ListItem>
-							<Divider />
-							<ListItem>
-								<ListItemButton onClick={this.save} disabled={!this.props.isSignedIn}>
-									<ListItemIcon>
-										<Save />
-									</ListItemIcon>
-									<ListItemText primary="Save tactics board" />
-								</ListItemButton>
-							</ListItem>
-						</List>
-					</Box>
-				</Drawer>
 				
 				<DrawMenu ref={this._refDrawMenu} anchorEl={this.drawMenuAnchorEl} drawMode={this.props.drawMode} paletteDialogRef={this.paletteDialogRef} extrasDialogRef={this.extrasDialogRef} />
 				<PaletteDialog ref={this._refPaletteDialog} drawMode={this.props.drawMode} />
@@ -241,11 +144,6 @@ class AppTools extends Component {
 
 AppTools.defaultProps = {
 	drawMode: null,
-	save: null,
-	saveImage: null,
-	createNewScheme: null,
-	createNewAnimation: null,
-	deleteAnimation: null,
 	snackbarOpen: null,
 	animExists: false,
 	animKeyFrameCurrent: 0,
@@ -258,16 +156,12 @@ AppTools.defaultProps = {
 	animPlayerShow: null,
 	extrasCreate: null,
 	isSignedIn: false,
-	firebaseApp: null
+	firebaseApp: null,
+	toggleDrawer: null
 }
 
 AppTools.propTypes = {
 	drawMode: PropTypes.instanceOf(DrawMode),
-	save: PropTypes.func,
-	saveImage: PropTypes.func,
-	createNewScheme: PropTypes.func,
-	createNewAnimation: PropTypes.func,
-	deleteAnimation: PropTypes.func,
 	snackbarOpen: PropTypes.func,
 	animExists: PropTypes.bool,
 	animKeyFrameCurrent: PropTypes.number,
@@ -280,7 +174,8 @@ AppTools.propTypes = {
 	animPlayerShow: PropTypes.func,
 	extrasCreate: PropTypes.func,
 	isSignedIn: PropTypes.bool,
-	firebaseApp: PropTypes.object
+	firebaseApp: PropTypes.object,
+	toggleDrawer: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);
