@@ -14,6 +14,7 @@ import MovieCreation from '@mui/icons-material/MovieCreation';
 import Delete from '@mui/icons-material/Delete';
 import Save from '@mui/icons-material/Save';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import Palette from '@mui/icons-material/Palette';
 
 class DrawerMenu extends Component {
 	constructor(props) {
@@ -24,6 +25,7 @@ class DrawerMenu extends Component {
 		this.deleteAnimation = this.deleteAnimation.bind(this);
 		this.save = this.save.bind(this);
 		this.saveImage = this.saveImage.bind(this);
+		this.colorPaletteEdit = this.colorPaletteEdit.bind(this);
 		this.state = {
 			drawerOpen: false
 		}
@@ -67,6 +69,11 @@ class DrawerMenu extends Component {
 		this.props.saveImage();
 	}
 
+	colorPaletteEdit() {
+		this.setDrawer(false);
+		this.props.colorPaletteEdit();
+	}
+
 	render() {
 		return (
 			<Drawer anchor="left" open={this.state.drawerOpen} onClose={this.ToggleDrawer}>
@@ -106,6 +113,13 @@ class DrawerMenu extends Component {
 								<ListItemText primary="Save tactics board" />
 							</ListItemButton>
 						</ListItem>
+						<Divider />
+						<ListItem>
+							<ListItemButton onClick={this.colorPaletteEdit}>
+								<ListItemIcon><Palette /></ListItemIcon>
+								<ListItemText primary="Color palette edit" />
+							</ListItemButton>
+						</ListItem>
 					</List>
 				</Box>
 			</Drawer>
@@ -119,6 +133,7 @@ DrawerMenu.defaultProps = {
 	newScheme: null,
 	newAnimation: null,
 	deleteAnimation: null,
+	colorPaletteEdit: null,
 	animExists: false,
 	isSignedIn: false
 }
@@ -129,6 +144,7 @@ DrawerMenu.propTypes = {
 	newScheme: PropTypes.func,
 	newAnimation: PropTypes.func,
 	deleteAnimation: PropTypes.func,
+	colorPaletteEdit: PropTypes.func,
 	animExists: PropTypes.bool,
 	isSignedIn: PropTypes.bool
 }

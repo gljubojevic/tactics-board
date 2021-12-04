@@ -5,6 +5,7 @@ import SvgToImg from './editors/SvgToImg';
 import AppTools from './ui/AppTools';
 import AnimPlayer from './ui/AnimPlayer';
 import ConfirmDialog from './ui/ConfirmDialog';
+import PaletteEditorDialog from './ui/PaletteEditorDialog';
 import PitchFutsal from './pitch/PitchFutsal';
 import DrawerMenu from './ui/DrawerMenu';
 import DrawMode from './pitch/DrawMode';
@@ -48,6 +49,7 @@ class App extends Component {
 		this.refConfirmDialog = React.createRef();
 		this.refAnimPlayer = React.createRef();
 		this.refDrawerMenu = React.createRef();
+		this.refPaletteEditorDialog = React.createRef();
 		// event handlers
 		this.ToggleDrawer = this.ToggleDrawer.bind(this);
 		this.SaveImage = this.SaveImage.bind(this);
@@ -75,6 +77,7 @@ class App extends Component {
 		this.LocalStorageLoad = this.LocalStorageLoad.bind(this);
 		this.LocalStorageSave = this.LocalStorageSave.bind(this);
 		this.LocalStorageDelete = this.LocalStorageDelete.bind(this);
+		this.ColorPaletteEdit = this.ColorPaletteEdit.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -191,6 +194,10 @@ class App extends Component {
 			svg.width, svg.height, 
 			svg.width/2, svg.height/2
 		);
+	}
+
+	ColorPaletteEdit() {
+		this.refPaletteEditorDialog.current.Show();
 	}
 
 	LocalStorageSave() {
@@ -338,6 +345,7 @@ class App extends Component {
 						newScheme={this.NewScheme}
 						newAnimation={this.NewAnimation}
 						deleteAnimation={this.DeleteAnimation}
+						colorPaletteEdit={this.ColorPaletteEdit}
 						animExists={this.state.pitch.AnimExists}
 						isSignedIn={this.state.isSignedIn}
 					/>
@@ -351,6 +359,7 @@ class App extends Component {
 						animFrame={this.AnimFrame}
 					/>
 					<ConfirmDialog ref={this.refConfirmDialog} />
+					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
 					</Snackbar>

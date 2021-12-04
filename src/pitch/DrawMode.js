@@ -99,6 +99,13 @@ class DrawMode {
 		return 99;
 	}
 
+	updateColors(objectColors, playerColors, ballColors) {
+		this._objectColors = objectColors;
+		this._playerColors = playerColors;
+		this._ballColors = ballColors;
+		this._modified();
+	}
+
 	get color() {
 		return this._color;
 	}
