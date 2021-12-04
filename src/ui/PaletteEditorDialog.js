@@ -17,12 +17,7 @@ class PaletteEditorDialog extends Component {
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
-			open: false,
-			//selPaletteType: "draw",
-			//selPaletteIndex: 0,
-			//drawPalette: props.drawMode.colorOptions,
-			//playersPalette: props.drawMode.colorOptionsPlayer,
-			//ballsPalette: props.drawMode.colorOptionsBall
+			open: false
 		}
 		this.Show = this.Show.bind(this);
 		this.handleClose = this.handleClose.bind(this);
@@ -32,17 +27,6 @@ class PaletteEditorDialog extends Component {
 		this.ballColorSelected = this.ballColorSelected.bind(this);
 		this.colorChanged = this.colorChanged.bind(this);
 	}
-
-	//componentDidUpdate(prevProps, prevState, snapshot) {
-	//	if (this.props.drawMode !== prevProps.drawMode) {
-	//		console.log("Palette editor dialog -> update");
-	//		this.setState({
-	//			drawPalette: this.props.drawMode.colorOptions,
-	//			playersPalette: this.props.drawMode.colorOptionsPlayer,
-	//			ballsPalette: this.props.drawMode.colorOptionsBall
-	//		})
-	//	}
-	//}
 
 	Show() {
 		// on show reset selection
@@ -108,7 +92,6 @@ class PaletteEditorDialog extends Component {
 	}
 
 	colorChanged(newColor) {
-		//console.log("Dialog color changed", newColor);
 		switch (this.state.selPaletteType) {
 			case "draw":
 				this.setState({

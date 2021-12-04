@@ -18,7 +18,6 @@ class ColorComponent extends Component {
 	}
 
 	componentDidUpdate() {
-		//console.log(this.props.value, this.state.value)
 		if (this.props.value !== this.state.value) {
 			this.setState({value:this.props.value});
 		}
