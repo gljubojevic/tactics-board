@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogTitleClose from '../ui/elements/DialogTitleClose';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+
 
 class PlayerDialog extends Component {
 	constructor(props) {
@@ -34,9 +35,7 @@ class PlayerDialog extends Component {
 	}
 
 	close() {
-		this.setState({
-			open: false
-		});
+		this.setState({open: false});
 	}
 
 	save() {
@@ -66,20 +65,17 @@ class PlayerDialog extends Component {
 
 	render() {
 		return (
-			<React.Fragment>
-				<Dialog open={this.state.open} onClose={this.close} aria-labelledby="form-dialog-title">
-					<DialogTitle id="form-dialog-title">Edit player</DialogTitle>
-					<DialogContent>
-						<TextField inputRef={this._refNumber} margin="dense" id="playerNumber" defaultValue={this.state.player.no} label="Number" type="number" fullWidth autoFocus />
-						<TextField inputRef={this._refName} margin="dense" id="playerName" defaultValue={this.state.player.name} label="Name" type="text" fullWidth />
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={this.remove} color="primary">Remove</Button>
-						<Button onClick={this.close} color="primary">Cancel</Button>
-						<Button onClick={this.save} color="primary">Save</Button>
-					</DialogActions>
-				</Dialog>
-			</React.Fragment>
+			<Dialog open={this.state.open} onClose={this.close} aria-labelledby="form-dialog-title">
+				<DialogTitleClose id="form-dialog-title" onClick={this.close}>Edit player</DialogTitleClose>
+				<DialogContent dividers>
+					<TextField inputRef={this._refNumber} margin="dense" id="playerNumber" defaultValue={this.state.player.no} label="Number" type="number" fullWidth autoFocus />
+					<TextField inputRef={this._refName} margin="dense" id="playerName" defaultValue={this.state.player.name} label="Name" type="text" fullWidth />
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={this.remove} variant="contained" color="secondary">Remove</Button>
+					<Button onClick={this.save} variant="contained" color="primary">Save</Button>
+				</DialogActions>
+			</Dialog>
 		);
 	}
 }

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import DialogTitleClose from './elements/DialogTitleClose';
 import firebase from 'firebase/compat/app';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
@@ -31,15 +29,11 @@ class SignInDialog extends Component {
 	}
 
 	Show() {
-		this.setState({
-			open: true
-		});
+		this.setState({open: true});
 	}
 	
 	handleClose() {
-		this.setState({
-			open: false
-		});
+		this.setState({open: false});
 	}
 
 	signInSuccessWithAuthResult(authResult, redirectUrl) {
@@ -51,12 +45,7 @@ class SignInDialog extends Component {
 	render() {
 		return (
 			<Dialog fullWidth={true} maxWidth={"sm"} open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitle id="responsive-dialog-title">
-					<IconButton aria-label="close" onClick={this.handleClose} sx={{ position: 'absolute', right: 8,top: 8}}>
-						<CloseIcon />
-					</IconButton>
-					Please select sign in method
-				</DialogTitle>
+				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>Please select sign in method</DialogTitleClose>
 				<DialogContent dividers>
 					<StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={this.props.firebaseApp.auth()}/>
 				</DialogContent>

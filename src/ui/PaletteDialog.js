@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DrawMode from '../pitch/DrawMode';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import ColorPalette from './elements/ColorPalette';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import DialogTitleClose from './elements/DialogTitleClose';
 
 class PaletteDialog extends Component {
 	constructor(props, context) {
@@ -35,11 +33,7 @@ class PaletteDialog extends Component {
 	render() {
 		return (
 			<Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitle id="responsive-dialog-title">Draw color palette
-					<IconButton aria-label="close" onClick={this.handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
-						<CloseIcon />
-					</IconButton>
-				</DialogTitle>
+				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>Draw color palette</DialogTitleClose>
 				<DialogContent dividers>
 					<ColorPalette toolTipPrefix="Color" colorWidth={48} colorHeight={48} palette={this.props.drawMode.colorOptions} colorSelected={this.props.drawMode.color} onSelected={this.colorSelected} />
 				</DialogContent>

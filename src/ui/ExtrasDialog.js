@@ -7,7 +7,7 @@ import Flag from '../editors/Flag';
 import { ExtrasDefaults, ExtrasType } from '../pitch/Constants';
 import withStyles from '@mui/styles/withStyles';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogTitleClose from './elements/DialogTitleClose';
 import DialogContent from '@mui/material/DialogContent';
 import Radio from '@mui/material/Radio';
 import SvgIcon from '@mui/material/SvgIcon';
@@ -34,15 +34,11 @@ class ExtrasDialog extends Component {
 	}
 
 	Show() {
-		this.setState({
-			open: true
-		});
+		this.setState({open: true});
 	}
 
 	handleClose() {
-		this.setState({
-			open: false
-		});
+		this.setState({open: false});
 	}
 
 	extrasChange(e) {
@@ -100,8 +96,8 @@ class ExtrasDialog extends Component {
 	render() {
 		return (
 			<Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitle>Select element to place on pitch</DialogTitle>
-				<DialogContent>
+				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>Select element to place on pitch</DialogTitleClose>
+				<DialogContent dividers>
 					{this.renderRadios()}
 				</DialogContent>
 			</Dialog>

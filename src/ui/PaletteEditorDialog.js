@@ -5,12 +5,10 @@ import ColorPalette from './elements/ColorPalette';
 import ColorEditor from './elements/ColorEditor';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogTitleClose from './elements/DialogTitleClose';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 
 class PaletteEditorDialog extends Component {
@@ -117,11 +115,7 @@ class PaletteEditorDialog extends Component {
 	render() {
 		return (
 			<Dialog maxWidth="lg" fullWidth={false} open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitle>Color palette editor
-					<IconButton aria-label="close" onClick={this.handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
-						<CloseIcon />
-					</IconButton>
-				</DialogTitle>
+				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>Color palette editor</DialogTitleClose>
 				<DialogContent dividers>
 					<Box sx={{display: 'flex', flexWrap: 'nowrap'}}>
 						<Box sx={{mr:2}}>

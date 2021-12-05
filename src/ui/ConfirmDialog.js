@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogTitleClose from './elements/DialogTitleClose';
 
 class ConfirmDialog extends Component {
 	constructor(props, context) {
@@ -46,8 +46,8 @@ class ConfirmDialog extends Component {
 	render() {
 		return (
 			<Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitle id="responsive-dialog-title">{this.state.title}</DialogTitle>
-				<DialogContent>
+				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>{this.state.title}</DialogTitleClose>
+				<DialogContent dividers>
 					<DialogContentText>{this.state.text}</DialogContentText>
 				</DialogContent>
 				<DialogActions>
