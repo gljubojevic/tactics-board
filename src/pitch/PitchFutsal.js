@@ -860,6 +860,13 @@ class PitchFutsal {
 		this._modified();
 	}
 
+	textEditEnd() {
+		this.texts = this.texts.map(tx => {
+			tx.isEdit = false;
+			return tx;
+		});
+	}	
+
 	extrasNewID() {
 		this.extrasID += 1;
 		return ElementIDPrefix.Extras + this.extrasID;
@@ -984,7 +991,7 @@ class PitchFutsal {
 		this.squareEditEnd();
 		this.ellipsesEditEnd();
 		this.extrasEditEnd();
-		// TODO: Text end editing
+		this.textEditEnd();
 		this._modified();
 	}
 
