@@ -12,8 +12,8 @@ class Ball {
 		return {
 			id: this.id,
 			color: this.color,
-			pos: this.pos.clone(),
-			posDefault: this.posDefault.clone()
+			pos: this.pos.save(),
+			posDefault: this.posDefault.save()
 		};
 	}
 

@@ -21,10 +21,10 @@ class Line {
 		return {
 			id: this.id,
 			color: this.color,
-			p1: this.p1.clone(),
-			p2: this.p2.clone(),
-			c1: this.c1.clone(),
-			c2: this.c2.clone(),
+			p1: this.p1.save(),
+			p2: this.p2.save(),
+			c1: this.c1.save(),
+			c2: this.c2.save(),
 			arrowStart: this.arrowStart,
 			arrowEnd: this.arrowEnd,
 			dashed: this.dashed

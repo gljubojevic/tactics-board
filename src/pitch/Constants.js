@@ -26,6 +26,13 @@ const ExtrasDefaults = [
 	{ name:'Flag', width: 130, height: 280, viewBoxScale: 2 }
 ];
 
+function RemoveTags(str) {
+	if ((str===null) || (str===''))
+	{	 return str;	}
+	// Regular expression to identify HTML tags in 
+	// the input string. Replacing the identified 
+	// HTML tag with a null string.
+	return str.replace( /(<([^>]+)>)/ig, '');
+}
 
-
-export { ElementIDPrefix, ExtrasType, ExtrasDefaults }
+export { ElementIDPrefix, ExtrasType, ExtrasDefaults, RemoveTags }

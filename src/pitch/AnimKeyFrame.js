@@ -1,5 +1,5 @@
 import Line from "./Line";
-import { ElementIDPrefix } from "./Constants";
+import { ElementIDPrefix, RemoveTags } from "./Constants";
 import Player from "./Player";
 import Point from "./Point";
 import Ball from "./Ball";
@@ -27,7 +27,9 @@ class AnimKeyFrame {
 	load(data) {
 		this.players = data.players.map(p => {
 			return new Player(
-				p.id, p.no, p.name, p.color,
+				p.id, p.no,
+				RemoveTags(p.name),
+				p.color,
 				new Point(p.pos.x, p.pos.y), p.rotation,
 				new Point(p.posDefault.x, p.posDefault.y),
 				p.noDefault

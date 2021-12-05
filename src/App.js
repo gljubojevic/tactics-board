@@ -11,11 +11,14 @@ import DrawerMenu from './ui/DrawerMenu';
 import DrawMode from './pitch/DrawMode';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import SaveDialog from './ui/SaveDialog';
 import { v4 as uuidv4 } from 'uuid';
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 // TODO: Add SDKs for Firebase products that you want to use
+import { getFirestore } from "firebase/firestore";
+import { doc as fsDoc, setDoc as fsSetDoc, Timestamp as fsTimestamp } from "firebase/firestore";
 // https://firebase.google.com/docs/web/setup#available-libraries
 // For auth using: https://github.com/firebase/firebaseui-web-react
 import './App.css';
@@ -36,7 +39,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 //const analytics = getAnalytics(firebaseApp);
-
+const firestoreDB = getFirestore();
 
 class App extends Component {
 	constructor(props) {
@@ -50,6 +53,7 @@ class App extends Component {
 		this.refAnimPlayer = React.createRef();
 		this.refDrawerMenu = React.createRef();
 		this.refPaletteEditorDialog = React.createRef();
+		this.refSaveDialog = React.createRef();
 		// event handlers
 		this.ToggleDrawer = this.ToggleDrawer.bind(this);
 		this.SaveImage = this.SaveImage.bind(this);
@@ -78,6 +82,8 @@ class App extends Component {
 		this.LocalStorageSave = this.LocalStorageSave.bind(this);
 		this.LocalStorageDelete = this.LocalStorageDelete.bind(this);
 		this.ColorPaletteEdit = this.ColorPaletteEdit.bind(this);
+		this.showSaveDialog = this.showSaveDialog.bind(this);
+		this.firebaseSave = this.firebaseSave.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -200,19 +206,93 @@ class App extends Component {
 		this.refPaletteEditorDialog.current.Show();
 	}
 
+	showSaveDialog() {
+		this.refSaveDialog.current.Show(
+			this.state.pitch.name,
+			this.state.pitch.description
+		);
+	}
+
+	firebaseSave(name, description) {
+		console.log("Firebase save", name, description);
+		this.state.pitch.setNameAndDescription(name, description);
+		// save to local storage to keep it and get data for save
+		const data = this.LocalStorageSave();
+		//console.log(data);
+		
+		// save to google firestore
+		if (!this.state.isSignedIn) {
+			console.error("User is not signed in");
+			return
+		}
+		const user = firebaseApp.auth().currentUser;
+		if (!user) {
+			console.error("User is not signed in");
+			return
+		}
+		//console.log(user);
+
+		let err = false;
+		// first create/update user collection
+		const tacticsCollection = "user-tactics";
+		const userCollection = { name: user.displayName };
+		fsSetDoc(fsDoc(firestoreDB, tacticsCollection, user.uid), userCollection, {merge:true} )
+		.then(() => {
+			console.log("User collection created/updated");
+		})
+		.catch((error) => {
+			console.error("Error creating/updating user collection", error);
+			err = true;
+		});
+
+		// stop on error
+		if (err) {return;}
+
+		// convert dates to firestore timestamps
+		data.created = fsTimestamp.fromDate(data.created);
+		data.updated = fsTimestamp.fromDate(data.updated);
+
+		// 2nd store tactics document
+		const userTacticsCollection = tacticsCollection + "/" + user.uid + "/tactics";
+		fsSetDoc(fsDoc(firestoreDB, userTacticsCollection, data.id), data)
+		.then(() => {
+			console.log("Tactics board saved", data.id, data.name);
+		})
+		.catch((error) => {
+			console.error("Error saving tactics board", error);
+			err = true;
+		});
+	}
+
 	LocalStorageSave() {
 		console.log("Saving to localStorage.");
 		let data = this.state.pitch.save();
+		// append settings to save object
+		data.settings = {
+			objectColors: this.state.drawMode.colorOptions,
+			playerColors: this.state.drawMode.colorOptionsPlayer,
+			ballColors: this.state.drawMode.colorOptionsBall,
+		}
 		localStorage.setItem("tactics-board-current", JSON.stringify(data));
+		return data;
 	}
 
 	LocalStorageLoad() {
-		console.log("Loading from localStorage.");
 		let json = localStorage.getItem("tactics-board-current");
 		if (null === json) {
 			return;
 		}
-		this.state.pitch.load(JSON.parse(json));
+		console.log("Loading from localStorage.");
+		const data = JSON.parse(json);
+		this.state.pitch.load(data);
+		// check for settings and update settings
+		if (data.settings) {
+			this.state.drawMode.updateColors(
+				data.settings.objectColors,
+				data.settings.playerColors,
+				data.settings.ballColors
+			);
+		}
 	}
 
 	LocalStorageDelete() {
@@ -340,7 +420,7 @@ class App extends Component {
 						toggleDrawer={this.ToggleDrawer}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu} 
-						save={this.LocalStorageSave} 
+						save={this.showSaveDialog} 
 						saveImage={this.SaveImage} 
 						newScheme={this.NewScheme}
 						newAnimation={this.NewAnimation}
@@ -360,6 +440,7 @@ class App extends Component {
 					/>
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
+					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
 					</Snackbar>

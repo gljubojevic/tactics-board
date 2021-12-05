@@ -6,13 +6,13 @@ Reference for project is https://tactical-board.com/uk/mini-football
 
 Project is using following technologies/libraries:
 - [React](https://create-react-app.dev/)
-- [Material UI](https://material-ui.com/)
+- [Material UI](https://mui.com/)
 	- [UI icons](https://materialdesignicons.com/)
 
-Proposition for storage and sharing:
+Firebase for storage and sharing:
 - [Google Firebase](https://firebase.google.com/)
 
-This should enable following features:
+This enables following features:
 - saving tactics for each user separately
 - sharing saved tactics by link
 - collaborating on same tactics
@@ -52,7 +52,9 @@ Tactics board has number of predefined shapes:
 - ~~players~~
 - ~~cones~~
 - ~~balls~~
-- goals
+- ~~goals~~
+- ~~flags~~
+- ~~cones~~
 
 Number of predefined shapes is available for placing on pitch.
 Predefined shapes are dragged on pitch to be placed on desired position.
@@ -138,14 +140,20 @@ Shared document is overwritten when any of users saves it.
 ## References
 https://create-react-app.dev/
 
-UI using:
-https://material-ui.com/
+UI using Material UI:  
+https://mui.com/
 
-UI Icons additional:
+UI Icons additional:  
 https://materialdesignicons.com/
 
 UI alternatives:  
 https://classpert.com/blog/top-bootstrap-alternatives
+
+Firebase:  
+https://firebase.google.com/
+
+FirebaseUI Web React:  
+https://github.com/firebase/firebaseui-web-react
 
 SVG to png:  
 https://github.com/webkul/myscale  

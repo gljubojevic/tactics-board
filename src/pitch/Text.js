@@ -25,7 +25,11 @@ class Text {
 			text: this.text,
 			x: this.x,
 			y: this.y,
-			rotation: this.rotation
+			rotation: this.rotation,
+			bx: this.bx,
+			by: this.by,
+			bwidth: this.bwidth,
+			bheight: this.bheight
 		};
 	}
 

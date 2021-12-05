@@ -18,9 +18,9 @@ class Player {
 			no: this.no,
 			name: this.name,
 			color: this.color,
-			pos: this.pos.clone(),
+			pos: this.pos.save(),
 			rotation: this.rotation,
-			posDefault: this.posDefault.clone(),
+			posDefault: this.posDefault.save(),
 			noDefault: this.noDefault
 		};
 	}

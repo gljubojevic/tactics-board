@@ -16,6 +16,13 @@ class Point {
 	clone() {
 		return new Point(this.x, this.y);
 	}
+
+	save() {
+		return {
+			x: this.x,
+			y: this.y
+		}
+	}
 }
 
 export default Point;

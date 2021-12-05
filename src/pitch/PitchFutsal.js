@@ -7,12 +7,16 @@ import Point from "./Point";
 import Text from "./Text";
 import Extras from "./Extras";
 import AnimKeyFrame from "./AnimKeyFrame";
-import { ElementIDPrefix } from "./Constants";
+import { ElementIDPrefix, RemoveTags } from "./Constants";
 
 class PitchFutsal {
 
 	constructor(uuid="") {
 		this.id = uuid;
+		this.name = "";
+		this.description = "";
+		this.created = new Date();
+		this.updated = new Date();
 
 		this.width = 4500;	// pitch width in cm
 		this.height = 2500;	// pitch height in cm
@@ -92,6 +96,10 @@ class PitchFutsal {
 		cp.isModified = true;
 
 		cp.id = this.id;
+		cp.name = this.name;
+		cp.description = this.description;
+		cp.created = this.created;
+		cp.updated = new Date();
 
 		cp.width = this.width;
 		cp.height = this.height;
@@ -125,6 +133,10 @@ class PitchFutsal {
 	save() {
 		return {
 			id: this.id,
+			name: this.name,
+			description: this.description,
+			created: this.created,
+			updated: this.updated,
 			width: this.width,
 			height: this.height,
 			AnimExists: this.AnimExists,
@@ -147,6 +159,10 @@ class PitchFutsal {
 
 	load(data) {
 		this.id = data.id;
+		this.name = RemoveTags(data.name);
+		this.description = RemoveTags(data.description);
+		this.created = new Date(data.created);
+		this.updated = new Date(data.updated);
 
 		this.width = data.width;
 		this.height = data.height;
@@ -197,12 +213,17 @@ class PitchFutsal {
 
 		this.textID = data.textID;
 		this.texts = data.texts.map(t => {
-			return new Text(
+			let tx = new Text(
 				t.id, t.color, 
 				t.size, t.text, 
 				t.x, t.y, t.rotation, 
 				false, false
 			);
+			tx.bx = t.bx;
+			tx.by = t.by;
+			tx.bwidth = t.bwidth;
+			tx.bheight = t.bheight;
+			return tx;
 		});
 
 		this.extrasID = data.extrasID;
@@ -218,6 +239,12 @@ class PitchFutsal {
 		this.overlay = data.overlay;
 
 		// trigger event modified
+		this._modified();
+	}
+
+	setNameAndDescription(name, description) {
+		this.name = name;
+		this.description = description;
 		this._modified();
 	}
 
