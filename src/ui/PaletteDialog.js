@@ -1,32 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DrawMode from '../pitch/DrawMode';
-import withStyles from '@mui/styles/withStyles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import Radio from '@mui/material/Radio';
-import CheckIcon from '@mui/icons-material/Check';
-
-// this is for offset from toolbar and default class
-const styles = theme => ({
-	radio: {
-		padding: 0,
-	},
-	radioIcon: {
-		width: 48,
-		height: 48,
-	},
-	radioIconSelected: {
-		width: 48,
-		height: 48,
-		border: '1px solid white',
-		color: theme.palette.common.white,
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-	}
-})
+import ColorPalette from './elements/ColorPalette';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 class PaletteDialog extends Component {
 	constructor(props, context) {
@@ -36,56 +16,32 @@ class PaletteDialog extends Component {
 		}
 		this.Show = this.Show.bind(this);
 		this.handleClose = this.handleClose.bind(this);
-		this.colorChange = this.colorChange.bind(this);
+		this.colorSelected = this.colorSelected.bind(this);
 	}
 
 	Show() {
-		this.setState({
-			open: true
-		});
+		this.setState({ open: true });
 	}
 
 	handleClose() {
-		this.setState({
-			open: false
-		});
+		this.setState({ open: false });
 	}
 
-	colorChange(e) {
-		this.props.drawMode.color = parseInt(e.target.value);
+	colorSelected(index, color) {
+		this.props.drawMode.color = index;
 		this.handleClose();
-	}
-
-	radioIcon(isChecked, color) {
-		if (!isChecked) {
-			return (
-				<div className={this.props.classes.radioIcon} style={{ backgroundColor: color }} />
-			);
-		}
-		return (
-			<div className={this.props.classes.radioIconSelected} style={{ backgroundColor: color }}>
-				<CheckIcon style={{ fontSize: 30 }} />
-			</div>
-		);
-	}
-
-	renderRadios() {
-		const dm = this.props.drawMode;
-		return dm.colorOptions.map((col, index) => {
-			const ico = this.radioIcon(false, col);
-			const icoChk = this.radioIcon(true, col);
-			return (
-				<Radio name="color-select" key={index} value={index} className={this.props.classes.radio} checked={index === dm.color} icon={ico} checkedIcon={icoChk} onChange={this.colorChange} />
-			);
-		});
 	}
 
 	render() {
 		return (
 			<Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitle id="responsive-dialog-title">Color palette</DialogTitle>
-				<DialogContent>
-					{this.renderRadios()}
+				<DialogTitle id="responsive-dialog-title">Draw color palette
+					<IconButton aria-label="close" onClick={this.handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
+						<CloseIcon />
+					</IconButton>
+				</DialogTitle>
+				<DialogContent dividers>
+					<ColorPalette toolTipPrefix="Color" colorWidth={48} colorHeight={48} palette={this.props.drawMode.colorOptions} colorSelected={this.props.drawMode.color} onSelected={this.colorSelected} />
 				</DialogContent>
 			</Dialog>
 		);
@@ -97,8 +53,7 @@ PaletteDialog.defaultProps = {
 }
 
 PaletteDialog.propTypes = {
-	classes: PropTypes.object.isRequired,
 	drawMode: PropTypes.instanceOf(DrawMode)
 };
 
-export default withStyles(styles, { withTheme: true })(PaletteDialog);
+export default PaletteDialog;
