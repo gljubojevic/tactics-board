@@ -15,6 +15,7 @@ import Delete from '@mui/icons-material/Delete';
 import Save from '@mui/icons-material/Save';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Palette from '@mui/icons-material/Palette';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 class DrawerMenu extends Component {
 	constructor(props) {
@@ -23,6 +24,7 @@ class DrawerMenu extends Component {
 		this.newScheme = this.newScheme.bind(this);
 		this.newAnimation = this.newAnimation.bind(this);
 		this.deleteAnimation = this.deleteAnimation.bind(this);
+		this.load = this.load.bind(this);
 		this.save = this.save.bind(this);
 		this.saveImage = this.saveImage.bind(this);
 		this.colorPaletteEdit = this.colorPaletteEdit.bind(this);
@@ -57,6 +59,11 @@ class DrawerMenu extends Component {
 	deleteAnimation() {
 		this.setDrawer(false);
 		this.props.deleteAnimation();
+	}
+
+	load() {
+		this.setDrawer(false);
+		this.props.load();
 	}
 
 	save() {
@@ -102,6 +109,13 @@ class DrawerMenu extends Component {
 						</ListItem>
 						<Divider />
 						<ListItem>
+							<ListItemButton onClick={this.load} disabled={!this.props.isSignedIn}>
+								<ListItemIcon><CloudDownloadIcon /></ListItemIcon>
+								<ListItemText primary="Load tactics board" />
+							</ListItemButton>
+						</ListItem>
+						<Divider />
+						<ListItem>
 							<ListItemButton onClick={this.saveImage}>
 								<ListItemIcon><PhotoCamera /></ListItemIcon>
 								<ListItemText primary="Save picture" />
@@ -128,6 +142,7 @@ class DrawerMenu extends Component {
 }
 
 DrawerMenu.defaultProps = {
+	load: null,
 	save: null,
 	saveImage: null,
 	newScheme: null,
@@ -139,6 +154,7 @@ DrawerMenu.defaultProps = {
 }
 
 DrawerMenu.propTypes = {
+	load: PropTypes.func,
 	save: PropTypes.func,
 	saveImage: PropTypes.func,
 	newScheme: PropTypes.func,

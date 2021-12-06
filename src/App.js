@@ -12,6 +12,7 @@ import DrawMode from './pitch/DrawMode';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import SaveDialog from './ui/SaveDialog';
+import LoadDialog from './ui/LoadDialog';
 import { v4 as uuidv4 } from 'uuid';
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
@@ -54,6 +55,7 @@ class App extends Component {
 		this.refDrawerMenu = React.createRef();
 		this.refPaletteEditorDialog = React.createRef();
 		this.refSaveDialog = React.createRef();
+		this.refLoadDialog = React.createRef();
 		// event handlers
 		this.ToggleDrawer = this.ToggleDrawer.bind(this);
 		this.SaveImage = this.SaveImage.bind(this);
@@ -84,6 +86,8 @@ class App extends Component {
 		this.ColorPaletteEdit = this.ColorPaletteEdit.bind(this);
 		this.showSaveDialog = this.showSaveDialog.bind(this);
 		this.firebaseSave = this.firebaseSave.bind(this);
+		this.firebaseBrowse = this.firebaseBrowse.bind(this);
+		this.firebaseLoad =this.firebaseLoad.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -264,6 +268,14 @@ class App extends Component {
 		});
 	}
 
+	firebaseBrowse() {
+		this.refLoadDialog.current.Show();
+	}
+
+	firebaseLoad(tacticsID) {
+		console.log("Loading tactics", tacticsID);
+	}
+
 	LocalStorageSave() {
 		console.log("Saving to localStorage.");
 		let data = this.state.pitch.save();
@@ -419,7 +431,8 @@ class App extends Component {
 						firebaseApp={firebaseApp}
 						toggleDrawer={this.ToggleDrawer}
 					/>
-					<DrawerMenu ref={this.refDrawerMenu} 
+					<DrawerMenu ref={this.refDrawerMenu}
+						load={this.firebaseBrowse}
 						save={this.showSaveDialog} 
 						saveImage={this.SaveImage} 
 						newScheme={this.NewScheme}
@@ -441,6 +454,7 @@ class App extends Component {
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
+					<LoadDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} firebaseApp={firebaseApp} firestoreDB={firestoreDB} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
 					</Snackbar>
