@@ -12,7 +12,7 @@ import DrawMode from './pitch/DrawMode';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import SaveDialog from './ui/SaveDialog';
-import LoadDialog from './ui/LoadDialog';
+import BrowseDialog from './ui/BrowseDialog';
 import { v4 as uuidv4 } from 'uuid';
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
@@ -20,6 +20,8 @@ import 'firebase/compat/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 import { getFirestore } from "firebase/firestore";
 import { doc as fsDoc, setDoc as fsSetDoc, Timestamp as fsTimestamp } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { ref as refFile, uploadBytes } from "firebase/storage";
 // https://firebase.google.com/docs/web/setup#available-libraries
 // For auth using: https://github.com/firebase/firebaseui-web-react
 import './App.css';
@@ -41,6 +43,8 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 //const analytics = getAnalytics(firebaseApp);
 const firestoreDB = getFirestore();
+const storage = getStorage();
+
 
 class App extends Component {
 	constructor(props) {
@@ -217,7 +221,7 @@ class App extends Component {
 		);
 	}
 
-	firebaseSave(name, description) {
+	async firebaseSave(name, description) {
 		console.log("Firebase save", name, description);
 		this.state.pitch.setNameAndDescription(name, description);
 		// save to local storage to keep it and get data for save
@@ -229,6 +233,7 @@ class App extends Component {
 			console.error("User is not signed in");
 			return
 		}
+
 		const user = firebaseApp.auth().currentUser;
 		if (!user) {
 			console.error("User is not signed in");
@@ -236,36 +241,57 @@ class App extends Component {
 		}
 		//console.log(user);
 
-		let err = false;
 		// first create/update user collection
 		const tacticsCollection = "user-tactics";
-		const userCollection = { name: user.displayName };
-		fsSetDoc(fsDoc(firestoreDB, tacticsCollection, user.uid), userCollection, {merge:true} )
-		.then(() => {
-			console.log("User collection created/updated");
-		})
-		.catch((error) => {
-			console.error("Error creating/updating user collection", error);
-			err = true;
-		});
+		try {
+			const userCollection = { name: user.displayName };
+			const userDocRef = await fsSetDoc(
+				fsDoc(firestoreDB, tacticsCollection, user.uid), 
+				userCollection, 
+				{merge:true}
+			);
+			console.log(userDocRef);
+		} catch (error) {
+			console.error("Creating / updating user collection", error);
+		}
 
-		// stop on error
-		if (err) {return;}
+		// user tactics root path for documents and thumbs
+		const userTacticsRoot = tacticsCollection + "/" + user.uid;
 
-		// convert dates to firestore timestamps
-		data.created = fsTimestamp.fromDate(data.created);
-		data.updated = fsTimestamp.fromDate(data.updated);
+		// 2nd store thumbnail
+		try {
+			const svg = this.refPitchEdit.current.getSVG();
+			const tmbWidth = 320;
+			const tmbHeight = tmbWidth * svg.height / svg.width;
+			const blob = await this.refSvgToImg.current.toBlob(
+				svg.svgText,
+				svg.width, svg.height,
+				tmbWidth, tmbHeight
+			);
+			const userTacticsThumbs = userTacticsRoot + "/tactics-thumbs/" + data.id + ".png";
+			const thumbRef = refFile(storage, userTacticsThumbs);
+			uploadBytes(thumbRef, blob).then((snapshot) => {
+				console.log('Uploaded a blob or file!', snapshot);
+			});
+		} catch (error) {
+			console.error("Saving tactics board thumbnail", error);
+		}
 
-		// 2nd store tactics document
-		const userTacticsCollection = tacticsCollection + "/" + user.uid + "/tactics";
-		fsSetDoc(fsDoc(firestoreDB, userTacticsCollection, data.id), data)
-		.then(() => {
-			console.log("Tactics board saved", data.id, data.name);
-		})
-		.catch((error) => {
-			console.error("Error saving tactics board", error);
-			err = true;
-		});
+		// 3rd store tactics document
+		try {
+			// convert dates to firestore timestamps
+			data.created = fsTimestamp.fromDate(data.created);
+			data.updated = fsTimestamp.fromDate(data.updated);
+			// save
+			const userTacticsCollection = userTacticsRoot + "/tactics";
+			const tacticsDocRef = await fsSetDoc(
+				fsDoc(firestoreDB, userTacticsCollection, data.id), 
+				data
+			);
+			console.log(tacticsDocRef);
+		} catch (error) {
+			console.error("Saving tactics board", error);
+		}
 	}
 
 	firebaseBrowse() {
@@ -454,7 +480,7 @@ class App extends Component {
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
-					<LoadDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} firebaseApp={firebaseApp} firestoreDB={firestoreDB} />
+					<BrowseDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} firebaseApp={firebaseApp} firestoreDB={firestoreDB} storage={storage} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
 					</Snackbar>

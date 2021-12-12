@@ -114,17 +114,17 @@ class DrawerMenu extends Component {
 								<ListItemText primary="Load tactics board" />
 							</ListItemButton>
 						</ListItem>
+						<ListItem>
+							<ListItemButton onClick={this.save} disabled={!this.props.isSignedIn}>
+								<ListItemIcon><Save /></ListItemIcon>
+								<ListItemText primary="Save tactics board" />
+							</ListItemButton>
+						</ListItem>
 						<Divider />
 						<ListItem>
 							<ListItemButton onClick={this.saveImage}>
 								<ListItemIcon><PhotoCamera /></ListItemIcon>
 								<ListItemText primary="Save picture" />
-							</ListItemButton>
-						</ListItem>
-						<ListItem>
-							<ListItemButton onClick={this.save} disabled={!this.props.isSignedIn}>
-								<ListItemIcon><Save /></ListItemIcon>
-								<ListItemText primary="Save tactics board" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
