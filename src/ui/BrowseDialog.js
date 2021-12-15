@@ -81,7 +81,7 @@ class BrowseDialog extends Component {
 					name: RemoveTags(dta.name),
 					description: RemoveTags(dta.description),
 					created: new fsTimestamp(dta.created.seconds, dta.created.nanoseconds).toDate(),
-					updated: new fsTimestamp(dta.created.seconds, dta.created.nanoseconds).toDate()
+					updated: new fsTimestamp(dta.updated.seconds, dta.updated.nanoseconds).toDate()
 				});
 			});
 			  

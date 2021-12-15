@@ -19,7 +19,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 import { getFirestore } from "firebase/firestore";
-import { doc as fsDoc, setDoc as fsSetDoc, Timestamp as fsTimestamp } from "firebase/firestore";
+import { collectionGroup, query, where, getDocs, doc as fsDoc, setDoc as fsSetDoc, getDoc as fsGetDoc, Timestamp as fsTimestamp } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { ref as refFile, uploadBytes } from "firebase/storage";
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -298,21 +298,104 @@ class App extends Component {
 		this.refLoadDialog.current.Show();
 	}
 
-	firebaseLoad(tacticsID) {
-		console.log("Loading tactics", tacticsID);
+	editTactics(tactics, toLocalStorage) {
+		if (null === tactics) {
+			return;
+		}
+		this.state.pitch.load(tactics);
+		// check for settings and update settings
+		if (tactics.settings) {
+			this.state.drawMode.updateColors(
+				tactics.settings.objectColors,
+				tactics.settings.playerColors,
+				tactics.settings.ballColors
+			);
+		}
+		if (toLocalStorage) {
+			this.LocalStorageSave();
+		}
+	}
+
+	async firebaseLoadShared(tacticsID) {
+		console.log("Loading shared tactics", tacticsID);
+
+		let tactics = null;
+		try {
+			// requires index on collection:tactics and field:id
+			const tacticsQuery = query(collectionGroup(firestoreDB, 'tactics'), where('id', '==', tacticsID));
+			const querySnapshot = await getDocs(tacticsQuery);
+			querySnapshot.forEach((doc) => {
+				//console.log(doc.id, ' => ', doc.data());
+				tactics = doc.data();
+				// fix data
+				tactics.created = new fsTimestamp(
+					tactics.created.seconds, 
+					tactics.created.nanoseconds
+				).toDate();
+				tactics.updated = new fsTimestamp(
+					tactics.updated.seconds, 
+					tactics.updated.nanoseconds
+				).toDate()
+				// change ID so user can save it as own tactics
+				tactics.id = uuidv4();
+			});
+		} catch (error) {
+			console.error("Loading shared tactics", error);
+		}
+
+		this.editTactics(tactics, true);
+	}
+
+	async firebaseLoad(tacticsID) {
+		console.log("Loading user tactics", tacticsID);
+
+		const user = firebaseApp.auth().currentUser;
+		if (!user) {
+			console.error("User is not signed in");
+			return
+		}
+
+		let tactics = null;
+
+		try {
+			const userTacticsPath = "user-tactics/" + user.uid + "/tactics/" + tacticsID;
+			const tacticsRef = fsDoc(firestoreDB, userTacticsPath);
+			const res = await fsGetDoc(tacticsRef);
+
+			if (!res.exists()) {
+				console.log("User tactics not found", tacticsID);
+				return;
+			}
+
+			tactics = res.data();
+			tactics.created = new fsTimestamp(
+				tactics.created.seconds, 
+				tactics.created.nanoseconds
+			).toDate();
+			tactics.updated = new fsTimestamp(
+				tactics.updated.seconds, 
+				tactics.updated.nanoseconds
+			).toDate()
+			console.log(res.id, " => ", tactics);
+		} catch (error) {
+			console.error("Loading user tactics", error);
+			return;
+		}
+
+		this.editTactics(tactics, true);
 	}
 
 	LocalStorageSave() {
 		console.log("Saving to localStorage.");
-		let data = this.state.pitch.save();
+		let tactics = this.state.pitch.save();
 		// append settings to save object
-		data.settings = {
+		tactics.settings = {
 			objectColors: this.state.drawMode.colorOptions,
 			playerColors: this.state.drawMode.colorOptionsPlayer,
 			ballColors: this.state.drawMode.colorOptionsBall,
 		}
-		localStorage.setItem("tactics-board-current", JSON.stringify(data));
-		return data;
+		localStorage.setItem("tactics-board-current", JSON.stringify(tactics));
+		return tactics;
 	}
 
 	LocalStorageLoad() {
@@ -321,14 +404,15 @@ class App extends Component {
 			return;
 		}
 		console.log("Loading from localStorage.");
-		const data = JSON.parse(json);
-		this.state.pitch.load(data);
+		const tactics = JSON.parse(json);
+		console.log(tactics.id, " => ", tactics);
+		this.state.pitch.load(tactics);
 		// check for settings and update settings
-		if (data.settings) {
+		if (tactics.settings) {
 			this.state.drawMode.updateColors(
-				data.settings.objectColors,
-				data.settings.playerColors,
-				data.settings.ballColors
+				tactics.settings.objectColors,
+				tactics.settings.playerColors,
+				tactics.settings.ballColors
 			);
 		}
 	}
