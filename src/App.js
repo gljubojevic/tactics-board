@@ -14,37 +14,9 @@ import MuiAlert from '@mui/material/Alert';
 import SaveDialog from './ui/SaveDialog';
 import BrowseDialog from './ui/BrowseDialog';
 import { v4 as uuidv4 } from 'uuid';
-// Import the functions you need from the SDKs you need
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-// TODO: Add SDKs for Firebase products that you want to use
-import { getFirestore } from "firebase/firestore";
-import { collectionGroup, query, where, getDocs, doc as fsDoc, setDoc as fsSetDoc, getDoc as fsGetDoc, Timestamp as fsTimestamp } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
-import { ref as refFile, uploadBytes } from "firebase/storage";
-// https://firebase.google.com/docs/web/setup#available-libraries
-// For auth using: https://github.com/firebase/firebaseui-web-react
+import { firebaseApp, fbSave, fbLoad, fbLoadShared } from './firebaseSDK';
 import './App.css';
 import './firebaseui-styling.global.css';
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-	apiKey: "AIzaSyDAb0oHSQCeihL0Op9agehWqYQh1-7E4xE",
-	authDomain: "tactics-board-1c644.firebaseapp.com",
-	projectId: "tactics-board-1c644",
-	storageBucket: "tactics-board-1c644.appspot.com",
-	messagingSenderId: "704589627362",
-	appId: "1:704589627362:web:b110cc834a5f5c19c543bb",
-	measurementId: "G-PDXB2VPRL8"
-};
-
-// Initialize Firebase
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-//const analytics = getAnalytics(firebaseApp);
-const firestoreDB = getFirestore();
-const storage = getStorage();
-
 
 class App extends Component {
 	constructor(props) {
@@ -222,85 +194,58 @@ class App extends Component {
 	}
 
 	async firebaseSave(name, description) {
-		console.log("Firebase save", name, description);
-		this.state.pitch.setNameAndDescription(name, description);
-		// save to local storage to keep it and get data for save
-		const data = this.LocalStorageSave();
-		//console.log(data);
-		
-		// save to google firestore
 		if (!this.state.isSignedIn) {
 			console.error("User is not signed in");
 			return
 		}
 
-		const user = firebaseApp.auth().currentUser;
-		if (!user) {
-			console.error("User is not signed in");
-			return
-		}
-		//console.log(user);
+		// save to local storage to keep it and get data for save
+		this.state.pitch.setNameAndDescription(name, description);
+		const tactics = this.LocalStorageSave();
 
-		// first create/update user collection
-		const tacticsCollection = "user-tactics";
-		try {
-			const userCollection = { name: user.displayName };
-			const userDocRef = await fsSetDoc(
-				fsDoc(firestoreDB, tacticsCollection, user.uid), 
-				userCollection, 
-				{merge:true}
-			);
-			console.log(userDocRef);
-		} catch (error) {
-			console.error("Creating / updating user collection", error);
-		}
+		// create thumbnail
+		const svg = this.refPitchEdit.current.getSVG();
+		const tmbWidth = 320;
+		const tmbHeight = tmbWidth * svg.height / svg.width;
+		const thumbnailBlob = await this.refSvgToImg.current.toBlob(
+			svg.svgText,
+			svg.width, svg.height,
+			tmbWidth, tmbHeight
+		);
 
-		// user tactics root path for documents and thumbs
-		const userTacticsRoot = tacticsCollection + "/" + user.uid;
-
-		// 2nd store thumbnail
-		try {
-			const svg = this.refPitchEdit.current.getSVG();
-			const tmbWidth = 320;
-			const tmbHeight = tmbWidth * svg.height / svg.width;
-			const blob = await this.refSvgToImg.current.toBlob(
-				svg.svgText,
-				svg.width, svg.height,
-				tmbWidth, tmbHeight
-			);
-			const userTacticsThumbs = userTacticsRoot + "/tactics-thumbs/" + data.id + ".png";
-			const thumbRef = refFile(storage, userTacticsThumbs);
-			uploadBytes(thumbRef, blob).then((snapshot) => {
-				console.log('Uploaded a blob or file!', snapshot);
-			});
-		} catch (error) {
-			console.error("Saving tactics board thumbnail", error);
-		}
-
-		// 3rd store tactics document
-		try {
-			// convert dates to firestore timestamps
-			data.created = fsTimestamp.fromDate(data.created);
-			data.updated = fsTimestamp.fromDate(data.updated);
-			// save
-			const userTacticsCollection = userTacticsRoot + "/tactics";
-			const tacticsDocRef = await fsSetDoc(
-				fsDoc(firestoreDB, userTacticsCollection, data.id), 
-				data
-			);
-			console.log(tacticsDocRef);
-		} catch (error) {
-			console.error("Saving tactics board", error);
-		}
+		// save to google firestore
+		await fbSave(tactics, thumbnailBlob);
 	}
 
 	firebaseBrowse() {
 		this.refLoadDialog.current.Show();
 	}
 
-	editTactics(tactics, toLocalStorage) {
+	async firebaseLoad(tacticsID) {
+		if (!this.state.isSignedIn) {
+			console.error("User is not signed in");
+			return
+		}
+		let tactics = await fbLoad(tacticsID);
+		this.editTactics(tactics, true, false);
+	}
+
+	async firebaseLoadShared(tacticsID) {
+		if (!this.state.isSignedIn) {
+			console.error("User is not signed in");
+			return
+		}
+		let tactics = await fbLoadShared(tacticsID) 
+		// change ID so user can save it as own tactics
+		this.editTactics(tactics, true, true);
+	}
+
+	editTactics(tactics, toLocalStorage, changeID) {
 		if (null === tactics) {
 			return;
+		}
+		if (changeID) {
+			tactics.id = uuidv4();
 		}
 		this.state.pitch.load(tactics);
 		// check for settings and update settings
@@ -314,75 +259,6 @@ class App extends Component {
 		if (toLocalStorage) {
 			this.LocalStorageSave();
 		}
-	}
-
-	async firebaseLoadShared(tacticsID) {
-		console.log("Loading shared tactics", tacticsID);
-
-		let tactics = null;
-		try {
-			// requires index on collection:tactics and field:id
-			const tacticsQuery = query(collectionGroup(firestoreDB, 'tactics'), where('id', '==', tacticsID));
-			const querySnapshot = await getDocs(tacticsQuery);
-			querySnapshot.forEach((doc) => {
-				//console.log(doc.id, ' => ', doc.data());
-				tactics = doc.data();
-				// fix data
-				tactics.created = new fsTimestamp(
-					tactics.created.seconds, 
-					tactics.created.nanoseconds
-				).toDate();
-				tactics.updated = new fsTimestamp(
-					tactics.updated.seconds, 
-					tactics.updated.nanoseconds
-				).toDate()
-				// change ID so user can save it as own tactics
-				tactics.id = uuidv4();
-			});
-		} catch (error) {
-			console.error("Loading shared tactics", error);
-		}
-
-		this.editTactics(tactics, true);
-	}
-
-	async firebaseLoad(tacticsID) {
-		console.log("Loading user tactics", tacticsID);
-
-		const user = firebaseApp.auth().currentUser;
-		if (!user) {
-			console.error("User is not signed in");
-			return
-		}
-
-		let tactics = null;
-
-		try {
-			const userTacticsPath = "user-tactics/" + user.uid + "/tactics/" + tacticsID;
-			const tacticsRef = fsDoc(firestoreDB, userTacticsPath);
-			const res = await fsGetDoc(tacticsRef);
-
-			if (!res.exists()) {
-				console.log("User tactics not found", tacticsID);
-				return;
-			}
-
-			tactics = res.data();
-			tactics.created = new fsTimestamp(
-				tactics.created.seconds, 
-				tactics.created.nanoseconds
-			).toDate();
-			tactics.updated = new fsTimestamp(
-				tactics.updated.seconds, 
-				tactics.updated.nanoseconds
-			).toDate()
-			console.log(res.id, " => ", tactics);
-		} catch (error) {
-			console.error("Loading user tactics", error);
-			return;
-		}
-
-		this.editTactics(tactics, true);
 	}
 
 	LocalStorageSave() {
@@ -564,7 +440,7 @@ class App extends Component {
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
-					<BrowseDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} firebaseApp={firebaseApp} firestoreDB={firestoreDB} storage={storage} />
+					<BrowseDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
 					</Snackbar>

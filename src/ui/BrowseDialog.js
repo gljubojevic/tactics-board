@@ -13,9 +13,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
-import { RemoveTags } from "../pitch/Constants";
-import { collection, query, orderBy, startAfter, startAt, limit, getDocs, Timestamp as fsTimestamp } from "firebase/firestore";
-import { ref as refFile, getDownloadURL } from "firebase/storage";
+import { fbList } from '../firebaseSDK';
 
 class BrowseDialog extends Component {
 	constructor(props, context) {
@@ -43,64 +41,8 @@ class BrowseDialog extends Component {
 
 	async firebaseList(){
 		// docs to show
-		let tacticsList = [];
-
-		// user details
-		const user = this.props.firebaseApp.auth().currentUser;
-		if (!user) {
-			console.error("User is not signed in");
-			return
-		}
-
-		// user root
-		const userTacticsRoot = "user-tactics/" + user.uid;
-
-		// get list
-		try {
-			// build query
-			const userTacticsCollection = userTacticsRoot + "/tactics";
-			const q = query(
-				collection(
-					this.props.firestoreDB, 
-					userTacticsCollection
-				), 
-				orderBy("updated", "desc"),
-				limit(this.props.perPage)
-			);
-
-			// get docs using query
-			const res = await getDocs(q)
-			// TODO: find last doc for paging
-
-			// iterate over docs
-			res.forEach((doc) => {
-				const dta = doc.data();
-				//console.log(doc.id, " => ", dta);
-				tacticsList.push({
-					id: dta.id,
-					name: RemoveTags(dta.name),
-					description: RemoveTags(dta.description),
-					created: new fsTimestamp(dta.created.seconds, dta.created.nanoseconds).toDate(),
-					updated: new fsTimestamp(dta.updated.seconds, dta.updated.nanoseconds).toDate()
-				});
-			});
-			  
-			//const last = await res.docs[0];
-			//console.log("Found docs",last);
-		} catch (error) {
-			console.log("Error fetching documents", error);
-		}
-
-		// get all thumbnails
-		try {
-			for (let i = 0; i < tacticsList.length; i++) {
-				const userTacticsThumbs = userTacticsRoot + "/tactics-thumbs/" + tacticsList[i].id + ".png";
-				const refTmb = refFile(this.props.storage, userTacticsThumbs);
-				tacticsList[i].thumbnail = await getDownloadURL(refTmb);
-			}
-		} catch (error) {
-			console.log("Error fetching thumbnails", error);
-		}
+		//debugger;
+		let tacticsList = await fbList(this.props.perPage);
 
 		// set for display
 		this.setState({
@@ -206,17 +148,11 @@ class BrowseDialog extends Component {
 
 BrowseDialog.defaultProps = {
 	onLoad: null,
-	firebaseApp: null,
-	firestoreDB: null,
-	storage: null,
 	perPage: 6
 }
 
 BrowseDialog.propTypes = {
 	onLoad: PropTypes.func,
-	firebaseApp: PropTypes.object,
-	firestoreDB: PropTypes.object,
-	storage: PropTypes.object,
 	perPage: PropTypes.number
 }
 
