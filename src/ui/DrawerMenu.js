@@ -111,7 +111,7 @@ class DrawerMenu extends Component {
 						<ListItem>
 							<ListItemButton onClick={this.load} disabled={!this.props.isSignedIn}>
 								<ListItemIcon><CloudDownloadIcon /></ListItemIcon>
-								<ListItemText primary="Load tactics board" />
+								<ListItemText primary="Browse my tactics" />
 							</ListItemButton>
 						</ListItem>
 						<ListItem>

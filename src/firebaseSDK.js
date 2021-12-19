@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 import { getFirestore } from "firebase/firestore";
-import { collection, collectionGroup, query, where, getDocs, limit, startAfter, startAt, orderBy, doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
+import { collection, collectionGroup, query, where, getDocs, limit, startAfter, orderBy, doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
 import { getStorage, ref as refFile, uploadBytes, getDownloadURL  } from "firebase/storage";
 import { RemoveTags } from "./pitch/Constants";
 
@@ -113,7 +113,7 @@ async function fbLoad(tacticsID) {
 			tactics.updated.seconds, 
 			tactics.updated.nanoseconds
 		).toDate()
-		console.log(res.id, " => ", tactics);
+		//console.log(res.id, " => ", tactics);
 		return tactics;
 
 	} catch (error) {
@@ -155,7 +155,7 @@ async function fbLoadShared(tacticsID) {
 	return tactics;
 }
 
-async function fbList(tacticsPerPage){
+async function fbList(tacticsPerPage, afterDoc){
 	// docs to show
 	let tacticsList = [];
 
@@ -173,15 +173,25 @@ async function fbList(tacticsPerPage){
 	try {
 		// build query
 		const userTacticsCollection = userTacticsRoot + "/tactics";
-		const q = query(
-			collection(firestore,userTacticsCollection), 
-			orderBy("updated", "desc"),
-			limit(tacticsPerPage)
-		);
+		const q = afterDoc ?
+			// continue for paging
+			query(
+				collection(firestore,userTacticsCollection), 
+				orderBy("updated", "desc"),
+				startAfter(afterDoc),
+				limit(tacticsPerPage)
+			)
+			:
+			// first page
+			query(
+				collection(firestore,userTacticsCollection), 
+				orderBy("updated", "desc"),
+				limit(tacticsPerPage)
+			)
+		;
 
 		// get docs using query
 		const res = await getDocs(q)
-		// TODO: find last doc for paging
 
 		// iterate over docs
 		res.forEach((doc) => {
@@ -192,7 +202,8 @@ async function fbList(tacticsPerPage){
 				name: RemoveTags(dta.name),
 				description: RemoveTags(dta.description),
 				created: new Timestamp(dta.created.seconds, dta.created.nanoseconds).toDate(),
-				updated: new Timestamp(dta.updated.seconds, dta.updated.nanoseconds).toDate()
+				updated: new Timestamp(dta.updated.seconds, dta.updated.nanoseconds).toDate(),
+				docRef: doc
 			});
 		});
 		  

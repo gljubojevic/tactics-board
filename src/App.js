@@ -281,7 +281,7 @@ class App extends Component {
 		}
 		console.log("Loading from localStorage.");
 		const tactics = JSON.parse(json);
-		console.log(tactics.id, " => ", tactics);
+		//console.log(tactics.id, " => ", tactics);
 		this.state.pitch.load(tactics);
 		// check for settings and update settings
 		if (tactics.settings) {
