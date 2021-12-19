@@ -16,7 +16,13 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { fbList } from '../firebaseSDK';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { fbList, fbDelete } from '../firebaseSDK';
 
 class BrowseDialog extends Component {
 	constructor(props, context) {
@@ -25,11 +31,16 @@ class BrowseDialog extends Component {
 		this.handleClose = this.handleClose.bind(this);
 		this.loadTactics = this.loadTactics.bind(this);
 		this.nextPage = this.nextPage.bind(this);
+		this.menuOpen = this.menuOpen.bind(this);
+		this.menuClose = this.menuClose.bind(this);
 		this.state = {
 			open: false,
 			tactics: [null],
 			loading: false,
-			loadMore: false
+			loadMore: false,
+			menuOpen: false,
+			menuAnchorEl: null,
+			menuTacticsID: null
 		}
 	}
 
@@ -39,7 +50,10 @@ class BrowseDialog extends Component {
 			open: true,
 			tactics: [null],
 			loading: true,
-			loadMore: false
+			loadMore: false,
+			menuOpen: false,
+			menuAnchorEl: null,
+			menuTacticsID: null
 		});
 		this.firebaseList();
 	}
@@ -92,6 +106,35 @@ class BrowseDialog extends Component {
 		}
 	}
 
+	menuOpen(e) {
+		// read from "data-value" attribute
+		const selectedValue = e.currentTarget.dataset.value;
+		this.setState({
+			menuOpen: true,
+			menuAnchorEl: e.currentTarget,
+			menuTacticsID: selectedValue
+		});
+	}
+
+	async menuClose(e) {
+		// read from "data-value" attribute
+		const selectedValue = e.currentTarget.dataset.value;
+		switch (selectedValue) {
+			case "delete":
+				//console.log("Delete", this.state.menuTacticsID);
+				await fbDelete(this.state.menuTacticsID);
+				this.firebaseList();
+				break;
+			default:
+				break;
+		}
+		this.setState({
+			menuOpen: false,
+			menuAnchorEl: null,
+			menuTacticsID: null
+		});
+	}
+
 	renderThumbnail(t) {
 		if (t) {
 			return (<CardMedia component="img" height={177} image={t.thumbnail} alt={t.name} />);
@@ -102,6 +145,7 @@ class BrowseDialog extends Component {
 	renderTitle(t) {
 		let title = (<Skeleton />);
 		let subheader = (<Skeleton />);
+		const val = t ? t.id : null;
 		if (t) {
 			title = t.name;
 			subheader = t.updated.toLocaleString();
@@ -120,6 +164,11 @@ class BrowseDialog extends Component {
 				subheaderTypographyProps={{ noWrap: true }}
 				title={title}
 				subheader={subheader}
+				action={
+					<IconButton aria-label="settings" data-value={val} onClick={this.menuOpen}>
+						<MoreVertIcon />
+					</IconButton>
+				}
 			/>
 		);
 	}
@@ -150,9 +199,9 @@ class BrowseDialog extends Component {
 			const val = t ? t.id : null;
 			return (
 				<Grid key={index} item xs={1}>
-					<Card sx={{ width: 320, marginRight: 0.5, my: 1 }} data-value={val} onClick={this.loadTactics}>
+					<Card sx={{ width: 320, marginRight: 0.5, my: 1 }}>
 						{this.renderTitle(t)}
-						<CardActionArea>
+						<CardActionArea data-value={val} onClick={this.loadTactics}>
 							{this.renderThumbnail(t)}
 							{this.renderDescription(t)}
 						</CardActionArea>
@@ -183,6 +232,33 @@ class BrowseDialog extends Component {
 				<DialogActions>
 					<Button onClick={this.handleClose} variant="contained" color="primary" autoFocus>Cancel</Button>
 				</DialogActions>
+				<Menu open={this.state.menuOpen} anchorEl={this.state.menuAnchorEl} onClose={this.menuClose}
+					PaperProps={{
+						elevation: 0,
+						sx: {
+							overflow: 'visible',
+							filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+							mt: 1.5,
+							'&:before': {
+								content: '""',
+								display: 'block',
+								position: 'absolute',
+								top: 0,
+								right: 14,
+								width: 10,
+								height: 10,
+								bgcolor: 'background.paper',
+								transform: 'translateY(-50%) rotate(45deg)',
+								zIndex: 0,
+							},
+						},
+					}}
+					transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+					anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
+					<MenuItem data-value="delete" onClick={this.menuClose}>
+						<ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>Delete
+					</MenuItem>
+				</Menu>
 			</Dialog>
 		);
 	}

@@ -5,8 +5,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 import { getFirestore } from "firebase/firestore";
-import { collection, collectionGroup, query, where, getDocs, limit, startAfter, orderBy, doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
-import { getStorage, ref as refFile, uploadBytes, getDownloadURL  } from "firebase/storage";
+import { collection, collectionGroup, query, where, getDocs, limit, startAfter, orderBy, doc, setDoc, getDoc, deleteDoc, Timestamp } from "firebase/firestore";
+import { getStorage, ref as refFile, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { RemoveTags } from "./pitch/Constants";
 
 // Your web app's Firebase configuration
@@ -43,12 +43,11 @@ async function fbSave(tactics, thumbnailBlob) {
 	const tacticsCollection = "user-tactics";
 	try {
 		const userCollection = { name: user.displayName };
-		const userDocRef = await setDoc(
+		await setDoc(
 			doc(firestore, tacticsCollection, user.uid), 
 			userCollection, 
 			{merge:true}
 		);
-		console.log(userDocRef);
 	} catch (error) {
 		console.error("Creating / updating user collection", error);
 	}
@@ -60,11 +59,9 @@ async function fbSave(tactics, thumbnailBlob) {
 	try {
 		const userTacticsThumbs = userTacticsRoot + "/tactics-thumbs/" + tactics.id + ".png";
 		const thumbRef = refFile(storage, userTacticsThumbs);
-		uploadBytes(thumbRef, thumbnailBlob).then((snapshot) => {
-			console.log('Uploaded a blob or file!', snapshot);
-		});
+		await uploadBytes(thumbRef, thumbnailBlob);
 	} catch (error) {
-		console.error("Saving tactics board thumbnail", error);
+		console.error("Saving user tactics thumbnail", error);
 	}
 
 	// 3rd store tactics document
@@ -74,13 +71,12 @@ async function fbSave(tactics, thumbnailBlob) {
 		tactics.updated = Timestamp.fromDate(tactics.updated);
 		// save
 		const userTacticsCollection = userTacticsRoot + "/tactics";
-		const tacticsDocRef = await setDoc(
+		await setDoc(
 			doc(firestore, userTacticsCollection, tactics.id), 
 			tactics
 		);
-		console.log(tacticsDocRef);
 	} catch (error) {
-		console.error("Saving tactics board", error);
+		console.error("Saving user tactics", error);
 	}
 }
 
@@ -229,4 +225,35 @@ async function fbList(tacticsPerPage, afterDoc){
 	return tacticsList;
 }
 
-export { firebaseApp, fbSave, fbLoad, fbLoadShared, fbList }
+async function fbDelete(tacticsID) {
+	const user = firebaseApp.auth().currentUser;
+	if (!user) {
+		console.error("User is not signed in");
+		return
+	}
+	//console.log(user);
+
+	console.log("Deleting user tactics", tacticsID);
+	// user tactics root path for documents and thumbs
+	const userTacticsRoot = "user-tactics/" + user.uid;
+
+	// 1st delete document
+	try {
+		const userTacticsPath = userTacticsRoot + "/tactics/" + tacticsID;
+		const tacticsRef = doc(firestore, userTacticsPath);
+		await deleteDoc(tacticsRef);
+	} catch (error) {
+		console.error("Deleting user tactics", error);
+	}
+
+	// 2nd delete thumbnail
+	try {
+		const userTacticsThumb = userTacticsRoot + "/tactics-thumbs/" + tacticsID + ".png";
+		const thumbRef = refFile(storage, userTacticsThumb);
+		await deleteObject(thumbRef);
+	} catch (error) {
+		console.error("Deleting user tactics thumbnail", error);
+	}
+}
+
+export { firebaseApp, fbSave, fbLoad, fbLoadShared, fbList, fbDelete }
