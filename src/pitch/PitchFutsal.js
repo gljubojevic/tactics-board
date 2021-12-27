@@ -242,6 +242,10 @@ class PitchFutsal {
 		this._modified();
 	}
 
+	shareEnabled() {
+		return (this.name.trim().length + this.description.trim().length) > 0;
+	}
+
 	setNameAndDescription(name, description) {
 		this.name = name;
 		this.description = description;

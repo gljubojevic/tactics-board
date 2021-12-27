@@ -59,7 +59,7 @@ class AppTools extends Component {
 					<div className={this.props.classes.grow} />
 					<DrawMenu drawMode={this.props.drawMode} extrasCreate={this.props.extrasCreate} />
 					<Tooltip title="Share link">
-						<IconButton aria-label="Share link" color="inherit">
+						<IconButton aria-label="Share link" color="inherit" disabled={!this.props.shareEnabled} onClick={this.props.shareTactics}>
 							<LinkIcon />
 						</IconButton>
 					</Tooltip>
@@ -85,7 +85,9 @@ AppTools.defaultProps = {
 	extrasCreate: null,
 	isSignedIn: false,
 	firebaseApp: null,
-	toggleDrawer: null
+	toggleDrawer: null,
+	shareTactics: null,
+	shareEnabled: false,
 }
 
 AppTools.propTypes = {
@@ -102,7 +104,9 @@ AppTools.propTypes = {
 	extrasCreate: PropTypes.func,
 	isSignedIn: PropTypes.bool,
 	firebaseApp: PropTypes.object,
-	toggleDrawer: PropTypes.func
+	toggleDrawer: PropTypes.func,
+	shareTactics: PropTypes.func,
+	shareEnabled: PropTypes.bool
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);

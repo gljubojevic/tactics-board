@@ -13,6 +13,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import SaveDialog from './ui/SaveDialog';
 import BrowseDialog from './ui/BrowseDialog';
+import ShareDialog from './ui/ShareDialog';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseApp, fbSave, fbLoad, fbLoadShared } from './firebaseSDK';
 import './App.css';
@@ -32,6 +33,7 @@ class App extends Component {
 		this.refPaletteEditorDialog = React.createRef();
 		this.refSaveDialog = React.createRef();
 		this.refLoadDialog = React.createRef();
+		this.refShareDialog = React.createRef();
 		// event handlers
 		this.ToggleDrawer = this.ToggleDrawer.bind(this);
 		this.SaveImage = this.SaveImage.bind(this);
@@ -63,7 +65,8 @@ class App extends Component {
 		this.showSaveDialog = this.showSaveDialog.bind(this);
 		this.firebaseSave = this.firebaseSave.bind(this);
 		this.firebaseBrowse = this.firebaseBrowse.bind(this);
-		this.firebaseLoad =this.firebaseLoad.bind(this);
+		this.firebaseLoad = this.firebaseLoad.bind(this);
+		this.ShareTactics = this.ShareTactics.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -397,6 +400,14 @@ class App extends Component {
 		this.refAnimPlayer.current.show();
     }
 
+	ShareTactics() {
+		this.refShareDialog.current.Show(
+			this.state.pitch.id,
+			this.state.pitch.name,
+			this.state.pitch.description
+		);
+	}
+
 	render() {
 		return (
 			<StyledEngineProvider injectFirst>
@@ -416,6 +427,8 @@ class App extends Component {
 						isSignedIn={this.state.isSignedIn}
 						firebaseApp={firebaseApp}
 						toggleDrawer={this.ToggleDrawer}
+						shareTactics={this.ShareTactics}
+						shareEnabled={this.state.pitch.shareEnabled()}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
 						load={this.firebaseBrowse}
@@ -441,6 +454,7 @@ class App extends Component {
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
 					<BrowseDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} />
+					<ShareDialog ref={this.refShareDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
 					</Snackbar>
