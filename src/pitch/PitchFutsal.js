@@ -126,6 +126,8 @@ class PitchFutsal {
 
 		cp.width = this.width;
 		cp.height = this.height;
+		cp.widthPitch = this.widthPitch;
+		cp.heightPitch = this.heightPitch;
 
 		cp.AnimExists = this.AnimExists;
 		cp.AnimKeyFrameCurrent = this.AnimKeyFrameCurrent;
@@ -162,6 +164,8 @@ class PitchFutsal {
 			updated: this.updated,
 			width: this.width,
 			height: this.height,
+			widthPitch: this.widthPitch,
+			heightPitch: this.heightPitch,
 			AnimExists: this.AnimExists,
 			AnimKeyFrameCurrent: this.AnimKeyFrameCurrent,
 			AnimKeyFrameDuration:this.AnimKeyFrameDuration,
@@ -189,6 +193,8 @@ class PitchFutsal {
 
 		this.width = data.width;
 		this.height = data.height;
+		this.widthPitch = data.widthPitch;
+		this.heightPitch = data.heightPitch;
 
 		this.AnimExists = data.AnimExists;
 		this.AnimKeyFrameCurrent = data.AnimKeyFrameCurrent;
