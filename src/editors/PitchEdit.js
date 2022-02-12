@@ -490,18 +490,18 @@ class PitchEdit extends Component {
 		const pitchClasses = "pitch " + this.props.classes.offset;
 
 		// Calculate pitch position in viewBox
-		const pitchLeft = (this._orgWidth - 4000) / 2; // Goals are relative to pitch no need to take them in calc
-		const pitchTop = (this._orgHeight - 2000) / 2;
+		const pitchLeft = (this._orgWidth - this.props.pitch.widthPitch) / 2;
+		const pitchTop = (this._orgHeight - this.props.pitch.heightPitch) / 2;
 		const pitchTransform = 'translate(' + pitchLeft + ' ' + pitchTop + ')';
 
 		// calculate players position in view box
 		const playersLeft = pitchLeft + 50;
-		const playersTop = pitchTop + 2000 + 50 + 25;
+		const playersTop = pitchTop + this.props.pitch.heightPitch + 50 + 25;
 		const playersTransform = 'translate(' + playersLeft + ' ' + playersTop + ')';
 
 		// calculate balls position in view box
 		const ballsLeft = pitchLeft + 1050
-		const ballsTop = pitchTop + 2000 + 90;
+		const ballsTop = pitchTop + this.props.pitch.heightPitch + 90;
 		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"
 
 		return (
@@ -549,11 +549,6 @@ class PitchEdit extends Component {
 							<path fill="none" d="M600,1158 a600,600 0 0,1 -600,600" />
 							<line x1="-20" x2="-60" y1="500" y2="500" />
 							<line x1="-20" x2="-60" y1="1500" y2="1500" />
-							<g id="goal-left">
-								<rect width="100" height="300" x="-100" y="850" fill="url(#goal-net)" stroke="#777777" strokeWidth="4" />
-								<line x1="0" x2="0" y1="850" y2="1150" />
-								<line x1="0" x2="0" y1="850" y2="1150" stroke="red" strokeDasharray="20" />
-							</g>
 						</g>
 						<g id="left-penalty" fill="white" strokeWidth="0">
 							<rect width="16" height="16" x="992" y="492" />
@@ -568,11 +563,6 @@ class PitchEdit extends Component {
 							<path fill="none" d="M3400,1158 a600,600 0 0,0 600,600" />
 							<line x1="4020" x2="4060" y1="500" y2="500" />
 							<line x1="4020" x2="4060" y1="1500" y2="1500" />
-							<g id="goal-right">
-								<rect width="100" height="300" x="4000" y="850" fill="url(#goal-net)" stroke="#777777" strokeWidth="4" />
-								<line x1="4000" x2="4000" y1="850" y2="1150" />
-								<line x1="4000" x2="4000" y1="850" y2="1150" stroke="red" strokeDasharray="20" />
-							</g>
 						</g>
 						<g id="right-penalty" fill="white" strokeWidth="0">
 							<rect width="16" height="16" x="2992" y="492" />

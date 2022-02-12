@@ -7,7 +7,7 @@ import Point from "./Point";
 import Text from "./Text";
 import Extras from "./Extras";
 import AnimKeyFrame from "./AnimKeyFrame";
-import { ElementIDPrefix, RemoveTags } from "./Constants";
+import { ElementIDPrefix, RemoveTags, ExtrasType, ExtrasDefaults } from "./Constants";
 
 class PitchFutsal {
 
@@ -18,8 +18,10 @@ class PitchFutsal {
 		this.created = new Date();
 		this.updated = new Date();
 
-		this.width = 4500;	// pitch width in cm
-		this.height = 2500;	// pitch height in cm
+		this.width = 4500;			// editor total width in cm
+		this.height = 2500;			// editor total height in cm
+		this.widthPitch = 4000; 	// pitch width in cm
+		this.heightPitch = 2000;	// pitch height in cm
 
 		this.AnimExists = false;
 		this.AnimKeyFrameCurrent = 0;
@@ -54,6 +56,27 @@ class PitchFutsal {
 			null
 		);
 		this.AnimKeyFrames.push(kf);
+
+		// add default extras
+		const goalExtras = ExtrasDefaults[ExtrasType.Goal];
+		const pitchLeft = (this.width-this.widthPitch) / 2;
+		const pitchTop = (this.height-this.heightPitch) / 2;
+		// Left goal
+		this.extras.push(new Extras(
+			ElementIDPrefix.Extras + "goal-left", 0, ExtrasType.Goal,
+			pitchLeft - (goalExtras.width / 2),
+			pitchTop + (this.heightPitch / 2),
+			goalExtras.width, goalExtras.height,
+			0, false
+		));
+		// Right Goal
+		this.extras.push(new Extras(
+			ElementIDPrefix.Extras + "goal-right", 0, ExtrasType.Goal,
+			pitchLeft + this.widthPitch + (goalExtras.width / 2),
+			pitchTop + (this.heightPitch / 2),
+			goalExtras.width, goalExtras.height,
+			180, false
+		));
 	}
 
 	_initPlayers(noPlayers, noPlayerColors, playerSize) {
