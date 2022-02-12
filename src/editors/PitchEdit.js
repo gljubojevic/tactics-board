@@ -267,6 +267,13 @@ class PitchEdit extends Component {
 					pos.X, pos.Y, dm.color, dm.textSize
 				);
 				break;
+			case 'delete':
+				e.preventDefault();
+				let id = e.target.getAttribute("data-ref");
+				if (null !== id && p.elementDelete(id)) {
+					dm.mode = 'select';
+				}
+				break;
 			case 'select':
 			default:
 				if (this.isDragStarted(e)) {

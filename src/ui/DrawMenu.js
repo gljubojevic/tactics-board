@@ -23,6 +23,7 @@ import SportsSoccer from '@mui/icons-material/SportsSoccer';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import CursorDefault from 'mdi-material-ui/CursorDefault';
+import DeleteIcon from '@mui/icons-material/Delete';
 import VectorLine from 'mdi-material-ui/VectorLine';
 import ShapeSquarePlus from 'mdi-material-ui/ShapeSquarePlus';
 import ShapeOvalPlus from 'mdi-material-ui/ShapeOvalPlus';
@@ -205,6 +206,8 @@ class DrawMenu extends Component {
 				return (<TextFields />);
 			case 'extras':
 				return (<SportsSoccer />);
+			case 'delete':
+				return (<DeleteIcon />);
 			case 'select':
 			default:
 				return (<CursorDefault />);
@@ -225,6 +228,11 @@ class DrawMenu extends Component {
 					<MenuItem data-value="select" onClick={this.close}>
 						<ListItemIcon><CursorDefault /></ListItemIcon>
 						<ListItemText primary="Select / Move" />
+					</MenuItem>
+					<Divider />
+					<MenuItem data-value="delete" onClick={this.close}>
+						<ListItemIcon><DeleteIcon /></ListItemIcon>
+						<ListItemText primary="Delete element" />
 					</MenuItem>
 					<Divider />
 					<MenuItem onClick={this.pitchOverlaysToggle}>

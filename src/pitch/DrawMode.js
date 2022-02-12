@@ -33,12 +33,13 @@ class DrawMode {
 
 	// default modes
 	// select	- select / move
+	// delete	- delete element
 	// line		- draw lines
 	// square	- draw square
 	// ellipse	- draw ellipse
 	// text		- draw text
 	get modeOptions(){
-		return ['select','line','square','ellipse','text','extras'];
+		return ['select','delete','line','square','ellipse','text','extras'];
 	}
 
 	get mode() {

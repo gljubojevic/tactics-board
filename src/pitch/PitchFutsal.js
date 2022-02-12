@@ -556,6 +556,25 @@ class PitchFutsal {
 		}
 	}
 
+	elementDelete(id) {
+		if (this.lineDelete(id)) {
+			return true;
+		}
+		if (this.ellipseDelete(id)) {
+			return true;
+		}
+		if (this.squareDelete(id)) {
+			return true;
+		}
+		if (this.textDelete(id)) {
+			return true;
+		}
+		if (this.extrasDelete(id)) {
+			return true;
+		}
+		return false;
+	}
+
 	lineNewID() {
 		this.lineID += 1;
 		return ElementIDPrefix.Line + this.lineID;
@@ -660,6 +679,15 @@ class PitchFutsal {
 		this._modified();
 	}
 
+	lineDelete(id) {
+		if (!id.startsWith(ElementIDPrefix.Line)) {
+			return false;
+		}
+		this.lines = this.lines.filter(l => id !== l.id);
+		this._modified();
+		return true;
+	}
+
 	ellipseNewID() {
 		this.ellipseID += 1;
 		return ElementIDPrefix.Ellipse + this.ellipseID;
@@ -738,6 +766,15 @@ class PitchFutsal {
 			el.isEdit = false;
 			return el;
 		});
+	}
+
+	ellipseDelete(id) {
+		if (!id.startsWith(ElementIDPrefix.Ellipse)) {
+			return false;
+		}
+		this.ellipses = this.ellipses.filter(el => id !== el.id);
+		this._modified();
+		return true;
 	}
 
 	squareNewID() {
@@ -820,6 +857,15 @@ class PitchFutsal {
 		});
 	}
 
+	squareDelete(id) {
+		if (!id.startsWith(ElementIDPrefix.Square)) {
+			return false;
+		}
+		this.squares = this.squares.filter(sq => id !== sq.id);
+		this._modified();
+		return true;
+	}
+
 	textNewID() {
 		this.textID += 1;
 		return ElementIDPrefix.Text + this.textID;
@@ -898,7 +944,16 @@ class PitchFutsal {
 			tx.isEdit = false;
 			return tx;
 		});
-	}	
+	}
+
+	textDelete(id) {
+		if (!id.startsWith(ElementIDPrefix.Text)) {
+			return false;
+		}
+		this.texts = this.texts.filter(tx => id !== tx.id);
+		this._modified();
+		return true;
+	}
 
 	extrasNewID() {
 		this.extrasID += 1;
@@ -979,6 +1034,15 @@ class PitchFutsal {
 			ex.isEdit = false;
 			return ex;
 		});
+	}
+
+	extrasDelete(id) {
+		if (!id.startsWith(ElementIDPrefix.Extras)) {
+			return false;
+		}
+		this.extras = this.extras.filter(ex => id !== ex.id);
+		this._modified();
+		return true;
 	}
 
 	editTopLeft(id, deltaX, deltaY) {
