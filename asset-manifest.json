@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/tactics-board/static/css/main.e5894030.chunk.css",
-    "main.js": "/tactics-board/static/js/main.25e013b9.chunk.js",
-    "main.js.map": "/tactics-board/static/js/main.25e013b9.chunk.js.map",
+    "main.js": "/tactics-board/static/js/main.5d6133fa.chunk.js",
+    "main.js.map": "/tactics-board/static/js/main.5d6133fa.chunk.js.map",
     "runtime-main.js": "/tactics-board/static/js/runtime-main.cc1c3c1a.js",
     "runtime-main.js.map": "/tactics-board/static/js/runtime-main.cc1c3c1a.js.map",
     "static/js/2.4da78b11.chunk.js": "/tactics-board/static/js/2.4da78b11.chunk.js",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.cc1c3c1a.js",
     "static/js/2.4da78b11.chunk.js",
     "static/css/main.e5894030.chunk.css",
-    "static/js/main.25e013b9.chunk.js"
+    "static/js/main.5d6133fa.chunk.js"
   ]
 }
