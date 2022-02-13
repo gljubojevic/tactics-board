@@ -21,7 +21,7 @@ class PlayerEdit extends Component {
 		const transform = 'translate(' + pl.pos.x + ' ' + pl.pos.y + ') rotate(' + pl.rotation + ')';
 		return (
 			<g className={className} textAnchor="middle" transform={transform}>
-				<circle r="50" className={editClassName} data-ref={editID} />
+				<circle r="35" className={editClassName} strokeWidth="30" strokeOpacity="0.6" data-ref={editID} />
 				<text className="number" dominantBaseline="central">{pl.no}</text>
 				{this.renderPlayerName(pl.name)}
 			</g>
