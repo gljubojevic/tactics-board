@@ -896,6 +896,8 @@ class PitchFutsal {
 			}
 			return t;
 		});
+		// cleanup empty texts
+		this.texts = this.texts.filter(tx => tx.text.length > 0);
 		this._modified();
 	}
 
