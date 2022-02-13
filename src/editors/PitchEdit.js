@@ -343,6 +343,7 @@ class PitchEdit extends Component {
 
 	textEditDone(id, text, bx, by, bwidth, bheight) {
 		this.props.pitch.textEditDone(id, text, bx, by, bwidth, bheight);
+		this.props.drawMode.mode = 'select';
 	}
 
 	// return current SVG in editor

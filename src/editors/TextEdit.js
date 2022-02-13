@@ -65,10 +65,29 @@ class TextEdit extends Component {
 	}
 
 	editStart(e) {
-		this._editRef.current.value = this.props.text.text;
+		//console.log("Text editStart", this.props.text.id);
+		let t = this.props.text.text;
+		// no text, render with "I" to draw cursor and bounding box
+		if (0 === t.length) {
+			this._editRef.current.value = 'I';
+			this._editRef.current.selectionStart = 1;
+			this._editRef.current.selectionEnd = 1;
+			this.editChange(e);
+			this.editShowCursor();
+			this._editRef.current.value = t;
+			this._editRef.current.selectionStart = 0;
+			this._editRef.current.selectionEnd = 0;
+			return;
+		}
+		this._editRef.current.value = t;
+		this._editRef.current.selectionStart = t.length;
+		this._editRef.current.selectionEnd = t.length;
+		this.editChange(e);
+		this.editShowCursor();
 	}
 
 	editChange(e) {
+		//console.log("Text editChange", this.props.text.id);
 		this.removeText();
 		let txt = this._editRef.current.value;
 		let ln = '';
@@ -85,14 +104,17 @@ class TextEdit extends Component {
 	}
 
 	editShowCursor() {
+		//console.log("Text editShowCursor", this.props.text.id);
 		if (0 === this._selectionEnd) {
 			return;
 		}
 		try {
 			const cr = this._textRef.current.getExtentOfChar(this._selectionEnd-1);
+			//console.log("Cursor", cr);
 			this.drawCursor(cr.x + cr.width, cr.y, cr.height);
 
 			const bb = this._textRef.current.getBBox();
+			//console.log("Boundig Box", bb);
 			this.drawTextBoundingBox(bb);
 
 		} catch (error) {
@@ -101,18 +123,20 @@ class TextEdit extends Component {
 	}
 
 	editKeyUp(e) {
+		//console.log("Text editKeyUp", this.props.text.id);
 		this._selectionStart = this._editRef.current.selectionStart;
 		this._selectionEnd = this._editRef.current.selectionEnd;
 		this.editShowCursor();
 	}
 
 	editEnd(e) {
+		//console.log("Text editEnd", this.props.text.id);
 		if (null === this.props.onEditDone) {
 			return;
 		}
         let tx = this._editRef.current.value.trim();
 		var bb = this._textRef.current.getBBox();
-		console.log(bb);
+		//console.log("Text Bounding box", bb);
         this.removeText();
 		this.props.onEditDone(
 			this.props.text.id, tx, 
