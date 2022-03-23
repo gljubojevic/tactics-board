@@ -62,8 +62,6 @@ class PitchEdit extends Component {
 		this._editRef = React.createRef();	// reference to editor container
 		this._bgRef = React.createRef();	// background reference to get client size of pitch for editing
 		this._playerDialogRef = React.createRef(); // edit player dialog reference
-		this._orgWidth = this.props.viewBoxRight - this.props.viewBoxLeft;
-		this._orgHeight = this.props.viewBoxBottom - this.props.viewBoxTop;
 		this._pitch = this.props.pitch;
 
 		// mouse drag init
@@ -86,8 +84,8 @@ class PitchEdit extends Component {
 	getScale() {
 		const box = this._bgRef.current.getBoundingClientRect();
 		return {
-			X: this._orgWidth / box.width,
-			Y: this._orgHeight / box.height
+			X: this.props.pitch.width / box.width,
+			Y: this.props.pitch.height / box.height
 		}
 	}
 
@@ -350,8 +348,8 @@ class PitchEdit extends Component {
 	// TODO: Cleanup unused players and balls
 	getSVG() {
 		return {
-			width: this._orgWidth,
-			height: this._orgHeight,
+			width: this.props.pitch.width,
+			height: this.props.pitch.height,
 			svgText: this._editRef.current.children[0].outerHTML
 		}
 	}
@@ -433,9 +431,9 @@ class PitchEdit extends Component {
 		if (null === o) {
 			return null;
 		}
-		const posX = (this._orgWidth - o.width) / 2;
-		const posY = (this._orgHeight - o.height) / 2;
-		const transform = 'translate(' + posX + ' ' + posY + ')';
+		const posX = (this.props.pitch.width - o.width) / 2;
+		const posY = (this.props.pitch.height - o.height) / 2;
+		const transform = `translate(${posX} ${posY})`;
 		return (<rect width={o.width} height={o.height} transform={transform} fill="none" />);
 	}
 
@@ -492,26 +490,17 @@ class PitchEdit extends Component {
 	}
 
 	render() {
-		const viewBox = this.props.viewBoxLeft.toString() + ' ' + this.props.viewBoxTop.toString() + ' ' + this.props.viewBoxRight.toString() + ' ' + this.props.viewBoxBottom.toString()
+		const editorWidth = this.props.pitch.width;
+		const editorHeight = this.props.pitch.height;
+		const viewBox = `0 0 ${editorWidth} ${editorHeight}`;
 
 		// default class is full screen width and height with padding for menu height
 		const pitchClasses = "pitch " + this.props.classes.offset;
 
-		// Calculate pitch position in viewBox
-		const pitchLeft = (this._orgWidth - this.props.pitch.widthPitch) / 2;
-		const pitchTop = (this._orgHeight - this.props.pitch.heightPitch) / 2;
-		const pitchTransform = 'translate(' + pitchLeft + ' ' + pitchTop + ')';
-
-		// calculate players position in view box
-		const playersLeft = pitchLeft + 50;
-		const playersTop = pitchTop + this.props.pitch.heightPitch + 50 + 25;
-		const playersTransform = 'translate(' + playersLeft + ' ' + playersTop + ')';
-
-		// calculate balls position in view box
-		const ballsLeft = pitchLeft + 1050
-		const ballsTop = pitchTop + this.props.pitch.heightPitch + 90;
-		const ballsTransform = 'translate(' + ballsLeft + ' ' + ballsTop + ')'; // "translate(1200 2210)"
-
+		// Get pitch position in viewBox
+		const pitchPos = this.props.pitch.pitchPos();
+		const pitchTransform = `translate(${pitchPos.left} ${pitchPos.top})`;
+		
 		return (
 			<React.Fragment>
 			<div ref={this._editRef} className={pitchClasses}>
@@ -530,7 +519,7 @@ class PitchEdit extends Component {
 						<path d="M9,0 L9,6 L0,3 z" fill="#f00" />
 					</marker>
 					<g id="background" ref={this._bgRef}>
-						<rect width={this._orgWidth} height={this._orgHeight} fill="#b7b7b7" fillOpacity="0.5" />
+						<rect width={editorWidth} height={editorHeight} fill="#b7b7b7" fillOpacity="0.5" />
 					</g>
 					<g id="pitch" transform={pitchTransform} fill="#0280c6" stroke="white" strokeWidth="8">
 						<rect width="4000" height="2000" />
@@ -584,13 +573,13 @@ class PitchEdit extends Component {
 					<g id="ellipses">{this.renderEllipses(this.props.pitch.ellipses)}</g>
 					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
 					<g id="extras">{this.renderExtras(this.props.pitch.extras)}</g>
-					<g id="players" transform={playersTransform} fontSize="50">
+					<g id="players" fontSize="50">
 						{this.renderLines(this.props.pitch.playerPathsCurrentKeyFrame(), true)}
 						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false, true)}
 						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame(), true, false)}
 						{this.renderPlayers(this.props.pitch.AnimPlayers, false, false)}
 					</g>
-					<g id="balls" transform={ballsTransform}>
+					<g id="balls">
 						{this.renderLines(this.props.pitch.ballPathsCurrentKeyFrame(), true)}
 						{this.renderBalls(this.props.pitch.ballsPreviousKeyFrame(), false, true)}
 						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), true, false)}
@@ -608,20 +597,12 @@ class PitchEdit extends Component {
 
 PitchEdit.defaultProps = {
 	pitch: null,
-	drawMode: null,
-	viewBoxLeft: 0,
-	viewBoxTop: 0,
-	viewBoxRight: 4500,
-	viewBoxBottom: 2500
+	drawMode: null
 }
 
 PitchEdit.propTypes = {
 	pitch: PropTypes.instanceOf(PitchFutsal),
-	drawMode: PropTypes.instanceOf(DrawMode),
-	viewBoxLeft: PropTypes.number,
-	viewBoxTop: PropTypes.number,
-	viewBoxRight: PropTypes.number,
-	viewBoxBottom: PropTypes.number
+	drawMode: PropTypes.instanceOf(DrawMode)
 }
 
 export default withStyles(styles, { withTheme: true })(PitchEdit);

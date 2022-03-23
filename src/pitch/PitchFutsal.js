@@ -48,6 +48,32 @@ class PitchFutsal {
 		this.onModified = null;
 	}
 
+	// Pitch top left corner position within editor
+	pitchPos() {
+		return {
+			top: (this.height - this.heightPitch) / 2,
+			left: (this.width - this.widthPitch) / 2
+		}
+	}
+
+	// Players top left corner within editor
+	playersPos() {
+		const pPos = this.pitchPos();
+		return {
+			top: pPos.top + this.heightPitch + 50 + 25,
+			left: pPos.left + 50
+		}
+	}
+
+	// Balls top left corner within editor
+	ballsPos() {
+		const pPos = this.pitchPos();
+		return {
+			top: pPos.top + this.heightPitch + 90,
+			left: pPos.left + 1050
+		}
+	}
+	
 	initDefault(noPlayers, noPlayerColors, playerSize, noBalls, noBallColors, ballSize) {
 		let kf = new AnimKeyFrame(
 			this._initPlayers(noPlayers, noPlayerColors, playerSize),
@@ -59,27 +85,27 @@ class PitchFutsal {
 
 		// add default extras
 		const goalExtras = ExtrasDefaults[ExtrasType.Goal];
-		const pitchLeft = (this.width-this.widthPitch) / 2;
-		const pitchTop = (this.height-this.heightPitch) / 2;
+		const pPos = this.pitchPos();
 		// Left goal
 		this.extras.push(new Extras(
 			ElementIDPrefix.Extras + "goal-left", 0, ExtrasType.Goal,
-			pitchLeft - (goalExtras.width / 2),
-			pitchTop + (this.heightPitch / 2),
+			pPos.left - (goalExtras.width / 2),
+			pPos.top + (this.heightPitch / 2),
 			goalExtras.width, goalExtras.height,
 			0, false
 		));
 		// Right Goal
 		this.extras.push(new Extras(
 			ElementIDPrefix.Extras + "goal-right", 0, ExtrasType.Goal,
-			pitchLeft + this.widthPitch + (goalExtras.width / 2),
-			pitchTop + (this.heightPitch / 2),
+			pPos.left + this.widthPitch + (goalExtras.width / 2),
+			pPos.top + (this.heightPitch / 2),
 			goalExtras.width, goalExtras.height,
 			180, false
 		));
 	}
 
 	_initPlayers(noPlayers, noPlayerColors, playerSize) {
+		const pPos = this.playersPos();
 		let players = [];
 		let groupSize = Math.floor(noPlayers / noPlayerColors);
 		for (var i = 0; i < noPlayers; i++) {
@@ -88,9 +114,9 @@ class PitchFutsal {
 			let posX = color * playerSize;
 			let player = new Player(
 				ElementIDPrefix.Player + i, number, "", color,
-				new Point(posX, 0),
+				new Point(pPos.left + posX, pPos.top),
 				0,
-				new Point(posX, 0),
+				new Point(pPos.left + posX, pPos.top),
 				number
 			);
 			players.push(player);
@@ -99,6 +125,7 @@ class PitchFutsal {
 	}
 
 	_initBalls(noBalls, noBallColors, ballSize) {
+		const bPos = this.ballsPos()
 		let balls = [];
 		let groupSize = Math.floor(noBalls / noBallColors);
 		for (var i = 0; i < noBalls; i++) {
@@ -106,8 +133,8 @@ class PitchFutsal {
 			let posX = color * ballSize;
 			let ball = new Ball(
 				ElementIDPrefix.Ball + i, color,
-				new Point(posX, 0),
-				new Point(posX, 0)
+				new Point(bPos.left + posX, bPos.top),
+				new Point(bPos.left + posX, bPos.top)
 			);
 			balls.push(ball);
 		}
@@ -436,6 +463,20 @@ class PitchFutsal {
 			id.replace(ElementIDPrefix.Player, ElementIDPrefix.PathPlayer), 
 			deltaX, deltaY
 		);
+		this._modified();
+	}
+
+	playerRotate(id, posX, posY, snap) {
+		if (!id.startsWith(ElementIDPrefix.Player)) {
+			return;
+		}
+		let players = this.playersCurrentKeyFrame().map(p => {
+			if (id === p.id) {
+				p.rotate(posX, posY, snap);
+			}
+			return p;
+		});
+		this.AnimKeyFrames[this.AnimKeyFrameCurrent].players = players;
 		this._modified();
 	}
 
@@ -1079,6 +1120,7 @@ class PitchFutsal {
 	}
 
 	editRotate(id, posX, posY, snap) {
+		this.playerRotate(id, posX, posY, snap);
 		this.squareRotate(id, posX, posY, snap);
 		this.ellipseRotate(id, posX, posY, snap);
 		this.extrasRotate(id, posX, posY, snap);

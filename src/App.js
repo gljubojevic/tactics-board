@@ -441,7 +441,7 @@ class App extends Component {
 						animExists={this.state.pitch.AnimExists}
 						isSignedIn={this.state.isSignedIn}
 					/>
-					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} viewBoxLeft={0} viewBoxTop={0} viewBoxRight={4500} viewBoxBottom={2500} />
+					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} />
 					<AnimPlayer ref={this.refAnimPlayer} 
 						anchorEl={this.animPlayerAnchorEl}
 						keyFramesNo={this.state.pitch.AnimKeyFrames.length}

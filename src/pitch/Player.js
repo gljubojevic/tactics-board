@@ -10,6 +10,7 @@ class Player {
 		this.rotation = rotation;
 		this.posDefault = posDefault;
 		this.noDefault = noDefault;
+		this.isEdit = false;
 	}
 
 	save() {
@@ -30,6 +31,7 @@ class Player {
 		this.rotation = 0;
 		this.name = "";
 		this.no = this.noDefault;
+		this.isEdit = false;
 	}
 
 	clone() {
@@ -58,6 +60,22 @@ class Player {
 
 	get isPlaced() {
 		return !this.pos.equalTo(this.posDefault);
+	}
+
+	rotate(posX, posY, snap) {
+		console.log(this.pos);
+		//console.log(posX, posY, this.pos.x, this.pos.y);
+		let vx = posX - this.pos.x;
+		let vy = posY - this.pos.y;
+		let angle = Math.atan2(vy, vx) * 180 / Math.PI;
+		angle += 90;
+		if (angle < 0) {
+			angle += 360;
+		}
+		if (snap) {
+			angle = Math.floor(angle / 45) * 45;
+		}
+		this.rotation = angle;
 	}
 }
 
