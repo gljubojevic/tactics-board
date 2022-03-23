@@ -453,6 +453,7 @@ class PitchFutsal {
 	playerMove(id, deltaX, deltaY) {
 		let players = this.playersCurrentKeyFrame().map(p => {
 			if (id === p.id) {
+				p.isEdit = true;
 				p.pos.move(deltaX, deltaY);
 			}
 			return p;
@@ -535,6 +536,16 @@ class PitchFutsal {
 			return kf;
 		});
 		this._modified();
+	}
+
+	playerEditEnd() {
+		this.AnimKeyFrames = this.AnimKeyFrames.map(kf => {
+			kf.players = kf.players.map(p => {
+				p.isEdit = false;
+				return p;
+			});
+			return kf;
+		});
 	}
 
 	ballsCurrentKeyFrame() {
@@ -1133,6 +1144,7 @@ class PitchFutsal {
 		this.ellipsesEditEnd();
 		this.extrasEditEnd();
 		this.textEditEnd();
+		this.playerEditEnd();
 		this._modified();
 	}
 
