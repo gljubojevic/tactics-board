@@ -29,14 +29,13 @@ class PlayerEdit extends Component {
 		if (!pl.isPlaced) {
 			return null;
 		}
-		//if (0 === pl.rotation) {
-		//	return null;
-		//}
+		const rotation = `rotate(${pl.rotation})`;
 		return (
-			<React.Fragment>
+			<g transform={rotation}>
 				<line x1={-40} y1={-20} x2={0} y2={20} strokeWidth="20" strokeLinecap="round" />
 				<line x1={40} y1={-20} x2={0} y2={20} strokeWidth="20" strokeLinecap="round" />
-			</React.Fragment>
+				{this.renderRotateHandle(this.props.isEdit, pl)}
+			</g>
 		);
 	}
 
@@ -45,14 +44,13 @@ class PlayerEdit extends Component {
 		const editID = this.props.isEdit ? pl.id : null;
 		const editClassName = this.props.isEdit ? 'draggable' : null;
 		const className = 'player pc' + pl.color + (this.props.isPrevFrame ? ' transparent': '');
-		const transform = `translate(${pl.pos.x} ${pl.pos.y}) rotate(${pl.rotation})`;
+		const transform = `translate(${pl.pos.x} ${pl.pos.y})`;
 		return (
 			<g className={className} textAnchor="middle" transform={transform}>
-				{this.renderHands(pl)}
 				<circle r="35" className={editClassName} strokeWidth="30" strokeOpacity="0.6" data-ref={editID} />
-				<text className="number" dominantBaseline="central">{pl.no}</text>
 				{this.renderPlayerName(pl.name)}
-				{this.renderRotateHandle(this.props.isEdit, pl)}
+				{this.renderHands(pl)}
+				<text className="number" dominantBaseline="central">{pl.no}</text>
 			</g>
 		);
 	}
