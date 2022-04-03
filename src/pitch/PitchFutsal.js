@@ -636,6 +636,44 @@ class PitchFutsal {
 		}
 	}
 
+	ballDelete(id) {
+		if (!id.startsWith(ElementIDPrefix.Ball)) {
+			return false;
+		}
+		this.AnimKeyFrames = this.AnimKeyFrames.map(kf => {
+			let ballRemoved = null;
+			kf.balls = kf.balls.map(b => {
+				if (id !== b.id) {
+					return b;
+				}
+				b.reset();
+				ballRemoved = b;
+				return b;
+			});
+			// reset path for player that is reset
+			if (null === ballRemoved || null == kf.ballPaths) {
+				return kf;
+			}
+			const pathID = ballRemoved.id.replace(ElementIDPrefix.Ball, ElementIDPrefix.PathBall);
+			kf.ballPaths = kf.ballPaths.map(p => {
+				if (pathID !== p.id) {
+					return p;
+				}
+				return new Line(
+					p.id, p.color,
+					ballRemoved.pos.clone(), 
+					ballRemoved.pos.clone(),
+					ballRemoved.pos.clone(), 
+					ballRemoved.pos.clone(),
+					false, false, true, true
+				);
+			});
+			return kf;
+		});
+		this._modified();
+		return true;
+	}
+
 	elementDelete(id) {
 		if (this.lineDelete(id)) {
 			return true;
@@ -653,6 +691,9 @@ class PitchFutsal {
 			return true;
 		}
 		if (this.playerDelete(id)) {
+			return true;
+		}
+		if (this.ballDelete(id)) {
 			return true;
 		}
 		return false;
