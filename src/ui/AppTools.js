@@ -59,9 +59,11 @@ class AppTools extends Component {
 					<div className={this.props.classes.grow} />
 					<DrawMenu drawMode={this.props.drawMode} extrasCreate={this.props.extrasCreate} />
 					<Tooltip title="Share link">
-						<IconButton aria-label="Share link" color="inherit" disabled={!this.props.shareEnabled} onClick={this.props.shareTactics}>
-							<LinkIcon />
-						</IconButton>
+						<span>
+							<IconButton aria-label="Share link" color="inherit" disabled={!this.props.shareEnabled} onClick={this.props.shareTactics}>
+								<LinkIcon />
+							</IconButton>
+						</span>
 					</Tooltip>
 					<FullscreenToggle />
 					<UserAccount firebaseApp={this.props.firebaseApp} isSignedIn={this.props.isSignedIn} />
