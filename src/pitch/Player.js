@@ -63,8 +63,6 @@ class Player {
 	}
 
 	rotate(posX, posY, snap) {
-		console.log(this.pos);
-		//console.log(posX, posY, this.pos.x, this.pos.y);
 		let vx = posX - this.pos.x;
 		let vy = posY - this.pos.y;
 		let angle = Math.atan2(vy, vx) * 180 / Math.PI;
