@@ -23,7 +23,7 @@ class BallEdit extends Component {
 		const ball = b.color === 4 ? this.ballImage() : null;
 		return (
 			<g className={className} transform={transform}>
-				<circle r="30" className={editClassName} data-ref={editID} />
+				<circle r="30" className={editClassName} strokeWidth="5" strokeOpacity="0.5" data-ref={editID} />
 				{ball}
 			</g>
 		);

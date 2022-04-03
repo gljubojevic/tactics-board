@@ -459,7 +459,7 @@ class PitchEdit extends Component {
 		// ball colors
 		const ballColors = colorsPlayer.concat(
 			dm.colorOptionsBall.map((col, index) => {
-				return '.bc'+ index + ' { fill: '+ col +'; }';
+				return '.bc'+ index +' { fill: '+ col +'; stroke: white; }';
 			})
 		);
 
