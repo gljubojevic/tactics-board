@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import FileSaver from 'browser-filesaver';
+import { Buffer } from 'buffer';
 
 class SvgToImg extends Component {
-	//constructor(props) {
-	//	super(props);
-	//}
 	
 	async toBlob(svgText, orgWidth, orgHeight, imgWidth, imgHeight) {
 		return new Promise( (resolve, reject) => {
@@ -34,7 +32,7 @@ class SvgToImg extends Component {
 			});
 
 			// prepare svg to load image
-			const encodedString = 'data:image/svg+xml;base64,' + new Buffer(svgText).toString('base64');
+			const encodedString = 'data:image/svg+xml;base64,' + Buffer.from(svgText).toString('base64');
 			img.onerror = reject;		// setup rejection
 			img.src = encodedString;	// start loading image
 		});
