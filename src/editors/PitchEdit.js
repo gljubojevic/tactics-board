@@ -532,11 +532,19 @@ class PitchEdit extends Component {
 							<path fill="none" d="M0,1975 a25,25 0 0,1 25,25" />
 							<path fill="none" d="M3975,2000 a25,25 0 0,1 25,-25" />
 						</g>
-						<g id="substitition-zones">
+						{/*
+						<g id="substitution-zones-up">
 							<line x1="1000" x2="1000" y1="-48" y2="32" />
 							<line x1="1500" x2="1500" y1="-48" y2="32" />
 							<line x1="2500" x2="2500" y1="-48" y2="32" />
 							<line x1="3000" x2="3000" y1="-48" y2="32" />
+						</g>
+						*/}
+						<g id="substitution-zones-down">
+							<line x1="1000" x2="1000" y1="1968" y2="2048" />
+							<line x1="1500" x2="1500" y1="1968" y2="2048" />
+							<line x1="2500" x2="2500" y1="1968" y2="2048" />
+							<line x1="3000" x2="3000" y1="1968" y2="2048" />
 						</g>
 						<g id="left">
 							<line x1="500" x2="500" y1="980" y2="1020" />
