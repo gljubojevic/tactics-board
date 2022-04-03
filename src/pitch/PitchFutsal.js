@@ -568,6 +568,14 @@ class PitchFutsal {
 		});
 	}
 
+	playerDelete(id) {
+		if (!id.startsWith(ElementIDPrefix.Player)) {
+			return false;
+		}
+		this.playerEditDone({id:id, remove: true});
+		return true;
+	}
+
 	ballsCurrentKeyFrame() {
 		if (this.AnimPlaying) {
 			return null;
@@ -642,6 +650,9 @@ class PitchFutsal {
 			return true;
 		}
 		if (this.extrasDelete(id)) {
+			return true;
+		}
+		if (this.playerDelete(id)) {
 			return true;
 		}
 		return false;
