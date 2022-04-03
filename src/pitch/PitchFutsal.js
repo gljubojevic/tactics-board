@@ -521,17 +521,37 @@ class PitchFutsal {
 	// note: edit player attributes changes player on all key frames
 	playerEditDone(player) {
 		this.AnimKeyFrames = this.AnimKeyFrames.map(kf => {
+			let playerRemoved = null;
 			kf.players = kf.players.map(p => {
 				if (player.id !== p.id) {
 					return p;
 				}
 				if (player.remove) {
 					p.reset();
+					playerRemoved = p;
 				} else {
 					p.name = player.name;
 					p.no = player.no;
 				}
 				return p;
+			});
+			// reset path for player that is reset
+			if (null === playerRemoved || null == kf.playerPaths) {
+				return kf;
+			}
+			const pathID = playerRemoved.id.replace(ElementIDPrefix.Player, ElementIDPrefix.PathPlayer);
+			kf.playerPaths = kf.playerPaths.map(p => {
+				if (pathID !== p.id) {
+					return p;
+				}
+				return new Line(
+					p.id, p.color,
+					playerRemoved.pos.clone(), 
+					playerRemoved.pos.clone(),
+					playerRemoved.pos.clone(), 
+					playerRemoved.pos.clone(),
+					false, false, true, true
+				);
 			});
 			return kf;
 		});
