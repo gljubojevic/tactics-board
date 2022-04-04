@@ -699,6 +699,44 @@ class PitchFutsal {
 		return false;
 	}
 
+	elementIsEditable(id) {
+		if (id.startsWith(ElementIDPrefix.Square)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Ellipse)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Line)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Text)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Extras)) { return true;}
+		return false;
+	}
+
+	elementHasContextMenu(id) {
+		if (id.startsWith(ElementIDPrefix.Ball)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Square)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Ellipse)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Line)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Text)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Extras)) { return true;}
+		return false;
+	}
+
+	elementEditStart(id) {
+		if (this.squareEditStart(id)) {
+			return true;
+		}
+		if (this.ellipseEditStart(id)) {
+			return true;
+		}
+		if (this.lineEditStart(id)) {
+			return true;
+		}
+		if (this.textEditStart(id)) {
+			return true;
+		}
+		if (this.extrasEditStart(id)) {
+			return true;
+		}
+		return false;
+	}
+
 	lineNewID() {
 		this.lineID += 1;
 		return ElementIDPrefix.Line + this.lineID;

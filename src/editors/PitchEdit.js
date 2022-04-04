@@ -11,6 +11,7 @@ import LineEdit from './LineEdit'
 import TextEdit from './TextEdit'
 import ExtrasEdit from './ExtrasEdit'
 import PlayerDialog from './PlayerDialog'
+import ContextMenu from './ContextMenu';
 
 // this is for offset from toolbar and default class
 const styles = theme => ({
@@ -61,7 +62,8 @@ class PitchEdit extends Component {
 		super(props);
 		this._editRef = React.createRef();	// reference to editor container
 		this._bgRef = React.createRef();	// background reference to get client size of pitch for editing
-		this._playerDialogRef = React.createRef(); // edit player dialog reference
+		this._playerDialogRef = React.createRef();	// edit player dialog reference
+		this._contextMenuRef = React.createRef();	// context menu reference
 		this._pitch = this.props.pitch;
 
 		// mouse drag init
@@ -72,6 +74,7 @@ class PitchEdit extends Component {
 
 		// add events
 		this.hContextMenu = this.hContextMenu.bind(this);
+		this.hContextMenuClose = this.hContextMenuClose.bind(this);
 		this.hMouseDown = this.hMouseDown.bind(this);
 		this.hMouseUp = this.hMouseUp.bind(this);
 		this.hMouseMove = this.hMouseMove.bind(this);
@@ -209,64 +212,60 @@ class PitchEdit extends Component {
 		if (null === id) {
 			return;
 		}
-		const p = this.props.pitch;
+		e.preventDefault();
+		// player edit dialog
 		if (this.playerEditStarted(id)) {
-			e.preventDefault();
 			return;
 		}
-		if (p.squareEditStart(id)) {
-			e.preventDefault();
-			return;
+		// show context menu
+		const p = this.props.pitch;
+		if (p.elementHasContextMenu(id)) {
+			this._contextMenuRef.current.open(
+				id, p.elementIsEditable(id),
+				e.clientX, e.clientY
+			);
 		}
-		if (p.ellipseEditStart(id)) {
-			e.preventDefault();
-			return;
-		}
-		if (p.lineEditStart(id)) {
-			e.preventDefault();
-			return;
-		}
-		if (p.textEditStart(id)) {
-			e.preventDefault();
-			return;
-		}
-		if (p.extrasEditStart(id)) {
-			e.preventDefault();
-			return;
+	}
+
+	hContextMenuClose(op, id) {
+		switch (op) {
+			case "delete":
+				this.props.pitch.elementDelete(id);
+				break;
+			case "edit":
+			default:
+				this.props.pitch.elementEditStart(id);
+				break;
 		}
 	}
 
 	hMouseDown(e) {
+		e.preventDefault();
 		let pos = this.getRealPosition(e);
 		const dm = this.props.drawMode;
 		const p = this.props.pitch;
 		switch (dm.mode) {
 			case 'line':
-				e.preventDefault();
 				this._dragNode = p.lineCreate(
 					pos.X, pos.Y, dm.color, dm.lineArrowStart, dm.lineArrowEnd, dm.lineDashed
 				);
 				break;
 			case 'square':
-				e.preventDefault();
 				this._dragNode = p.squareCreate(
 					pos.X, pos.Y, dm.color, dm.lineDashed
 				);
 				break;
 			case 'ellipse':
-				e.preventDefault();
 				this._dragNode = p.ellipseCreate(
 					pos.X, pos.Y, dm.color, dm.lineDashed
 				);
 				break;
 			case 'text':
-				e.preventDefault();
 				this._dragNode = p.textCreate(
 					pos.X, pos.Y, dm.color, dm.textSize
 				);
 				break;
 			case 'delete':
-				e.preventDefault();
 				let id = e.target.getAttribute("data-ref");
 				if (null !== id && p.elementDelete(id)) {
 					dm.mode = 'select';
@@ -274,10 +273,7 @@ class PitchEdit extends Component {
 				break;
 			case 'select':
 			default:
-				if (this.isDragStarted(e)) {
-					e.preventDefault();
-					return;
-				}
+				this.isDragStarted(e);
 				break;
 		}
 	}
@@ -598,6 +594,7 @@ class PitchEdit extends Component {
 				</svg>
 			</div>
 			<PlayerDialog ref={this._playerDialogRef} onEditDone={this.playerEditDone} />
+			<ContextMenu ref={this._contextMenuRef} onClose={this.hContextMenuClose} />
 			</React.Fragment>
 		);
 	}

@@ -232,7 +232,7 @@ class DrawMenu extends Component {
 					<Divider />
 					<MenuItem data-value="delete" onClick={this.close}>
 						<ListItemIcon><DeleteIcon /></ListItemIcon>
-						<ListItemText primary="Delete element" />
+						<ListItemText primary="Remove" />
 					</MenuItem>
 					<Divider />
 					<MenuItem onClick={this.pitchOverlaysToggle}>
