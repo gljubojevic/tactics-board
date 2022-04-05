@@ -91,7 +91,7 @@ class DrawerMenu extends Component {
 						<ListItem>
 							<ListItemButton onClick={this.newScheme}>
 								<ListItemIcon><OpenInNew /></ListItemIcon>
-								<ListItemText primary="New scheme" />
+								<ListItemText primary="Reset" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
@@ -111,20 +111,20 @@ class DrawerMenu extends Component {
 						<ListItem>
 							<ListItemButton onClick={this.load} disabled={!this.props.isSignedIn}>
 								<ListItemIcon><CloudDownloadIcon /></ListItemIcon>
-								<ListItemText primary="Browse my tactics" />
+								<ListItemText primary="Browse my animations" />
 							</ListItemButton>
 						</ListItem>
 						<ListItem>
 							<ListItemButton onClick={this.save} disabled={!this.props.isSignedIn}>
 								<ListItemIcon><Save /></ListItemIcon>
-								<ListItemText primary="Save tactics board" />
+								<ListItemText primary="Save animation" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
 						<ListItem>
 							<ListItemButton onClick={this.saveImage}>
 								<ListItemIcon><PhotoCamera /></ListItemIcon>
-								<ListItemText primary="Save picture" />
+								<ListItemText primary="Save screenshot" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
