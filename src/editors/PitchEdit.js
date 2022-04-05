@@ -459,7 +459,14 @@ class PitchEdit extends Component {
 			})
 		);
 
-		return ballColors.concat([
+		// extras colors
+		const extrasColors = ballColors.concat([
+			dm.colorOptions.map((col, index) => {
+				return '.ex' + index  + ' { fill: '+ col +'; stroke: '+ col +'; }'
+			})
+		]);
+
+		return extrasColors.concat([
 			'.bc4 svg { fill: #000000; }',
 			'#texts { font-family: sans-serif; font-size: 10em; cursor: default; user-select: none; }',
 			'.txt0 text { font-size: 0.5em; }',

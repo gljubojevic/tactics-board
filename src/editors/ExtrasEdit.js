@@ -25,11 +25,11 @@ class ExtrasEdit extends Component {
 			case ExtrasType.GoalSmall:
 				return (<Goal id={ex.id} x={ex.x} y={ex.y} width={ex.width} height={ex.height} />);
 			case ExtrasType.Ladder:
-				return (<Ladder id={ex.id} x={ex.x} y={ex.y} width={ex.width} height={ex.height} />);
+				return (<Ladder id={ex.id} color={ex.color} x={ex.x} y={ex.y} width={ex.width} height={ex.height} strokeWidth={12} />);
 			case ExtrasType.Cone:
-				return (<Cone id={ex.id} x={ex.x} y={ex.y} width={ex.width} height={ex.height} />);
+				return (<Cone id={ex.id} color={ex.color} x={ex.x} y={ex.y} width={ex.width} height={ex.height} />);
 			case ExtrasType.Flag:
-				return (<Flag id={ex.id} x={ex.x} y={ex.y} width={ex.width} height={ex.height} />);
+				return (<Flag id={ex.id} color={ex.color} x={ex.x} y={ex.y} width={ex.width} height={ex.height} strokeWidth={12} />);
 			default:
 				return (<rect x={ex.x} y={ex.y} width={ex.width} height={ex.height} data-ref={ex.id} />);
 		}

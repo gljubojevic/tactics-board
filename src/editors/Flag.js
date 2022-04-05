@@ -12,10 +12,13 @@ class Flag extends Component {
 		const lX = this.props.x - hW;	// left X
 		const tY = this.props.y - hH;	// top Y
 		const bY = this.props.y + hH;	// bottom Y
+		const sW = this.props.strokeWidth;
+		const fill = -1 !== this.props.color ? null : "red";
+		const className = -1 !== this.props.color ? 'ex' + this.props.color : null;
 		return (
-			<g>
-				<rect x={lX} y={tY} width={w} height={h/3} fill="red" stroke="black" strokeWidth="3" data-ref={this.props.id} />
-				<line x1={lX} y1={tY} x2={lX} y2={bY} stroke="black" strokeWidth="6" data-ref={this.props.id} />
+			<g className={className}>
+				<rect x={lX} y={tY} width={w} height={h/3} fill={fill} stroke="black" strokeWidth={sW / 2} data-ref={this.props.id} />
+				<line x1={lX} y1={tY} x2={lX} y2={bY} stroke="black" strokeWidth={sW} data-ref={this.props.id} />
 			</g>
 		);
 	}
@@ -23,18 +26,22 @@ class Flag extends Component {
 
 Flag.defaultProps = {
 	id: null,
+	color: -1,
 	x: 0,
 	y: 0,
 	width: 130,
-	height: 280
+	height: 280,
+	strokeWidth: 6
 }
 
 Flag.propTypes = {
 	id: PropTypes.string,
+	color: PropTypes.number,
 	x: PropTypes.number,
 	y: PropTypes.number,
 	width: PropTypes.number,
-	height: PropTypes.number
+	height: PropTypes.number,
+	strokeWidth: PropTypes.number
 }
 
 export default Flag;

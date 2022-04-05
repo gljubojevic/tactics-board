@@ -23,9 +23,11 @@ class Cone extends Component {
 			const y = p[1] + this.props.y;
 			points += `${x},${y} `;
 		});
+		const fill = -1 !== this.props.color ? null : "red";
+		const className = -1 !== this.props.color ? 'ex' + this.props.color : null;
 		return (
-			<g>
-				<polygon points={points} stroke="black"/>
+			<g className={className}>
+				<polygon points={points} fill={fill} strokeWidth={this.props.strokeWidth} stroke="black"/>
 			</g>
 		);
 	}
@@ -33,18 +35,22 @@ class Cone extends Component {
 
 Cone.defaultProps = {
 	id: null,
+	color: -1,
 	x: 0,
 	y: 0,
 	width: 70,
-	height: 85
+	height: 85,
+	strokeWidth: 6
 }
 
 Cone.propTypes = {
 	id: PropTypes.string,
+	color: PropTypes.number,
 	x: PropTypes.number,
 	y: PropTypes.number,
 	width: PropTypes.number,
-	height: PropTypes.number
+	height: PropTypes.number,
+	strokeWidth: PropTypes.number
 }
 
 export default Cone;
