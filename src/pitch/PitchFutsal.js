@@ -700,11 +700,27 @@ class PitchFutsal {
 	}
 
 	elementIsEditable(id) {
-		if (id.startsWith(ElementIDPrefix.Square)) { return true;}
-		if (id.startsWith(ElementIDPrefix.Ellipse)) { return true;}
-		if (id.startsWith(ElementIDPrefix.Line)) { return true;}
-		if (id.startsWith(ElementIDPrefix.Text)) { return true;}
-		if (id.startsWith(ElementIDPrefix.Extras)) { return true;}
+		if (id.startsWith(ElementIDPrefix.Square)) {
+			const e = this.squares.find(e => id === e.id);
+			return !e.isEdit;
+		}
+		if (id.startsWith(ElementIDPrefix.Ellipse)) {
+			const e = this.ellipses.find(e => id === e.id);
+			return !e.isEdit;
+		}
+		if (id.startsWith(ElementIDPrefix.Line)) {
+			const e = this.lines.find(e => id === e.id);
+			return !e.isEdit;
+		}
+		if (id.startsWith(ElementIDPrefix.Text)) {
+			const e = this.texts.find(e => id === e.id);
+			return !e.isEdit;
+		}
+		if (id.startsWith(ElementIDPrefix.Extras)) {
+			const e = this.extras.find(ex => id === ex.id);
+			// not all extras is editable
+			return (e.isResizable || e.isRotatable) && !e.isEdit;
+		}
 		return false;
 	}
 

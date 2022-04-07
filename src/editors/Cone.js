@@ -27,7 +27,7 @@ class Cone extends Component {
 		const className = -1 !== this.props.color ? 'ex' + this.props.color : null;
 		return (
 			<g className={className}>
-				<polygon points={points} fill={fill} strokeWidth={this.props.strokeWidth} stroke="black"/>
+				<polygon points={points} fill={fill} strokeWidth={this.props.strokeWidth} stroke="black" data-ref={this.props.id} />
 			</g>
 		);
 	}

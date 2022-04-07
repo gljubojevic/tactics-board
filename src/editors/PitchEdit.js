@@ -217,11 +217,18 @@ class PitchEdit extends Component {
 		if (this.playerEditStarted(id)) {
 			return;
 		}
+		// element can be in edit mode prefixed with "edit-xx-"
+		let elementID = id;
+		if (elementID.startsWith("edit-")) {
+			elementID = elementID.substring(elementID.lastIndexOf('-')+1);			
+		}
 		// show context menu
 		const p = this.props.pitch;
-		if (p.elementHasContextMenu(id)) {
+		// use ID from element to disable editing on already editable elements 
+		const isEditable = p.elementIsEditable(id);
+		if (p.elementHasContextMenu(elementID)) {
 			this._contextMenuRef.current.open(
-				id, p.elementIsEditable(id),
+				elementID, isEditable,
 				e.clientX, e.clientY
 			);
 		}
