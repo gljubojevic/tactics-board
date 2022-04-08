@@ -91,6 +91,40 @@ class AnimKeyFrame {
 		}
 	}
 
+	animGetActivePlayerPaths() {
+		const active = [];
+		if (null === this.playerPaths) {
+			return active;
+		}
+		this.playerPaths.forEach(p => {
+			if (p.empty()) {
+				return;
+			}
+			const pc = p.clone();
+			pc.arrowEnd = true;
+			pc.isEdit = false;
+			active.push(pc);
+		});
+		return active;
+	}
+
+	animGetActiveBallPaths() {
+		const active = [];
+		if (null === this.ballPaths) {
+			return active;
+		}
+		this.ballPaths.forEach(p => {
+			if (p.empty()) {
+				return;
+			}
+			const pc = p.clone();
+			pc.arrowEnd = true;
+			pc.isEdit = false;
+			active.push(pc);
+		});
+		return active;
+	}
+
 	// there are 3 cubic bezier splines forming a path
 	splinePathPos(keyFramePos) {
 		const scale = keyFramePos * 3;
@@ -139,7 +173,8 @@ class AnimKeyFrame {
 			this.players.map((p, index) => {
 				// new key frame has line with all points at same position
 				return new Line(
-					this.playerPathID(index), 99,	// using 99 as edit color 
+					this.playerPathID(index),
+					p.color,	// using same color as player 
 					p.pos.clone(), 
 					p.pos.clone(),
 					p.pos.clone(), 
@@ -151,7 +186,8 @@ class AnimKeyFrame {
 			this.balls.map((b, index) => {
 				// new key frame has line with all points at same position
 				return new Line(
-					this.ballPathID(index), 99,	// using 99 as edit color 
+					this.ballPathID(index),
+					b.color,	// using same color as ball
 					b.pos.clone(),
 					b.pos.clone(),
 					b.pos.clone(), 

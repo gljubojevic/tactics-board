@@ -15,6 +15,8 @@ import SkipNext from '@mui/icons-material/SkipNext';
 import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import Repeat from '@mui/icons-material/Repeat';
 import RepeatOn from '@mui/icons-material/RepeatOn';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 const BorderLinearProgress = withStyles((theme) => ({
 	root: {
@@ -44,6 +46,7 @@ class AnimPlayer extends Component {
 		this.playPause = this.playPause.bind(this);
 		this.stop = this.stop.bind(this);
 		this.animStep = this.animStep.bind(this);
+		this.showPaths = this.showPaths.bind(this);
 		this.repeatToggle = this.repeatToggle.bind(this);
 		this.keyFrameNext = this.keyFrameNext.bind(this);
 		this.keyFramePrevious = this.keyFramePrevious.bind(this);
@@ -84,6 +87,12 @@ class AnimPlayer extends Component {
 		this.setState({
 			isRepeat: !this.state.isRepeat
 		});
+	}
+
+	showPaths(e) {
+		if (null !== this.props.animShowPaths) {
+			this.props.animShowPaths(e.target.checked);
+		}
 	}
 
 	playPause() {
@@ -222,6 +231,7 @@ class AnimPlayer extends Component {
 			>
 				<Grid container alignItems="center">
 					<Grid item>
+						<FormControlLabel control={<Switch checked={this.props.pathsVisible} onChange={this.showPaths} />} labelPlacement="start" label="Paths" />
 						<Tooltip title="Repeat Animation">
 							<IconButton aria-label="Repeat Animation" color="inherit" onClick={this.repeatToggle}>
 								{this.renderRepeat()}
@@ -274,18 +284,22 @@ AnimPlayer.defaultProps = {
 	anchorEl: null,
 	keyFramesNo: 0,
 	keyFrameDuration: 0,
+	pathsVisible: false,
 	animStart: null,
 	animStop: null,
 	animFrame: null,
+	animShowPaths: null
 }
 
 AnimPlayer.propTypes = {
 	anchorEl: PropTypes.func,
 	keyFramesNo: PropTypes.number,
 	keyFrameDuration: PropTypes.number,
+	pathsVisible: PropTypes.bool,
 	animStart: PropTypes.func,
 	animStop: PropTypes.func,
-	animFrame: PropTypes.func
+	animFrame: PropTypes.func,
+	animShowPaths: PropTypes.func
 }
 
 export default AnimPlayer;

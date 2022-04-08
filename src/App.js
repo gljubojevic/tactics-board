@@ -56,6 +56,7 @@ class App extends Component {
 		this.AnimStart=this.AnimStart.bind(this);
 		this.AnimStop=this.AnimStop.bind(this);
 		this.AnimFrame=this.AnimFrame.bind(this);
+		this.AnimShowPaths=this.AnimShowPaths.bind(this);
 		this.animPlayerAnchorEl=this.animPlayerAnchorEl.bind(this);
 		this.animPlayerShow=this.animPlayerShow.bind(this);
 		this.LocalStorageLoad = this.LocalStorageLoad.bind(this);
@@ -388,6 +389,10 @@ class App extends Component {
 		this.state.pitch.animFrame(time);
 	}
 
+	AnimShowPaths(show) {
+		this.state.pitch.animShowPaths(show);
+	}
+
 	animPlayerAnchorEl() {
 		return this.refPitchEdit.current;
 	}
@@ -446,9 +451,11 @@ class App extends Component {
 						anchorEl={this.animPlayerAnchorEl}
 						keyFramesNo={this.state.pitch.AnimKeyFrames.length}
 						keyFrameDuration={this.state.pitch.AnimKeyFrameDuration}
+						pathsVisible={this.state.pitch.AnimShowPaths}
 						animStart={this.AnimStart}
 						animStop={this.AnimStop}
 						animFrame={this.AnimFrame}
+						animShowPaths={this.AnimShowPaths}
 					/>
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />

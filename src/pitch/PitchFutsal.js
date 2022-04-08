@@ -28,8 +28,11 @@ class PitchFutsal {
 		this.AnimKeyFrameDuration = 5;	// duration of each key frame in seconds
 		this.AnimKeyFrames = [];
 		this.AnimPlaying = false;
+		this.AnimShowPaths = false;
 		this.AnimPlayers = null;
 		this.AnimBalls = null;
+		this.AnimPlayerPaths = null;
+		this.AnimBallPaths = null;
 
 		this.squareID = -1;
 		this.squares = [];
@@ -160,9 +163,12 @@ class PitchFutsal {
 		cp.AnimKeyFrameCurrent = this.AnimKeyFrameCurrent;
 		cp.AnimKeyFrameDuration = this.AnimKeyFrameDuration;
 		cp.AnimKeyFrames = this.AnimKeyFrames;
+		cp.AnimShowPaths = this.AnimShowPaths;
 		cp.AnimPlaying = this.AnimPlaying;
 		cp.AnimPlayers = this.AnimPlayers;
 		cp.AnimBalls = this.AnimBalls;
+		cp.AnimPlayerPaths = this.AnimPlayerPaths;
+		cp.AnimBallPaths = this.AnimBallPaths;
 
 		cp.squareID = this.squareID;
 		cp.squares = this.squares;
@@ -334,6 +340,7 @@ class PitchFutsal {
 
 	animCreate() {
 		this.AnimExists = true;
+		this.AnimShowPaths = true;
 		this._modified();
 	}
 
@@ -420,7 +427,14 @@ class PitchFutsal {
 
 	animStart() {
 		this.AnimPlaying = true;
-		this.AnimKeyFrames.map(kf => kf.animPreCalcSplines());
+		this.AnimPlayerPaths = [];
+		this.AnimBallPaths = [];
+		this.AnimKeyFrames.forEach(kf => {
+			kf.animPreCalcSplines();
+			// prepare paths to show
+			this.AnimPlayerPaths = this.AnimPlayerPaths.concat(kf.animGetActivePlayerPaths());
+			this.AnimBallPaths = this.AnimBallPaths.concat(kf.animGetActiveBallPaths());
+		});
 		this.animFrame(0);	// prepare first frame
 		this._modified();
 	}
@@ -429,6 +443,27 @@ class PitchFutsal {
 		this.AnimPlaying = false;
 		this.AnimPlayers = null;
 		this.AnimBalls = null;
+		this.AnimPlayerPaths = null;
+		this.AnimBallPaths = null;
+		this._modified();
+	}
+
+	AnimAllPlayerPaths() {
+		if (this.AnimPlaying && this.AnimShowPaths) {
+			return this.AnimPlayerPaths;
+		}
+		return null;
+	}
+
+	AnimAllBallPaths() {
+		if (this.AnimPlaying && this.AnimShowPaths) {
+			return this.AnimBallPaths;
+		}
+		return null;
+	}
+
+	animShowPaths(show) {
+		this.AnimShowPaths = show;
 		this._modified();
 	}
 

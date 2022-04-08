@@ -31,6 +31,21 @@ class Line {
 		};
 	}
 
+	clone() {
+		return new Line(
+			this.id,
+			this.color,
+			this.p1.clone(),
+			this.p2.clone(),
+			this.c1.clone(),
+			this.c2.clone(),
+			this.arrowStart,
+			this.arrowEnd,
+			this.dashed,
+			this.isEdit
+		);
+	}
+
 	empty() {
 		return this.p1.equalTo(this.p2) 
 			&& this.p1.equalTo(this.c1)

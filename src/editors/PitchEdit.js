@@ -397,7 +397,7 @@ class PitchEdit extends Component {
 		});
 	}
 
-	renderLines(lines, isPath){
+	renderLines(lines, isPath, forPlayer){
 		if (null === lines) {
 			return null;
 		}
@@ -408,7 +408,7 @@ class PitchEdit extends Component {
 				return null;
 			}
 			return (
-				<LineEdit key={keyPrefix + index.toString()} line={l} isPath={isPath} />
+				<LineEdit key={keyPrefix + index.toString()} line={l} isPath={isPath} forPlayer={forPlayer} />
 			);
 		});
 	}
@@ -440,40 +440,9 @@ class PitchEdit extends Component {
 		return (<rect width={o.width} height={o.height} transform={transform} fill="none" />);
 	}
 
-	generatePicthStyles() {
-		const dm = this.props.drawMode;
-
-		// object colors
-		const colorsEdit = dm.colorOptions.map((col, index) => {
-			return '.ec'+ index +' { fill: '+ col +'; stroke: '+ col +'; }';
-		});
-		// editors default color
-		const colorsEditAll = colorsEdit.concat([
-			'.ec' + dm.editColorIndex  + ' { fill: '+ dm.editColor +'; stroke: '+ dm.editColor +'; }'
-		]);
-
-		// player colors
-		const colorsPlayer = colorsEditAll.concat(
-			dm.colorOptionsPlayer.map((col, index) => {
-				return '.pc'+ index +' { fill: '+ col +'; stroke: '+ col +'; }';
-			})
-		);
-
-		// ball colors
-		const ballColors = colorsPlayer.concat(
-			dm.colorOptionsBall.map((col, index) => {
-				return '.bc'+ index +' { fill: '+ col +'; stroke: white; }';
-			})
-		);
-
-		// extras colors
-		const extrasColors = ballColors.concat([
-			dm.colorOptions.map((col, index) => {
-				return '.ex' + index  + ' { fill: '+ col +'; stroke: '+ col +'; }'
-			})
-		]);
-
-		return extrasColors.concat([
+	generateStyles() {
+		// default styles
+		let styles = [
 			'.bc4 svg { fill: #000000; }',
 			'#texts { font-family: sans-serif; font-size: 10em; cursor: default; user-select: none; }',
 			'.txt0 text { font-size: 0.5em; }',
@@ -496,6 +465,37 @@ class PitchEdit extends Component {
 			'.editTransparent { fill: none; stroke-width: 0; }',
 			'.editCorner { fill: red; stroke-width: 0; stroke-opacity: 1; }',
 			'.transparent { fill-opacity: 50%; stroke-opacity: 50%; }'
+		];
+
+		// build rest of styles
+		const dm = this.props.drawMode;
+		return styles.concat([
+			// object colors
+			dm.colorOptions.map((col, idx) => {
+				return `.ec${idx} { fill: ${col}; stroke: ${col}; }`;
+			}),
+			// editors default color
+			[`.ec${dm.editColorIndex} { fill: ${dm.editColor}; stroke: ${dm.editColor}; }`],
+			// player colors
+			dm.colorOptionsPlayer.map((col, idx) => {
+				return `.pc${idx} { fill: ${col}; stroke: ${col}; }`;
+			}),
+			// player path colors
+			dm.colorOptionsPlayer.map((col, idx) => {
+				return `.ppc${idx} { fill: ${col}; stroke: ${col}; }`;
+			}),
+			// ball colors
+			dm.colorOptionsBall.map((col, idx) => {
+				return `.bc${idx} { fill: ${col}; stroke: white; }`;
+			}),
+			// ball path colors
+			dm.colorOptionsBall.map((col, idx) => {
+				return `.bpc${idx} { fill: ${col}; stroke: ${col}; }`;
+			}),
+			// extras colors
+			dm.colorOptions.map((col, index) => {
+				return `.ex${index} { fill: ${col}; stroke: ${col}; }`;
+			})
 		]);
 	}
 
@@ -516,7 +516,7 @@ class PitchEdit extends Component {
 			<div ref={this._editRef} className={pitchClasses}>
 				<svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox} onContextMenu={this.hContextMenu} onMouseDown={this.hMouseDown} onMouseUp={this.hMouseUp} onMouseMove={this.hMouseMove}>
 					<style>
-						{this.generatePicthStyles()}
+						{this.generateStyles()}
 					</style>
 					<pattern id="goal-net" x="0" y="0" width="20" height="20" stroke="black" patternUnits="userSpaceOnUse">
 						<line x1="0" x2="20" y1="0" y2="20" />
@@ -592,15 +592,17 @@ class PitchEdit extends Component {
 					<g id="squares">{this.renderSquares(this.props.pitch.squares)}</g>
 					<g id="extras">{this.renderExtras(this.props.pitch.extras)}</g>
 					<g id="players" fontSize="50">
-						{this.renderLines(this.props.pitch.playerPathsCurrentKeyFrame(), true)}
+						{this.renderLines(this.props.pitch.playerPathsCurrentKeyFrame(), true, true)}
 						{this.renderPlayers(this.props.pitch.playersPreviousKeyFrame(), false, true)}
 						{this.renderPlayers(this.props.pitch.playersCurrentKeyFrame(), true, false)}
+						{this.renderLines(this.props.pitch.AnimAllPlayerPaths(), true, true)}
 						{this.renderPlayers(this.props.pitch.AnimPlayers, false, false)}
 					</g>
 					<g id="balls">
-						{this.renderLines(this.props.pitch.ballPathsCurrentKeyFrame(), true)}
+						{this.renderLines(this.props.pitch.ballPathsCurrentKeyFrame(), true, false)}
 						{this.renderBalls(this.props.pitch.ballsPreviousKeyFrame(), false, true)}
 						{this.renderBalls(this.props.pitch.ballsCurrentKeyFrame(), true, false)}
+						{this.renderLines(this.props.pitch.AnimAllBallPaths(), true, false)}
 						{this.renderBalls(this.props.pitch.AnimBalls, false, false)}
 					</g>
 					<g id="lines">{this.renderLines(this.props.pitch.lines, false)}</g>
