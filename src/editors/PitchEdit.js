@@ -440,6 +440,15 @@ class PitchEdit extends Component {
 		return (<rect width={o.width} height={o.height} transform={transform} fill="none" />);
 	}
 
+	renderCenterAD(x, y, width, height) {
+		if (null === this.props.centerADURL) {
+			return null;
+		}
+		return (
+			<image x={x} y={y} width={width} height={height} opacity={0.7} href={this.props.centerADURL} />
+		);
+	}
+
 	generateStyles() {
 		// default styles
 		let styles = [
@@ -533,6 +542,7 @@ class PitchEdit extends Component {
 					</g>
 					<g id="pitch" transform={pitchTransform} fill="#0280c6" stroke="white" strokeWidth="8">
 						<rect width="4000" height="2000" />
+						{this.renderCenterAD(1700,700,600,600)}
 						<line x1="2000" x2="2000" y1="0" y2="2000" />
 						<circle r="300" cx="2000" cy="1000" fill="none" />
 						<circle r="12" cx="2000" cy="1000" fill="white" strokeWidth="0" />
@@ -618,12 +628,14 @@ class PitchEdit extends Component {
 
 PitchEdit.defaultProps = {
 	pitch: null,
-	drawMode: null
+	drawMode: null,
+	centerADURL: null
 }
 
 PitchEdit.propTypes = {
 	pitch: PropTypes.instanceOf(PitchFutsal),
-	drawMode: PropTypes.instanceOf(DrawMode)
+	drawMode: PropTypes.instanceOf(DrawMode),
+	centerADURL: PropTypes.string
 }
 
 export default withStyles(styles, { withTheme: true })(PitchEdit);

@@ -450,7 +450,7 @@ class App extends Component {
 						animExists={this.state.pitch.AnimExists}
 						isSignedIn={this.state.isSignedIn}
 					/>
-					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} />
+					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} centerADURL={this.config.pitchCenterADURL} />
 					<SiteLogo logoURL={this.config.siteLogoURL} />
 					<AnimPlayer ref={this.refAnimPlayer} 
 						anchorEl={this.animPlayerAnchorEl}
