@@ -18,10 +18,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { firebaseApp, fbSave, fbLoad, fbLoadShared } from './firebaseSDK';
 import './App.css';
 import './firebaseui-styling.global.css';
+import AppConfigs from './AppConfigs';
+import SiteLogo from './ui/SiteLogo';
 
 class App extends Component {
 	constructor(props) {
 		super(props);
+		//this.config = AppConfigs.default;
+		this.config = AppConfigs.coatchingfutsal;
 		// application Material-UI theme
 		this.appTheme = createTheme();
 		// references
@@ -447,6 +451,7 @@ class App extends Component {
 						isSignedIn={this.state.isSignedIn}
 					/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} />
+					<SiteLogo logoURL={this.config.siteLogoURL} />
 					<AnimPlayer ref={this.refAnimPlayer} 
 						anchorEl={this.animPlayerAnchorEl}
 						keyFramesNo={this.state.pitch.AnimKeyFrames.length}
