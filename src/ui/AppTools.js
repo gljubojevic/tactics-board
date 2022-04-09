@@ -13,6 +13,7 @@ import DrawMenu from './DrawMenu';
 import FullscreenToggle from './FullscreenToggle';
 import AnimControls from './AnimControls';
 import UserAccount from './UserAccount';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -22,9 +23,6 @@ const styles = theme => ({
 });
 
 class AppTools extends Component {
-	//constructor(props) {
-	//	super(props);
-	//}
 
 	renderAnimControls() {
 		if (!this.props.animExists) {
@@ -58,6 +56,11 @@ class AppTools extends Component {
 					{this.renderAnimControls()}
 					<div className={this.props.classes.grow} />
 					<DrawMenu drawMode={this.props.drawMode} extrasCreate={this.props.extrasCreate} />
+					<Tooltip title="Help">
+						<IconButton aria-label="Help" color="inherit" onClick={this.props.showHelp}>
+							<HelpCenterIcon />
+						</IconButton>
+					</Tooltip>
 					<Tooltip title="Share link">
 						<span>
 							<IconButton aria-label="Share link" color="inherit" disabled={!this.props.shareEnabled} onClick={this.props.shareTactics}>
@@ -90,6 +93,7 @@ AppTools.defaultProps = {
 	toggleDrawer: null,
 	shareTactics: null,
 	shareEnabled: false,
+	showHelp: null,
 }
 
 AppTools.propTypes = {
@@ -108,7 +112,8 @@ AppTools.propTypes = {
 	firebaseApp: PropTypes.object,
 	toggleDrawer: PropTypes.func,
 	shareTactics: PropTypes.func,
-	shareEnabled: PropTypes.bool
+	shareEnabled: PropTypes.bool,
+	showHelp: PropTypes.func,
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);

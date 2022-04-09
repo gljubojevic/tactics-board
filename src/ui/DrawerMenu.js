@@ -91,20 +91,20 @@ class DrawerMenu extends Component {
 						<ListItem>
 							<ListItemButton onClick={this.newScheme}>
 								<ListItemIcon><OpenInNew /></ListItemIcon>
-								<ListItemText primary="Reset" />
+								<ListItemText primary="New" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
 						<ListItem>
 							<ListItemButton onClick={this.newAnimation} disabled={this.props.animExists}>
 								<ListItemIcon><MovieCreation /></ListItemIcon>
-								<ListItemText primary="New animation" />
+								<ListItemText primary="Add animation" />
 							</ListItemButton>
 						</ListItem>
 						<ListItem>
 							<ListItemButton onClick={this.deleteAnimation} disabled={!this.props.animExists}>
 								<ListItemIcon><Delete /></ListItemIcon>
-								<ListItemText primary="Delete animation" />
+								<ListItemText primary="Remove animation" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
@@ -117,21 +117,21 @@ class DrawerMenu extends Component {
 						<ListItem>
 							<ListItemButton onClick={this.save} disabled={!this.props.isSignedIn}>
 								<ListItemIcon><Save /></ListItemIcon>
-								<ListItemText primary="Save animation" />
+								<ListItemText primary="Save" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
 						<ListItem>
 							<ListItemButton onClick={this.saveImage}>
 								<ListItemIcon><PhotoCamera /></ListItemIcon>
-								<ListItemText primary="Save screenshot" />
+								<ListItemText primary="Screenshot" />
 							</ListItemButton>
 						</ListItem>
 						<Divider />
 						<ListItem>
 							<ListItemButton onClick={this.colorPaletteEdit}>
 								<ListItemIcon><Palette /></ListItemIcon>
-								<ListItemText primary="Color palette edit" />
+								<ListItemText primary="Color palette" />
 							</ListItemButton>
 						</ListItem>
 					</List>

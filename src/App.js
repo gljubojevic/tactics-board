@@ -20,12 +20,13 @@ import './App.css';
 import './firebaseui-styling.global.css';
 import AppConfigs from './AppConfigs';
 import SiteLogo from './ui/SiteLogo';
+import HelpDialog from './ui/HelpDialog';
 
 class App extends Component {
 	constructor(props) {
 		super(props);
-		//this.config = AppConfigs.default;
-		this.config = AppConfigs.coatchingfutsal;
+		this.config = AppConfigs.default;
+		//this.config = AppConfigs.coatchingfutsal;
 		// application Material-UI theme
 		this.appTheme = createTheme();
 		// references
@@ -38,6 +39,7 @@ class App extends Component {
 		this.refSaveDialog = React.createRef();
 		this.refLoadDialog = React.createRef();
 		this.refShareDialog = React.createRef();
+		this.refHelpDialog = React.createRef();
 		// event handlers
 		this.ToggleDrawer = this.ToggleDrawer.bind(this);
 		this.SaveImage = this.SaveImage.bind(this);
@@ -71,6 +73,7 @@ class App extends Component {
 		this.firebaseSave = this.firebaseSave.bind(this);
 		this.firebaseBrowse = this.firebaseBrowse.bind(this);
 		this.firebaseLoad = this.firebaseLoad.bind(this);
+		this.ShowHelp = this.ShowHelp.bind(this);
 		this.ShareTactics = this.ShareTactics.bind(this);
 
 		// init default state
@@ -409,6 +412,10 @@ class App extends Component {
 		this.refAnimPlayer.current.show();
     }
 
+	ShowHelp() {
+		this.refHelpDialog.current.Show();
+	}
+
 	ShareTactics() {
 		this.refShareDialog.current.Show(
 			this.state.pitch.id,
@@ -438,6 +445,7 @@ class App extends Component {
 						toggleDrawer={this.ToggleDrawer}
 						shareTactics={this.ShareTactics}
 						shareEnabled={this.state.pitch.shareEnabled()}
+						showHelp={this.ShowHelp}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
 						load={this.firebaseBrowse}
@@ -467,6 +475,7 @@ class App extends Component {
 					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
 					<BrowseDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} />
 					<ShareDialog ref={this.refShareDialog} />
+					<HelpDialog ref={this.refHelpDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
 						<MuiAlert elevation={6} variant="filled" onClose={this.SnackbarOnClose} severity={this.state.snackBar.Severity}>{this.state.snackBar.Message}</MuiAlert>
 					</Snackbar>
