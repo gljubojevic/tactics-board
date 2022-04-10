@@ -5,7 +5,7 @@ const AppConfigs = {
 		useFirebase: true,
 	},
 	coatchingfutsal: {
-		siteLogoURL: '/tactics-board/ext/coatching_futsal_logo.png',
+		siteLogoURL: '/tactics-board/ext/cf_logo.png',
 		pitchCenterADURL: '/tactics-board/ext/heineken-logo.png',
 		useFirebase: false,
 	}

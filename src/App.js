@@ -25,8 +25,8 @@ import HelpDialog from './ui/HelpDialog';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.config = AppConfigs.default;
-		//this.config = AppConfigs.coatchingfutsal;
+		//this.config = AppConfigs.default;
+		this.config = AppConfigs.coatchingfutsal;
 		// application Material-UI theme
 		this.appTheme = createTheme();
 		// references
