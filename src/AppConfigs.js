@@ -8,6 +8,8 @@ const AppConfigs = {
 		siteLogoURL: '/tactics-board/ext/cf_logo.png',
 		pitchCenterADURL: '/tactics-board/ext/heineken-logo.png',
 		useFirebase: false,
+		loginURL: '/login',
+		getUserURL: '/get-user'
 	}
 }
 

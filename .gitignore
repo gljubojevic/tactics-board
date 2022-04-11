@@ -10,6 +10,7 @@
 
 # production
 /build
+/servertest/cmd/servertest/tactics-board
 
 # misc
 .DS_Store
