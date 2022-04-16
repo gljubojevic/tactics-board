@@ -445,7 +445,7 @@ class PitchEdit extends Component {
 			return null;
 		}
 		return (
-			<image x={x} y={y} width={width} height={height} opacity={0.7} href={this.props.centerADURL} />
+			<image x={x} y={y} width={width} height={height} opacity={1} href={this.props.centerADURL} />
 		);
 	}
 
