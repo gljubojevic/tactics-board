@@ -60,6 +60,7 @@ class HelpDialog extends Component {
 					<h1>Help</h1>
 					<p>Futsal tactics board is a tool for visualizing practice exercises or game tactics, includes option to make static or animated visualization.</p>
 					<p>Pitch is scaled version of real futsal pitch.</p>
+					<p><b>To use saving and loading options you need to be registered user.</b></p>
 					<h2><MenuIcon />Main menu</h2>
 					<p>Located at upper left corner has following options</p>
 					<ul>

@@ -122,7 +122,7 @@ class DrawerMenu extends Component {
 						</ListItem>
 						<Divider />
 						<ListItem>
-							<ListItemButton onClick={this.saveImage}>
+							<ListItemButton onClick={this.saveImage} disabled={!this.props.isSignedIn}>
 								<ListItemIcon><PhotoCamera /></ListItemIcon>
 								<ListItemText primary="Screenshot" />
 							</ListItemButton>
