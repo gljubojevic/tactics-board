@@ -96,7 +96,7 @@ class App extends Component {
 	componentDidMount() {
 		// mount handler for authentication
 		this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
-			//console.log("Current user",user);
+			console.log("Current user",user);
 			this.setState({
 				isSignedIn: !!user
 			});
@@ -202,6 +202,10 @@ class App extends Component {
 			this.state.pitch.name,
 			this.state.pitch.description
 		);
+	}
+
+	firebaseLogin() {
+		
 	}
 
 	async firebaseSave(name, description) {
