@@ -118,7 +118,7 @@ class PitchFutsal {
 			let player = new Player(
 				ElementIDPrefix.Player + i, number, "", color,
 				new Point(pPos.left + posX, pPos.top),
-				0,
+				90,
 				new Point(pPos.left + posX, pPos.top),
 				number
 			);
