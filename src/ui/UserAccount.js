@@ -9,12 +9,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Logout from '@mui/icons-material/Logout';
-import SignInDialog from './SignInDialog';
+import AppUser from '../AppUser';
 
 class UserAccount extends Component {
 	constructor(props, context) {
 		super(props, context);
-		this._refSignInDialog = React.createRef();
 		this.userOnClick = this.userOnClick.bind(this);
 		this.menuOnClose = this.menuOnClose.bind(this);
 		this.state = {
@@ -24,8 +23,8 @@ class UserAccount extends Component {
 	}
 
 	userOnClick(event) {
-		if (!this.props.isSignedIn) {
-			this._refSignInDialog.current.Show();
+		if (null === this.props.currentUser) {
+			this.props.signIn();
 			return;
 		}
 
@@ -39,11 +38,10 @@ class UserAccount extends Component {
 		// read from "data-value" attribute
 		const selectedValue = event.currentTarget.dataset.value;
 		switch (selectedValue) {
-			case "user-info":
-				break;
 			case "logout":
-				this.props.firebaseApp.auth().signOut();
+				this.props.signOut();
 				break;
+			case "user-info":
 			default:
 				break;
 		}
@@ -58,13 +56,10 @@ class UserAccount extends Component {
 		let avatarIcon = (<AccountCircle />);
 		let avatarSrc = null;
 
-		if (this.props.isSignedIn) {
-			const user = this.props.firebaseApp.auth().currentUser;
-			userName = user.displayName;
-			if (user.photoURL) {
-				avatarSrc = user.photoURL;
-				avatarIcon = null;
-			}
+		if (null !== this.props.currentUser) {
+			userName = this.props.currentUser.displayName;
+			avatarSrc = this.props.currentUser.photoURL;
+			avatarIcon = null;
 		}
 
 		return (
@@ -111,20 +106,21 @@ class UserAccount extends Component {
 						<ListItemIcon><Logout fontSize="small" /></ListItemIcon>Logout
 					</MenuItem>
 				</Menu>
-				<SignInDialog ref={this._refSignInDialog} firebaseApp={this.props.firebaseApp} />
 			</React.Fragment>
 		);
 	}
 }
 
 UserAccount.defaultProps = {
-	firebaseApp: null,
-	isSignedIn: false
+	currentUser: null,
+	signIn: null,
+	signOut: null
 }
 
 UserAccount.propTypes = {
-	firebaseApp: PropTypes.object,
-	isSignedIn: PropTypes.bool
+	currentUser: PropTypes.instanceOf(AppUser),
+	signIn: PropTypes.func,
+	signOut: PropTypes.func
 }
 
 export default UserAccount;

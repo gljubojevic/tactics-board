@@ -14,6 +14,7 @@ import FullscreenToggle from './FullscreenToggle';
 import AnimControls from './AnimControls';
 import UserAccount from './UserAccount';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
+import AppUser from '../AppUser';
 
 // this is for custom position classes
 const styles = theme => ({
@@ -69,7 +70,11 @@ class AppTools extends Component {
 						</span>
 					</Tooltip>
 					<FullscreenToggle />
-					<UserAccount firebaseApp={this.props.firebaseApp} isSignedIn={this.props.isSignedIn} />
+					<UserAccount 
+						currentUser={this.props.currentUser}
+						signIn={this.props.signIn}
+						signOut={this.props.signOut}
+					/>
 				</Toolbar>
 			</AppBar>
 		);
@@ -88,12 +93,13 @@ AppTools.defaultProps = {
 	keyFrameDurationSet: null,
 	animPlayerShow: null,
 	extrasCreate: null,
-	isSignedIn: false,
-	firebaseApp: null,
 	toggleDrawer: null,
 	shareTactics: null,
 	shareEnabled: false,
 	showHelp: null,
+	currentUser: null,
+	signIn: null,
+	signOut: null
 }
 
 AppTools.propTypes = {
@@ -108,12 +114,13 @@ AppTools.propTypes = {
 	keyFrameDurationSet: PropTypes.func,
 	animPlayerShow: PropTypes.func,
 	extrasCreate: PropTypes.func,
-	isSignedIn: PropTypes.bool,
-	firebaseApp: PropTypes.object,
 	toggleDrawer: PropTypes.func,
 	shareTactics: PropTypes.func,
 	shareEnabled: PropTypes.bool,
 	showHelp: PropTypes.func,
+	currentUser: PropTypes.instanceOf(AppUser),
+	signIn: PropTypes.func,
+	signOut: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);

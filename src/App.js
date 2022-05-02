@@ -21,6 +21,8 @@ import './firebaseui-styling.global.css';
 import AppConfigs from './AppConfigs';
 import SiteLogo from './ui/SiteLogo';
 import HelpDialog from './ui/HelpDialog';
+import SignInDialog from './ui/SignInDialog';
+import AppUser from './AppUser';
 
 class App extends Component {
 	constructor(props) {
@@ -40,6 +42,7 @@ class App extends Component {
 		this.refLoadDialog = React.createRef();
 		this.refShareDialog = React.createRef();
 		this.refHelpDialog = React.createRef();
+		this.refSignInDialog = React.createRef();
 		// event handlers
 		this.ToggleDrawer = this.ToggleDrawer.bind(this);
 		this.SaveImage = this.SaveImage.bind(this);
@@ -75,6 +78,8 @@ class App extends Component {
 		this.firebaseLoad = this.firebaseLoad.bind(this);
 		this.ShowHelp = this.ShowHelp.bind(this);
 		this.ShareTactics = this.ShareTactics.bind(this);
+		this.signIn = this.signIn.bind(this);
+		this.signOut = this.signOut.bind(this);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -82,7 +87,7 @@ class App extends Component {
 		this.drawMode = new DrawMode();
 		this.drawMode.onModified = this.OnDrawModeModified;
 		this.state = {
-			isSignedIn: false,
+			currentUser: null,
 			pitch: this.pitch,
 			drawMode: this.drawMode,
 			snackBar: {
@@ -97,8 +102,12 @@ class App extends Component {
 		// mount handler for authentication
 		this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
 			console.log("Current user",user);
+			let currentUser = null;
+			if (!!user) {
+				currentUser = new AppUser(user.displayName, user.photoURL);
+			}
 			this.setState({
-				isSignedIn: !!user
+				currentUser: currentUser
 			});
 		});
 		// load previous board editing
@@ -204,12 +213,29 @@ class App extends Component {
 		);
 	}
 
-	firebaseLogin() {
-		
+	//////////////////////
+	// User management
+	//////////////////////
+
+	signIn() {
+		this.refSignInDialog.current.Show();		
 	}
 
+	get isSignedIn() {
+		return null !== this.state.currentUser;
+	}
+
+	signOut() {
+		firebaseApp.auth().signOut();
+	}
+
+
+	//////////////////////
+	// Firebase functions
+	//////////////////////
+
 	async firebaseSave(name, description) {
-		if (!this.state.isSignedIn) {
+		if (!this.isSignedIn) {
 			console.error("User is not signed in");
 			return
 		}
@@ -237,7 +263,7 @@ class App extends Component {
 	}
 
 	async firebaseLoad(tacticsID) {
-		if (!this.state.isSignedIn) {
+		if (!this.isSignedIn) {
 			console.error("User is not signed in");
 			return
 		}
@@ -246,7 +272,7 @@ class App extends Component {
 	}
 
 	async firebaseLoadShared(tacticsID) {
-		if (!this.state.isSignedIn) {
+		if (!this.isSignedIn) {
 			console.error("User is not signed in");
 			return
 		}
@@ -444,12 +470,13 @@ class App extends Component {
 						animKeyFrameDurationSet={this.AnimKeyFrameDurationSet}
 						animPlayerShow={this.animPlayerShow}
 						extrasCreate={this.ExtrasCreate}
-						isSignedIn={this.state.isSignedIn}
-						firebaseApp={firebaseApp}
 						toggleDrawer={this.ToggleDrawer}
 						shareTactics={this.ShareTactics}
 						shareEnabled={this.state.pitch.shareEnabled()}
 						showHelp={this.ShowHelp}
+						currentUser={this.state.currentUser}
+						signIn={this.signIn}
+						signOut={this.signOut}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
 						load={this.firebaseBrowse}
@@ -460,7 +487,7 @@ class App extends Component {
 						deleteAnimation={this.DeleteAnimation}
 						colorPaletteEdit={this.ColorPaletteEdit}
 						animExists={this.state.pitch.AnimExists}
-						isSignedIn={this.state.isSignedIn}
+						isSignedIn={this.isSignedIn}
 					/>
 					<PitchEdit ref={this.refPitchEdit} pitch={this.state.pitch} drawMode={this.state.drawMode} centerADURL={this.config.pitchCenterADURL} />
 					<SiteLogo logoURL={this.config.siteLogoURL} />
@@ -474,6 +501,7 @@ class App extends Component {
 						animFrame={this.AnimFrame}
 						animShowPaths={this.AnimShowPaths}
 					/>
+					<SignInDialog ref={this.refSignInDialog} firebaseApp={firebaseApp} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
