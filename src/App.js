@@ -73,9 +73,10 @@ class App extends Component {
 		this.LocalStorageDelete = this.LocalStorageDelete.bind(this);
 		this.ColorPaletteEdit = this.ColorPaletteEdit.bind(this);
 		this.showSaveDialog = this.showSaveDialog.bind(this);
-		this.firebaseSave = this.firebaseSave.bind(this);
-		this.firebaseBrowse = this.firebaseBrowse.bind(this);
-		this.firebaseLoad = this.firebaseLoad.bind(this);
+		this.TacticsSave = this.TacticsSave.bind(this);
+		this.TacticsBrowse = this.TacticsBrowse.bind(this);
+		this.TacticsLoad = this.TacticsLoad.bind(this);
+		this.TacticsLoadShared = this.TacticsLoadShared.bind(this);
 		this.ShowHelp = this.ShowHelp.bind(this);
 		this.ShareTactics = this.ShareTactics.bind(this);
 		this.signIn = this.signIn.bind(this);
@@ -213,9 +214,8 @@ class App extends Component {
 		);
 	}
 
-	//////////////////////
+	///////////////////////////////////
 	// User management
-	//////////////////////
 
 	signIn() {
 		this.refSignInDialog.current.Show();		
@@ -229,12 +229,10 @@ class App extends Component {
 		firebaseApp.auth().signOut();
 	}
 
+	///////////////////////////////////
+	// Server related functions
 
-	//////////////////////
-	// Firebase functions
-	//////////////////////
-
-	async firebaseSave(name, description) {
+	async TacticsSave(name, description) {
 		if (!this.isSignedIn) {
 			console.error("User is not signed in");
 			return
@@ -258,11 +256,15 @@ class App extends Component {
 		await fbSave(tactics, thumbnailBlob);
 	}
 
-	firebaseBrowse() {
+	TacticsBrowse() {
+		if (!this.isSignedIn) {
+			console.error("User is not signed in");
+			return
+		}
 		this.refLoadDialog.current.Show();
 	}
 
-	async firebaseLoad(tacticsID) {
+	async TacticsLoad(tacticsID) {
 		if (!this.isSignedIn) {
 			console.error("User is not signed in");
 			return
@@ -271,7 +273,7 @@ class App extends Component {
 		this.editTactics(tactics, true, false);
 	}
 
-	async firebaseLoadShared(tacticsID) {
+	async TacticsLoadShared(tacticsID) {
 		if (!this.isSignedIn) {
 			console.error("User is not signed in");
 			return
@@ -301,6 +303,9 @@ class App extends Component {
 			this.LocalStorageSave();
 		}
 	}
+
+	///////////////////////////////////
+	// LocalStorage related functions
 
 	LocalStorageSave() {
 		console.log("Saving to localStorage.");
@@ -371,6 +376,9 @@ class App extends Component {
 			width, height
 		);
 	}
+
+	///////////////////////////////////
+	// Anim related functions
 
 	AnimCreate() {
 		this.pitch.animCreate();
@@ -479,7 +487,7 @@ class App extends Component {
 						signOut={this.signOut}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
-						load={this.firebaseBrowse}
+						load={this.TacticsBrowse}
 						save={this.showSaveDialog} 
 						saveImage={this.SaveImage} 
 						newScheme={this.NewScheme}
@@ -504,8 +512,8 @@ class App extends Component {
 					<SignInDialog ref={this.refSignInDialog} firebaseApp={firebaseApp} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
-					<SaveDialog ref={this.refSaveDialog} onSave={this.firebaseSave} />
-					<BrowseDialog ref={this.refLoadDialog} onLoad={this.firebaseLoad} />
+					<SaveDialog ref={this.refSaveDialog} onSave={this.TacticsSave} />
+					<BrowseDialog ref={this.refLoadDialog} onLoad={this.TacticsLoad} />
 					<ShareDialog ref={this.refShareDialog} />
 					<HelpDialog ref={this.refHelpDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
