@@ -22,7 +22,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { fbList, fbDelete } from '../firebaseSDK';
 
 class BrowseDialog extends Component {
 	constructor(props, context) {
@@ -55,16 +54,16 @@ class BrowseDialog extends Component {
 			menuAnchorEl: null,
 			menuTacticsID: null
 		});
-		this.firebaseList();
+		this.List();
 	}
 	
 	handleClose() {
 		this.setState({open: false});
 	}
 
-	async firebaseList(){
+	async List(){
 		// docs to show
-		let tactics = await fbList(this.props.perPage, null);
+		let tactics = await this.props.onList(this.props.perPage, null);
 		// set for display
 		this.setState({
 			tactics: tactics,
@@ -80,7 +79,7 @@ class BrowseDialog extends Component {
 		// last doc reference
 		const afterDoc = this.state.tactics[this.state.tactics.length - 1].docRef;
 		// docs to show
-		let tactics = await fbList(this.props.perPage, afterDoc);
+		let tactics = await this.props.onList(this.props.perPage, afterDoc);
 		if (0 === tactics.length) {
 			this.setState({
 				loading: false,
@@ -121,9 +120,8 @@ class BrowseDialog extends Component {
 		const selectedValue = e.currentTarget.dataset.value;
 		switch (selectedValue) {
 			case "delete":
-				//console.log("Delete", this.state.menuTacticsID);
-				await fbDelete(this.state.menuTacticsID);
-				this.firebaseList();
+				await this.props.onDelete(this.state.menuTacticsID);
+				this.List();
 				break;
 			default:
 				break;
@@ -265,12 +263,16 @@ class BrowseDialog extends Component {
 }
 
 BrowseDialog.defaultProps = {
+	onList: null,
 	onLoad: null,
+	onDelete: null,
 	perPage: 6
 }
 
 BrowseDialog.propTypes = {
+	onList: PropTypes.func,
 	onLoad: PropTypes.func,
+	onDelete: PropTypes.func,
 	perPage: PropTypes.number
 }
 

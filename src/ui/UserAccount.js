@@ -34,12 +34,12 @@ class UserAccount extends Component {
 		});
 	}
 
-	menuOnClose(event) {
+	async menuOnClose(event) {
 		// read from "data-value" attribute
 		const selectedValue = event.currentTarget.dataset.value;
 		switch (selectedValue) {
 			case "logout":
-				this.props.signOut();
+				await this.props.signOut();
 				break;
 			case "user-info":
 			default:

@@ -15,14 +15,13 @@ import SaveDialog from './ui/SaveDialog';
 import BrowseDialog from './ui/BrowseDialog';
 import ShareDialog from './ui/ShareDialog';
 import { v4 as uuidv4 } from 'uuid';
-import { firebaseApp, fbSave, fbLoad, fbLoadShared } from './firebaseSDK';
+import { firebaseApp, Server } from './firebaseSDK';
 import './App.css';
 import './firebaseui-styling.global.css';
 import AppConfigs from './AppConfigs';
 import SiteLogo from './ui/SiteLogo';
 import HelpDialog from './ui/HelpDialog';
 import SignInDialog from './ui/SignInDialog';
-import AppUser from './AppUser';
 
 class App extends Component {
 	constructor(props) {
@@ -80,7 +79,9 @@ class App extends Component {
 		this.ShowHelp = this.ShowHelp.bind(this);
 		this.ShareTactics = this.ShareTactics.bind(this);
 		this.signIn = this.signIn.bind(this);
-		this.signOut = this.signOut.bind(this);
+		this.signedInCallback = this.signedInCallback.bind(this);
+
+		this.server = new Server(this.signedInCallback);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -101,22 +102,20 @@ class App extends Component {
 
 	componentDidMount() {
 		// mount handler for authentication
-		this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
-			console.log("Current user",user);
-			let currentUser = null;
-			if (!!user) {
-				currentUser = new AppUser(user.displayName, user.photoURL);
-			}
-			this.setState({
-				currentUser: currentUser
-			});
-		});
+		this.server.UserChangesSubscribe();
 		// load previous board editing
 		this.LocalStorageLoad();
 	}
 
 	componentWillUnmount() {
-		this.unregisterAuthObserver();
+		// unmount handler for authentication
+		this.server.UserChangesUnsubscribe();
+	}
+
+	signedInCallback(currentUser) {
+		this.setState({
+			currentUser: currentUser
+		});
 	}
 
 	DefaultPitch() {
@@ -225,10 +224,6 @@ class App extends Component {
 		return null !== this.state.currentUser;
 	}
 
-	signOut() {
-		firebaseApp.auth().signOut();
-	}
-
 	///////////////////////////////////
 	// Server related functions
 
@@ -252,8 +247,7 @@ class App extends Component {
 			tmbWidth, tmbHeight
 		);
 
-		// save to google firestore
-		await fbSave(tactics, thumbnailBlob);
+		this.server.Save(tactics, thumbnailBlob);
 	}
 
 	TacticsBrowse() {
@@ -269,7 +263,7 @@ class App extends Component {
 			console.error("User is not signed in");
 			return
 		}
-		let tactics = await fbLoad(tacticsID);
+		let tactics = await this.server.Load(tacticsID);
 		this.editTactics(tactics, true, false);
 	}
 
@@ -278,7 +272,7 @@ class App extends Component {
 			console.error("User is not signed in");
 			return
 		}
-		let tactics = await fbLoadShared(tacticsID) 
+		let tactics = await this.server.LoadShared(tacticsID); 
 		// change ID so user can save it as own tactics
 		this.editTactics(tactics, true, true);
 	}
@@ -484,7 +478,7 @@ class App extends Component {
 						showHelp={this.ShowHelp}
 						currentUser={this.state.currentUser}
 						signIn={this.signIn}
-						signOut={this.signOut}
+						signOut={this.server.SignOut}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
 						load={this.TacticsBrowse}
@@ -513,7 +507,7 @@ class App extends Component {
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.TacticsSave} />
-					<BrowseDialog ref={this.refLoadDialog} onLoad={this.TacticsLoad} />
+					<BrowseDialog ref={this.refLoadDialog} onList={this.server.List} onLoad={this.TacticsLoad} onDelete={this.server.Delete} />
 					<ShareDialog ref={this.refShareDialog} />
 					<HelpDialog ref={this.refHelpDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
