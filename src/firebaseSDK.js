@@ -22,28 +22,29 @@ const firebaseConfig = {
 	measurementId: "G-PDXB2VPRL8"
 };
 
-// Initialize Firebase
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-//const analytics = getAnalytics(firebaseApp);
-const firestore = getFirestore();
-const storage = getStorage();
-
-class Server {
+class FirebaseServer {
 	constructor(signedInCallback = null) {
+		// Initialize Firebase
+		this.firebaseApp = firebase.initializeApp(firebaseConfig);
+		//const analytics = getAnalytics(firebaseApp);
+		this.firestore = getFirestore();
+		this.storage = getStorage();
 		this.signedInCallback = signedInCallback;
 	}
 
-	SignIn() {
-
+	get AppInstance() {
+		return this.firebaseApp;
 	}
 
+	SignIn() {}
+
 	async SignOut() {
-		await firebaseApp.auth().signOut();
+		await this.firebaseApp.auth().signOut();
 	}
 
 	UserChangesSubscribe() {
 		// mount handler for authentication
-		this.unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
+		this.unregisterAuthObserver = this.firebaseApp.auth().onAuthStateChanged((user) => {
 			console.log("Current user",user);
 			let currentUser = null;
 			if (!!user) {
@@ -61,7 +62,7 @@ class Server {
 		// docs to show
 		let tacticsList = [];
 
-		const user = firebaseApp.auth().currentUser;
+		const user = this.firebaseApp.auth().currentUser;
 		if (!user) {
 			console.error("User is not signed in");
 			return [null];
@@ -78,7 +79,7 @@ class Server {
 			const q = afterDoc ?
 				// continue for paging
 				query(
-					collection(firestore,userTacticsCollection), 
+					collection(this.firestore, userTacticsCollection), 
 					orderBy("updated", "desc"),
 					startAfter(afterDoc),
 					limit(tacticsPerPage)
@@ -86,7 +87,7 @@ class Server {
 				:
 				// first page
 				query(
-					collection(firestore,userTacticsCollection), 
+					collection(this.firestore, userTacticsCollection), 
 					orderBy("updated", "desc"),
 					limit(tacticsPerPage)
 				)
@@ -120,7 +121,7 @@ class Server {
 		try {
 			for (let i = 0; i < tacticsList.length; i++) {
 				const userTacticsThumbs = userTacticsRoot + "/tactics-thumbs/" + tacticsList[i].id + ".png";
-				const refTmb = refFile(storage, userTacticsThumbs);
+				const refTmb = refFile(this.storage, userTacticsThumbs);
 				tacticsList[i].thumbnail = await getDownloadURL(refTmb);
 			}
 		} catch (error) {
@@ -132,7 +133,7 @@ class Server {
 	}
 
 	async Save(tactics, thumbnailBlob) {
-		const user = firebaseApp.auth().currentUser;
+		const user = this.firebaseApp.auth().currentUser;
 		if (!user) {
 			console.error("User is not signed in");
 			return
@@ -147,7 +148,7 @@ class Server {
 		try {
 			const userCollection = { name: user.displayName };
 			await setDoc(
-				doc(firestore, tacticsCollection, user.uid), 
+				doc(this.firestore, tacticsCollection, user.uid), 
 				userCollection, 
 				{merge:true}
 			);
@@ -161,7 +162,7 @@ class Server {
 		// 2nd store thumbnail
 		try {
 			const userTacticsThumbs = userTacticsRoot + "/tactics-thumbs/" + tactics.id + ".png";
-			const thumbRef = refFile(storage, userTacticsThumbs);
+			const thumbRef = refFile(this.storage, userTacticsThumbs);
 			await uploadBytes(thumbRef, thumbnailBlob);
 		} catch (error) {
 			console.error("Saving user tactics thumbnail", error);
@@ -175,7 +176,7 @@ class Server {
 			// save
 			const userTacticsCollection = userTacticsRoot + "/tactics";
 			await setDoc(
-				doc(firestore, userTacticsCollection, tactics.id), 
+				doc(this.firestore, userTacticsCollection, tactics.id), 
 				tactics
 			);
 		} catch (error) {
@@ -184,7 +185,7 @@ class Server {
 	}
 
 	async Load(tacticsID) {
-		const user = firebaseApp.auth().currentUser;
+		const user = this.firebaseApp.auth().currentUser;
 		if (!user) {
 			console.error("User is not signed in");
 			return
@@ -194,7 +195,7 @@ class Server {
 		try {
 			console.log("Loading user tactics", tacticsID);
 			const userTacticsPath = "user-tactics/" + user.uid + "/tactics/" + tacticsID;
-			const tacticsRef = doc(firestore, userTacticsPath);
+			const tacticsRef = doc(this.firestore, userTacticsPath);
 			const res = await getDoc(tacticsRef);
 	
 			if (!res.exists()) {
@@ -222,7 +223,7 @@ class Server {
 	}
 
 	async LoadShared(tacticsID) {
-		const user = firebaseApp.auth().currentUser;
+		const user = this.firebaseApp.auth().currentUser;
 		if (!user) {
 			console.error("User is not signed in");
 			return
@@ -233,7 +234,7 @@ class Server {
 		let tactics = null;
 		try {
 			// requires index on collection:tactics and field:id
-			const tacticsQuery = query(collectionGroup(firestore, 'tactics'), where('id', '==', tacticsID));
+			const tacticsQuery = query(collectionGroup(this.firestore, 'tactics'), where('id', '==', tacticsID));
 			const querySnapshot = await getDocs(tacticsQuery);
 			querySnapshot.forEach((doc) => {
 				//console.log(doc.id, ' => ', doc.data());
@@ -255,7 +256,7 @@ class Server {
 	}
 
 	async Delete(tacticsID) {
-		const user = firebaseApp.auth().currentUser;
+		const user = this.firebaseApp.auth().currentUser;
 		if (!user) {
 			console.error("User is not signed in");
 			return
@@ -269,7 +270,7 @@ class Server {
 		// 1st delete document
 		try {
 			const userTacticsPath = userTacticsRoot + "/tactics/" + tacticsID;
-			const tacticsRef = doc(firestore, userTacticsPath);
+			const tacticsRef = doc(this.firestore, userTacticsPath);
 			await deleteDoc(tacticsRef);
 		} catch (error) {
 			console.error("Deleting user tactics", error);
@@ -278,7 +279,7 @@ class Server {
 		// 2nd delete thumbnail
 		try {
 			const userTacticsThumb = userTacticsRoot + "/tactics-thumbs/" + tacticsID + ".png";
-			const thumbRef = refFile(storage, userTacticsThumb);
+			const thumbRef = refFile(this.storage, userTacticsThumb);
 			await deleteObject(thumbRef);
 		} catch (error) {
 			console.error("Deleting user tactics thumbnail", error);
@@ -286,4 +287,4 @@ class Server {
 	}
 }
 
-export { firebaseApp, Server }
+export default FirebaseServer;

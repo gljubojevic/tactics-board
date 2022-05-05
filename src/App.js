@@ -15,7 +15,7 @@ import SaveDialog from './ui/SaveDialog';
 import BrowseDialog from './ui/BrowseDialog';
 import ShareDialog from './ui/ShareDialog';
 import { v4 as uuidv4 } from 'uuid';
-import { firebaseApp, Server } from './firebaseSDK';
+import FirebaseServer from './firebaseSDK';
 import './App.css';
 import './firebaseui-styling.global.css';
 import AppConfigs from './AppConfigs';
@@ -72,6 +72,8 @@ class App extends Component {
 		this.LocalStorageDelete = this.LocalStorageDelete.bind(this);
 		this.ColorPaletteEdit = this.ColorPaletteEdit.bind(this);
 		this.showSaveDialog = this.showSaveDialog.bind(this);
+		this.TacticsList = this.TacticsList.bind(this);
+		this.TacticsDelete = this.TacticsDelete.bind(this);
 		this.TacticsSave = this.TacticsSave.bind(this);
 		this.TacticsBrowse = this.TacticsBrowse.bind(this);
 		this.TacticsLoad = this.TacticsLoad.bind(this);
@@ -79,9 +81,10 @@ class App extends Component {
 		this.ShowHelp = this.ShowHelp.bind(this);
 		this.ShareTactics = this.ShareTactics.bind(this);
 		this.signIn = this.signIn.bind(this);
+		this.signOut = this.signOut.bind(this);
 		this.signedInCallback = this.signedInCallback.bind(this);
 
-		this.server = new Server(this.signedInCallback);
+		this.server = new FirebaseServer(this.signedInCallback);
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -220,12 +223,24 @@ class App extends Component {
 		this.refSignInDialog.current.Show();		
 	}
 
+	async signOut() {
+		await this.server.SignOut();
+	}
+
 	get isSignedIn() {
 		return null !== this.state.currentUser;
 	}
 
 	///////////////////////////////////
 	// Server related functions
+
+	async TacticsList(tacticsPerPage, afterDoc) {
+		return await this.server.List(tacticsPerPage, afterDoc)
+	}
+
+	async TacticsDelete(tacticsID) {
+		await this.server.Delete(tacticsID) 
+	}
 
 	async TacticsSave(name, description) {
 		if (!this.isSignedIn) {
@@ -478,7 +493,7 @@ class App extends Component {
 						showHelp={this.ShowHelp}
 						currentUser={this.state.currentUser}
 						signIn={this.signIn}
-						signOut={this.server.SignOut}
+						signOut={this.signOut}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
 						load={this.TacticsBrowse}
@@ -503,11 +518,11 @@ class App extends Component {
 						animFrame={this.AnimFrame}
 						animShowPaths={this.AnimShowPaths}
 					/>
-					<SignInDialog ref={this.refSignInDialog} firebaseApp={firebaseApp} />
+					<SignInDialog ref={this.refSignInDialog} firebaseApp={this.server.AppInstance} />
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.TacticsSave} />
-					<BrowseDialog ref={this.refLoadDialog} onList={this.server.List} onLoad={this.TacticsLoad} onDelete={this.server.Delete} />
+					<BrowseDialog ref={this.refLoadDialog} onList={this.TacticsList} onLoad={this.TacticsLoad} onDelete={this.TacticsDelete} />
 					<ShareDialog ref={this.refShareDialog} />
 					<HelpDialog ref={this.refHelpDialog} />
 					<Snackbar open={this.state.snackBar.Show} anchorOrigin={{ vertical: 'bottom', horizontal: 'center'}} autoHideDuration={2000} onClose={this.SnackbarOnClose}>
