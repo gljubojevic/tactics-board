@@ -1,15 +1,21 @@
 const AppConfigs = {
 	default: {
+		useFirebase: true,
 		siteLogoURL: null,
 		pitchCenterADURL: null,
-		useFirebase: true,
 	},
 	coatchingfutsal: {
+		useFirebase: false,
 		siteLogoURL: '/tactics-board/ext/cf_logo.png',
 		pitchCenterADURL: '/tactics-board/ext/heineken-logo.png',
-		useFirebase: false,
-		loginURL: '/login',
-		getUserURL: '/get-user'
+		signInURL: '/login',
+		signOutURL: '/logout',
+		getUserURL: '/get-user',
+		saveURL: '/tactics-save',
+		loadURL: '/tactics-load',
+		loadSharedURL: '/tactics-load-shared',
+		listURL: '/tactics-list',
+		deleteURL: '/tactics-delete'
 	}
 }
 

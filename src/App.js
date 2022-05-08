@@ -16,6 +16,7 @@ import BrowseDialog from './ui/BrowseDialog';
 import ShareDialog from './ui/ShareDialog';
 import { v4 as uuidv4 } from 'uuid';
 import FirebaseServer from './firebaseSDK';
+import CoatchingfutsalServer from './coatchingfutsalSDK';
 import './App.css';
 import './firebaseui-styling.global.css';
 import AppConfigs from './AppConfigs';
@@ -84,7 +85,21 @@ class App extends Component {
 		this.signOut = this.signOut.bind(this);
 		this.signedInCallback = this.signedInCallback.bind(this);
 
-		this.server = new FirebaseServer(this.signedInCallback);
+		if (this.config.useFirebase) {
+			this.server = new FirebaseServer(this.signedInCallback);
+		} else {
+			this.server = new CoatchingfutsalServer(
+				this.config.signInURL,
+				this.config.signOutURL,
+				this.config.getUserURL,
+				this.signedInCallback,
+				this.config.saveURL,
+				this.config.loadURL,
+				this.config.loadSharedURL,
+				this.config.listURL,
+				this.config.deleteURL,
+			);
+		}
 
 		// init default state
 		this.pitch = this.DefaultPitch();
@@ -220,7 +235,11 @@ class App extends Component {
 	// User management
 
 	signIn() {
-		this.refSignInDialog.current.Show();		
+		if (this.config.useFirebase) {
+			this.refSignInDialog.current.Show();		
+		} else {
+			this.server.SignIn();
+		}
 	}
 
 	async signOut() {
@@ -471,6 +490,15 @@ class App extends Component {
 		);
 	}
 
+	renderSignIn() {
+		if (this.config.useFirebase) {
+			return (
+				<SignInDialog ref={this.refSignInDialog} firebaseApp={this.server.AppInstance} />
+			);
+		}
+		return null;
+	}
+
 	render() {
 		return (
 			<StyledEngineProvider injectFirst>
@@ -518,7 +546,7 @@ class App extends Component {
 						animFrame={this.AnimFrame}
 						animShowPaths={this.AnimShowPaths}
 					/>
-					<SignInDialog ref={this.refSignInDialog} firebaseApp={this.server.AppInstance} />
+					{this.renderSignIn()}
 					<ConfirmDialog ref={this.refConfirmDialog} />
 					<PaletteEditorDialog ref={this.refPaletteEditorDialog} drawMode={this.state.drawMode} />
 					<SaveDialog ref={this.refSaveDialog} onSave={this.TacticsSave} />
