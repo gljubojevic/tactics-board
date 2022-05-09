@@ -8,6 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"sort"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -35,14 +38,25 @@ var sessionID string
 
 // some details for manipulation
 type TacticDetails struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Decription string `json:"description"`
+	ID          string    `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Created     time.Time `json:"created"`
+	Updated     time.Time `json:"updated"`
+	DocRef      string    `json:"docRef"`
+	Thumbnail   string    `json:"thumbnail"`
 }
 
 func main() {
 	fmt.Println("Starting server")
 	defer fmt.Println("Stopped server")
+
+	// Create the uploads folder if it doesn't already exist
+	err := os.MkdirAll("./uploads", os.ModePerm)
+	if err != nil {
+		fmt.Printf("error %v\n", err)
+		return
+	}
 
 	// Handle embedded, must be in folder below command folder
 	//http.Handle("/tactics-board/", http.StripPrefix("/tactics-board/", http.FileServer(http.FS(content))))
@@ -52,14 +66,18 @@ func main() {
 	// Handle direct from build folder
 	http.Handle("/tactics-board/", http.StripPrefix("/tactics-board", http.FileServer(http.Dir("../../../build"))))
 
+	// Handle uploaded files from uploads folder
+	http.Handle("/uploads/", http.StripPrefix("/uploads", http.FileServer(http.Dir("./uploads"))))
+
 	// emulate routes for tactics board
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/get-user", getUser)
 	http.HandleFunc("/tactics-save", tacticsSave)
+	http.HandleFunc("/tactics-list", tacticsList)
 
 	// start server same as npm
-	err := http.ListenAndServe(":3000", nil)
+	err = http.ListenAndServe(":3000", nil)
 	if nil != err {
 		fmt.Printf("error %v\n", err)
 	}
@@ -182,14 +200,7 @@ func tacticsSave(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Create the uploads folder if it doesn't already exist
-	err := os.MkdirAll("./uploads", os.ModePerm)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	err = req.ParseMultipartForm(1024 * 500)
+	err := req.ParseMultipartForm(1024 * 500)
 	if nil != err {
 		fmt.Printf("tactics-save error %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -239,6 +250,104 @@ func tacticsSave(w http.ResponseWriter, req *http.Request) {
 	_, err = io.Copy(dst, tmb)
 	if err != nil {
 		fmt.Printf("tactics-save error saving tactics thumbnail %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func tacticsList(w http.ResponseWriter, req *http.Request) {
+	fmt.Printf("tactics-list\n")
+	if !isLoggedIn(w, req) {
+		return
+	}
+
+	// optional param
+	afterID := req.URL.Query().Get("after")
+
+	// required per page
+	sPerPage := req.URL.Query().Get("perPage")
+	if sPerPage == "" {
+		fmt.Printf("tactics-list error missing perPage param\n")
+		http.Error(w, "tactics-list error missing perPage param", http.StatusInternalServerError)
+		return
+	}
+
+	perPage, err := strconv.Atoi(sPerPage)
+	if err != nil {
+		fmt.Printf("tactics-list error invalid perPage param %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	files, err := ioutil.ReadDir("./uploads")
+	if err != nil {
+		fmt.Printf("tactics-list error reading uploads folder %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	allTactics := make([]*TacticDetails, 0)
+
+	// all tactics list
+	for _, f := range files {
+		if !strings.HasSuffix(f.Name(), ".json") {
+			continue
+		}
+		fmt.Printf("tactics-list reading %v\n", f.Name())
+		tdta, err := ioutil.ReadFile("./uploads/" + f.Name())
+		if err != nil {
+			fmt.Printf("tactics-list error reading uploads file %v\n", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		tactics := TacticDetails{}
+		err = json.Unmarshal(tdta, &tactics)
+		if err != nil {
+			fmt.Printf("tactics-list error reading uploads file %v\n", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// set tumbnail path and ref
+		tactics.Thumbnail = "/uploads/" + tactics.ID + ".png"
+		tactics.DocRef = tactics.ID
+		allTactics = append(allTactics, &tactics)
+	}
+
+	// sort
+	sort.Slice(allTactics, func(i, j int) bool {
+		return allTactics[i].Updated.After(allTactics[j].Updated)
+	})
+
+	idx := 0
+	if "" != afterID {
+		// find index to start from
+		for i := 0; i < len(allTactics); i++ {
+			if allTactics[i].ID == afterID {
+				idx = i + 1
+				break
+			}
+		}
+	}
+
+	idxEnd := idx + perPage
+	if idxEnd >= len(allTactics) {
+		idxEnd = len(allTactics)
+	}
+	showTactics := allTactics[idx:idxEnd]
+
+	JSON, err := json.Marshal(showTactics)
+	if err != nil {
+		fmt.Printf("tactics-list error marshal tactics %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(JSON)
+	if err != nil {
+		fmt.Printf("tactics-list error respond tactics %v\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

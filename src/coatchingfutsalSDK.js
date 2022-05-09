@@ -82,7 +82,26 @@ class CoatchingfutsalServer {
 	}
 
 	async List(tacticsPerPage, afterDoc) {
-		let tacticsList = [];
+		//console.log("listing tactics");
+		const l = document.location;
+		let url = l.protocol + '//' + l.host + this.listURL + "?perPage=" + tacticsPerPage;
+		if (afterDoc && afterDoc.length > 0) {
+			url += "&after=" + afterDoc
+		}
+
+		let tacticsList = await fetch(url, {
+			mode:"same-origin",
+			cache:"no-cache",
+			redirect:"error"
+		})
+		.then(rsp => {
+			//console.log("list tactics response", rsp);
+			if (rsp.status == 200) {
+				return rsp.json()
+			}
+			return [];
+		})
+		.catch(error => console.error(error));
 		return tacticsList;
 	}
 
@@ -102,7 +121,7 @@ class CoatchingfutsalServer {
 			body: formData
 		})
 		.then(rsp => {
-			console.log("saving tactics response", rsp);
+			//console.log("saving tactics response", rsp);
 			return rsp.status;
 		})
 		.catch(error => console.error(error));
