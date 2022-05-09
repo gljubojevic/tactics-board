@@ -128,11 +128,45 @@ class CoatchingfutsalServer {
 	}
 
 	async Load(tacticsID) {
-		return null;
+		//console.log("Loading tactics");
+		const l = document.location;
+		let url = l.protocol + '//' + l.host + this.loadURL + "?t=" + tacticsID;
+
+		const tactics = await fetch(url, {
+			mode:"same-origin",
+			cache:"no-cache",
+			redirect:"error"
+		})
+		.then(rsp => {
+			//console.log("Loading tactics response", rsp);
+			if (rsp.status == 200) {
+				return rsp.json()
+			}
+			return null;
+		})
+		.catch(error => console.error(error));
+		return tactics;
 	}
 
 	async LoadShared(tacticsID) {
-		return null;
+		//console.log("Loading shared tactics");
+		const l = document.location;
+		let url = l.protocol + '//' + l.host + this.loadSharedURL + "?t=" + tacticsID;
+
+		const tactics = await fetch(url, {
+			mode:"same-origin",
+			cache:"no-cache",
+			redirect:"error"
+		})
+		.then(rsp => {
+			//console.log("Loading shared tactics response", rsp);
+			if (rsp.status == 200) {
+				return rsp.json()
+			}
+			return null;
+		})
+		.catch(error => console.error(error));
+		return tactics;
 	}
 
 	async Delete(tacticsID) {

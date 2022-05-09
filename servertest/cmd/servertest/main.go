@@ -75,6 +75,8 @@ func main() {
 	http.HandleFunc("/get-user", getUser)
 	http.HandleFunc("/tactics-save", tacticsSave)
 	http.HandleFunc("/tactics-list", tacticsList)
+	http.HandleFunc("/tactics-load", tacticsLoad)
+	http.HandleFunc("/tactics-load-shared", tacticsLoad)
 
 	// start server same as npm
 	err = http.ListenAndServe(":3000", nil)
@@ -348,6 +350,37 @@ func tacticsList(w http.ResponseWriter, req *http.Request) {
 	_, err = w.Write(JSON)
 	if err != nil {
 		fmt.Printf("tactics-list error respond tactics %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func tacticsLoad(w http.ResponseWriter, req *http.Request) {
+	fmt.Printf("tactics-load\n")
+	if !isLoggedIn(w, req) {
+		return
+	}
+
+	id := req.URL.Query().Get("t")
+	if id == "" {
+		fmt.Printf("tactics-load error missing t param\n")
+		http.Error(w, "tactics-load error missing t param", http.StatusInternalServerError)
+		return
+	}
+
+	fname := id + ".json"
+	fmt.Printf("tactics-load reading %v\n", id)
+	JSON, err := ioutil.ReadFile("./uploads/" + fname)
+	if err != nil {
+		fmt.Printf("tactics-load error reading file %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(JSON)
+	if err != nil {
+		fmt.Printf("tactics-load error %v\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
