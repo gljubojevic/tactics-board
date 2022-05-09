@@ -11,6 +11,7 @@
 # production
 /build
 /servertest/cmd/servertest/tactics-board
+/servertest/cmd/servertest/uploads
 
 # misc
 .DS_Store

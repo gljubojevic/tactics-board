@@ -31,7 +31,7 @@ class CoatchingfutsalServer {
 	signInOutRedirect(operation, goToURL){
 		const l = document.location;
 		let returnURL = l.href;
-		let url = l.protocol + '//' + l.host + goToURL + '?rurl=' + encodeURIComponent(returnURL) 
+		let url = l.protocol + '//' + l.host + goToURL + '?rurl=' + encodeURIComponent(returnURL);
 		console.log(operation, l, returnURL, url);
 		document.location = url;
 	}
@@ -47,7 +47,7 @@ class CoatchingfutsalServer {
 	async getUser(){
 		//console.log("getting user info");
 		const l = document.location;
-		let url = l.protocol + '//' + l.host + this.getUserURL
+		let url = l.protocol + '//' + l.host + this.getUserURL;
 		const response = await fetch(url, {
 			mode:"same-origin",
 			cache:"no-cache",
@@ -87,6 +87,25 @@ class CoatchingfutsalServer {
 	}
 
 	async Save(tactics, thumbnailBlob) {
+		//console.log("saving tactics");
+		const l = document.location;
+		let url = l.protocol + '//' + l.host + this.saveURL;
+
+		const formData = new FormData();
+		formData.append("tactics", JSON.stringify(tactics));
+		formData.append("thumbnail", thumbnailBlob, tactics.id + '.png');
+		await fetch(url, {
+			method: "POST",
+			mode:"same-origin",
+			cache:"no-cache",
+			redirect:"error",
+			body: formData
+		})
+		.then(rsp => {
+			console.log("saving tactics response", rsp);
+			return rsp.status;
+		})
+		.catch(error => console.error(error));
 	}
 
 	async Load(tacticsID) {

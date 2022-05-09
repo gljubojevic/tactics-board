@@ -4,7 +4,10 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -30,6 +33,13 @@ const session_cookie_name = "tactics-session"
 var loggedUser *UserData
 var sessionID string
 
+// some details for manipulation
+type TacticDetails struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Decription string `json:"description"`
+}
+
 func main() {
 	fmt.Println("Starting server")
 	defer fmt.Println("Stopped server")
@@ -46,6 +56,7 @@ func main() {
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/get-user", getUser)
+	http.HandleFunc("/tactics-save", tacticsSave)
 
 	// start server same as npm
 	err := http.ListenAndServe(":3000", nil)
@@ -127,18 +138,26 @@ func logout(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, returnURL, http.StatusFound)
 }
 
-func getUser(w http.ResponseWriter, req *http.Request) {
-	fmt.Printf("get-user\n")
+func isLoggedIn(w http.ResponseWriter, req *http.Request) bool {
 	sessionCookie, err := req.Cookie(session_cookie_name)
 	if err != nil {
 		fmt.Printf("get-user error %v\n", err)
 		w.WriteHeader(http.StatusForbidden)
-		return
+		return false
 	}
 
 	if sessionCookie.Value != sessionID {
 		fmt.Printf("get-user error invalid session %v need %v\n", sessionCookie.Value, sessionID)
 		w.WriteHeader(http.StatusForbidden)
+		return false
+	}
+	return true
+}
+
+func getUser(w http.ResponseWriter, req *http.Request) {
+	fmt.Printf("get-user\n")
+	if !isLoggedIn(w, req) {
+		return
 	}
 
 	JSON, err := json.Marshal(loggedUser)
@@ -153,6 +172,74 @@ func getUser(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Printf("get-user error %v\n", err)
 		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+}
+
+func tacticsSave(w http.ResponseWriter, req *http.Request) {
+	fmt.Printf("tactics-save\n")
+	if !isLoggedIn(w, req) {
+		return
+	}
+
+	// Create the uploads folder if it doesn't already exist
+	err := os.MkdirAll("./uploads", os.ModePerm)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = req.ParseMultipartForm(1024 * 500)
+	if nil != err {
+		fmt.Printf("tactics-save error %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if !req.Form.Has("tactics") {
+		fmt.Printf("tactics-save error missing tactics data\n")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	tacticsDetails := TacticDetails{}
+	tacticsJSON := req.Form.Get("tactics")
+	err = json.Unmarshal([]byte(tacticsJSON), &tacticsDetails)
+	if err != nil {
+		fmt.Printf("tactics-save error unmarshal tactics %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = ioutil.WriteFile("./uploads/"+tacticsDetails.ID+".json", []byte(tacticsJSON), 0644)
+	if err != nil {
+		fmt.Printf("tactics-save error saving tactics %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	tmb, hdr, err := req.FormFile("thumbnail")
+	if nil != err {
+		fmt.Printf("tactics-save error missing tactics thumbnail\n")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	defer tmb.Close()
+
+	// Create a new file in the uploads directory
+	dst, err := os.Create(fmt.Sprintf("./uploads/%s", hdr.Filename))
+	if err != nil {
+		fmt.Printf("tactics-save error saving tactics thumbnail %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	// Copy the uploaded file to the filesystem
+	// at the specified destination
+	_, err = io.Copy(dst, tmb)
+	if err != nil {
+		fmt.Printf("tactics-save error saving tactics thumbnail %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
