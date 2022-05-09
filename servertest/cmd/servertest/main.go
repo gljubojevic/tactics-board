@@ -77,6 +77,7 @@ func main() {
 	http.HandleFunc("/tactics-list", tacticsList)
 	http.HandleFunc("/tactics-load", tacticsLoad)
 	http.HandleFunc("/tactics-load-shared", tacticsLoad)
+	http.HandleFunc("/tactics-delete", tacticsDelete)
 
 	// start server same as npm
 	err = http.ListenAndServe(":3000", nil)
@@ -381,6 +382,38 @@ func tacticsLoad(w http.ResponseWriter, req *http.Request) {
 	_, err = w.Write(JSON)
 	if err != nil {
 		fmt.Printf("tactics-load error %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func tacticsDelete(w http.ResponseWriter, req *http.Request) {
+	fmt.Printf("tactics-delete\n")
+	if !isLoggedIn(w, req) {
+		return
+	}
+
+	id := req.URL.Query().Get("t")
+	if id == "" {
+		fmt.Printf("tactics-delete error missing t param\n")
+		http.Error(w, "tactics-delete error missing t param", http.StatusInternalServerError)
+		return
+	}
+
+	fname := id + ".json"
+	fmt.Printf("tactics-delete %v\n", fname)
+	err := os.Remove("./uploads/" + fname)
+	if err != nil {
+		fmt.Printf("tactics-delete error deleting file %v\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fname = id + ".png"
+	fmt.Printf("tactics-delete %v\n", fname)
+	err = os.Remove("./uploads/" + fname)
+	if err != nil {
+		fmt.Printf("tactics-delete error deleting file %v\n", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

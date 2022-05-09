@@ -170,6 +170,19 @@ class CoatchingfutsalServer {
 	}
 
 	async Delete(tacticsID) {
+		//console.log("deleting tactics");
+		const l = document.location;
+		let url = l.protocol + '//' + l.host + this.deleteURL + "?t=" + tacticsID;
+
+		await fetch(url, {
+			mode:"same-origin",
+			cache:"no-cache",
+			redirect:"error"
+		})
+		.then(rsp => {
+			console.log("Deleting tactics response", rsp);
+		})
+		.catch(error => console.error(error));
 	}
 }
 
