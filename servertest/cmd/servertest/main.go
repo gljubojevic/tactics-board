@@ -70,9 +70,9 @@ func main() {
 	http.Handle("/uploads/", http.StripPrefix("/uploads", http.FileServer(http.Dir("./uploads"))))
 
 	// emulate routes for tactics board
-	http.HandleFunc("/login", login)
-	http.HandleFunc("/logout", logout)
-	http.HandleFunc("/get-user", getUser)
+	http.HandleFunc("/Account/LoginRegister", login)
+	http.HandleFunc("/Account/Logout", logout)
+	http.HandleFunc("/Account/get-user", getUser)
 	http.HandleFunc("/tactics-save", tacticsSave)
 	http.HandleFunc("/tactics-list", tacticsList)
 	http.HandleFunc("/tactics-load", tacticsLoad)
