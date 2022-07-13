@@ -28,15 +28,34 @@ class CoatchingfutsalServer {
 		return null;
 	}
 
-	signInOutRedirect(operation, goToURL){
+	async signInOutRedirect(operation, goToURL){
 		const l = document.location;
 		let returnURL = l.href;
 		let url = l.protocol + '//' + l.host + goToURL + '?rurl=' + encodeURIComponent(returnURL);
 		console.log(operation, l, returnURL, url);
-		document.location = url;
+		if (operation === "SignIn") {
+			document.location = url;
+			return;
+		}
+
+		// logout is post
+		await fetch(url, {
+			method: "POST",
+			mode:"same-origin",
+			cache:"no-cache",
+			//redirect:"error",
+		})
+		.then(rsp => {
+			if (rsp.redirected) {
+				document.location = rsp.url;
+				return;
+			}
+			console.log(rsp);
+		})
+		.catch(error => console.error(error));
 	}
 
-	SignIn() {
+	async SignIn() {
 		this.signInOutRedirect("SignIn", this.signInURL);
 	}
 

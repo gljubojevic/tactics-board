@@ -9,7 +9,7 @@ const AppConfigs = {
 		siteLogoURL: '/tactics-board/ext/cf_logo.png',
 		pitchCenterADURL: '/tactics-board/ext/heineken-logo.png',
 		signInURL: '/Account/LoginRegister',
-		signOutURL: '/Account/Logout',
+		signOutURL: '/Account/LogOff',
 		getUserURL: '/Account/get-user',
 		saveURL: '/tactics-save',
 		loadURL: '/tactics-load',

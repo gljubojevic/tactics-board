@@ -71,7 +71,7 @@ func main() {
 
 	// emulate routes for tactics board
 	http.HandleFunc("/Account/LoginRegister", login)
-	http.HandleFunc("/Account/Logout", logout)
+	http.HandleFunc("/Account/LogOff", logout)
 	http.HandleFunc("/Account/get-user", getUser)
 	http.HandleFunc("/tactics-save", tacticsSave)
 	http.HandleFunc("/tactics-list", tacticsList)
@@ -135,7 +135,11 @@ func login(w http.ResponseWriter, req *http.Request) {
 }
 
 func logout(w http.ResponseWriter, req *http.Request) {
-	fmt.Printf("logout\n")
+	fmt.Printf("logout %s\n", req.Method)
+	if req.Method != "POST" {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
 	sessionID = ""
 	loggedUser = nil
 	returnURL := req.URL.Query()["rurl"][0]
