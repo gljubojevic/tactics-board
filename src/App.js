@@ -134,6 +134,10 @@ class App extends Component {
 		this.setState({
 			currentUser: currentUser
 		});
+		// load when param is present
+		if (this.LoadUsingUrlParam()) {
+			return;
+		}
 	}
 
 	DefaultPitch() {
@@ -229,6 +233,29 @@ class App extends Component {
 			this.state.pitch.name,
 			this.state.pitch.description
 		);
+	}
+
+	///////////////////////////////////
+	// url loading or loading shared
+
+	async LoadUsingUrlParam() {
+		let l = document.location;
+		let params = new URLSearchParams(document.location.search);
+		let t = params.get("t");
+		if (null !== t) {
+			await this.TacticsLoad(t);
+			// when loaded redirect without param
+			document.location = l.protocol + '//' + l.host + l.pathname;
+			return true;
+		}
+		let ts = params.get("ts");
+		if (null !== ts) {
+			await this.TacticsLoadShared(ts);
+			// when loaded redirect without param
+			document.location = l.protocol + '//' + l.host + l.pathname;
+			return true;
+		}
+		return false;
 	}
 
 	///////////////////////////////////
