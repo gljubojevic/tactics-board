@@ -26,22 +26,23 @@ class CoatchingfutsalServer {
 		return null;
 	}
 
-	async signInOutRedirect(operation, goToURL){
+	async SignIn() {
 		const l = document.location;
 		let returnURL = l.href;
-		let url = l.protocol + '//' + l.host + goToURL + '?rurl=' + encodeURIComponent(returnURL);
-		console.log(operation, l, returnURL, url);
-		if (operation === "SignIn") {
-			document.location = url;
-			return;
-		}
+		let url = l.protocol + '//' + l.host + this.signInURL + '?rurl=' + encodeURIComponent(returnURL);
+		//console.log("SignIn", l, returnURL, url);
+		document.location = url;
+	}
 
-		// logout is post
+	async SignOut() {
+		const l = document.location;
+		let returnURL = l.href;
+		let url = l.protocol + '//' + l.host + this.signOutURL + '?rurl=' + encodeURIComponent(returnURL);
+		//console.log("SignOut", l, returnURL, url);
 		await fetch(url, {
 			method: "POST",
 			mode:"same-origin",
 			cache:"no-cache",
-			//redirect:"error",
 		})
 		.then(rsp => {
 			if (rsp.redirected) {
@@ -51,14 +52,6 @@ class CoatchingfutsalServer {
 			console.log(rsp);
 		})
 		.catch(error => console.error(error));
-	}
-
-	async SignIn() {
-		this.signInOutRedirect("SignIn", this.signInURL);
-	}
-
-	async SignOut() {
-		this.signInOutRedirect("SignOut", this.signOutURL);
 	}
 
 	async getUser(){
@@ -192,6 +185,7 @@ class CoatchingfutsalServer {
 		let url = l.protocol + '//' + l.host + this.deleteURL + "?t=" + tacticsID;
 
 		await fetch(url, {
+			method: "POST",
 			mode:"same-origin",
 			cache:"no-cache",
 			redirect:"error"

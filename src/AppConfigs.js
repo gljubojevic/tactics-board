@@ -10,12 +10,12 @@ const AppConfigs = {
 		pitchCenterADURL: '/tactics-board/ext/heineken-logo.png',
 		signInURL: '/Account/LoginRegister',
 		signOutURL: '/Account/LogOff',
-		getUserURL: '/Account/get-user',
-		saveURL: '/tactics-save',
-		loadURL: '/tactics-load',
-		loadSharedURL: '/tactics-load-shared',
-		listURL: '/tactics-list',
-		deleteURL: '/tactics-delete'
+		getUserURL: '/Account/GetUser',
+		saveURL: '/TacticsBoard/SaveTactic',
+		loadURL: '/TacticsBoard/TacticsLoad',
+		loadSharedURL: '/TacticsBoard/TacticsLoadShared',
+		listURL: '/TacticsBoard/GetTacticsList',
+		deleteURL: '/TacticsBoard/DeleteTactic'
 	}
 }
 

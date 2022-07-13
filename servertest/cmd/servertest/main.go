@@ -72,12 +72,12 @@ func main() {
 	// emulate routes for tactics board
 	http.HandleFunc("/Account/LoginRegister", login)
 	http.HandleFunc("/Account/LogOff", logout)
-	http.HandleFunc("/Account/get-user", getUser)
-	http.HandleFunc("/tactics-save", tacticsSave)
-	http.HandleFunc("/tactics-list", tacticsList)
-	http.HandleFunc("/tactics-load", tacticsLoad)
-	http.HandleFunc("/tactics-load-shared", tacticsLoad)
-	http.HandleFunc("/tactics-delete", tacticsDelete)
+	http.HandleFunc("/Account/GetUser", getUser)
+	http.HandleFunc("/TacticsBoard/SaveTactic", tacticsSave)
+	http.HandleFunc("/TacticsBoard/GetTacticsList", tacticsList)
+	http.HandleFunc("/TacticsBoard/TacticsLoad", tacticsLoad)
+	http.HandleFunc("/TacticsBoard/TacticsLoadShared", tacticsLoad)
+	http.HandleFunc("/TacticsBoard/DeleteTactic", tacticsDelete)
 
 	// start server same as npm
 	err = http.ListenAndServe(":3000", nil)
@@ -393,6 +393,10 @@ func tacticsLoad(w http.ResponseWriter, req *http.Request) {
 
 func tacticsDelete(w http.ResponseWriter, req *http.Request) {
 	fmt.Printf("tactics-delete\n")
+	if req.Method != "POST" {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
 	if !isLoggedIn(w, req) {
 		return
 	}
