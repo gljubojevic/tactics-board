@@ -1,5 +1,3 @@
-import { rootShouldForwardProp } from "@mui/material/styles/styled";
-
 class CoatchingfutsalServer {
 	constructor(
 		signInURL = null, 
@@ -74,7 +72,7 @@ class CoatchingfutsalServer {
 		})
 		.then(rsp => {
 			//console.log("getUser response", rsp);
-			if (rsp.status == 200) {
+			if (rsp.status === 200) {
 				return rsp.json()
 			}
 			return null;
@@ -115,7 +113,7 @@ class CoatchingfutsalServer {
 		})
 		.then(rsp => {
 			//console.log("list tactics response", rsp);
-			if (rsp.status == 200) {
+			if (rsp.status === 200) {
 				return rsp.json()
 			}
 			return [];
@@ -158,7 +156,7 @@ class CoatchingfutsalServer {
 		})
 		.then(rsp => {
 			//console.log("Loading tactics response", rsp);
-			if (rsp.status == 200) {
+			if (rsp.status === 200) {
 				return rsp.json()
 			}
 			return null;
@@ -179,7 +177,7 @@ class CoatchingfutsalServer {
 		})
 		.then(rsp => {
 			//console.log("Loading shared tactics response", rsp);
-			if (rsp.status == 200) {
+			if (rsp.status === 200) {
 				return rsp.json()
 			}
 			return null;
