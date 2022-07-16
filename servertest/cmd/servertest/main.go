@@ -69,6 +69,9 @@ func main() {
 	// Handle uploaded files from uploads folder
 	http.Handle("/uploads/", http.StripPrefix("/uploads", http.FileServer(http.Dir("./uploads"))))
 
+	// Handle ext logos and adds
+	http.Handle("/TacticsBoard/ext/", http.StripPrefix("/TacticsBoard/ext/", http.FileServer(http.Dir("../../../build/ext"))))
+
 	// emulate routes for tactics board
 	http.HandleFunc("/Account/LoginRegister", login)
 	http.HandleFunc("/Account/LogOff", logout)

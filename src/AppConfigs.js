@@ -6,8 +6,8 @@ const AppConfigs = {
 	},
 	coatchingfutsal: {
 		useFirebase: false,
-		siteLogoURL: '/tactics-board/ext/cf_logo.png',
-		pitchCenterADURL: '/tactics-board/ext/heineken-logo.png',
+		siteLogoURL: '/TacticsBoard/ext/cf_logo.png',
+		pitchCenterADURL: '/TacticsBoard/ext/heineken-logo.png',
 		signInURL: '/Account/LoginRegister',
 		signOutURL: '/Account/LogOff',
 		getUserURL: '/Account/GetUser',
