@@ -40,7 +40,7 @@ class ShareDialog extends Component {
 	}
 
 	copyLink() {
-		const lnk = document.location + '?t=' + this.state.id;
+		const lnk = document.location + '?ts=' + this.state.id;
 		navigator.clipboard.writeText(lnk)
 		this.setState({copied: true});
 	}
@@ -50,7 +50,7 @@ class ShareDialog extends Component {
 	}
 
 	render() {
-		const lnk = document.location + '?t=' + this.state.id;
+		const lnk = document.location + '?ts=' + this.state.id;
 		const tooltipTitle = this.state.copied ? "copied" : "click to copy"
 		return (
 			<Dialog fullWidth={false} maxWidth="md" open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
