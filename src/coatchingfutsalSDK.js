@@ -48,6 +48,8 @@ class CoatchingfutsalServer {
 	}
 
 	async SignOut() {
+		document.getElementById('logoutForm').submit()
+		/*
 		const l = document.location;
 		let returnURL = l.href;
 		let url = l.protocol + '//' + l.host + this.signOutURL + '?rurl=' + encodeURIComponent(returnURL);
@@ -56,6 +58,7 @@ class CoatchingfutsalServer {
 			method: "POST",
 			mode:"same-origin",
 			cache:"no-cache",
+			body:formData
 		})
 		.then(rsp => {
 			if (rsp.redirected) {
@@ -65,6 +68,7 @@ class CoatchingfutsalServer {
 			console.log(rsp);
 		})
 		.catch(error => console.error(error));
+		*/
 	}
 
 	async getUser(){
