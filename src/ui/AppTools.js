@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
 import LinkIcon from '@mui/icons-material/Link';
 import DrawMenu from './DrawMenu';
 import FullscreenToggle from './FullscreenToggle';
@@ -46,6 +47,17 @@ class AppTools extends Component {
 		);
 	}
 
+	renderSiteHome() {
+		if (null === this.props.siteHome) {
+			return null;
+		}
+		return (
+			<IconButton color="inherit" aria-label="home" onClick={this.props.siteHome}>
+				<HomeIcon />
+			</IconButton>
+		)
+	}
+
 	render() {
 		return (
 			<AppBar position="fixed">
@@ -54,6 +66,7 @@ class AppTools extends Component {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" color="inherit">Futsal tactics board</Typography>
+					{this.renderSiteHome()}
 					{this.renderAnimControls()}
 					<div className={this.props.classes.grow} />
 					<DrawMenu drawMode={this.props.drawMode} extrasCreate={this.props.extrasCreate} />
@@ -99,7 +112,8 @@ AppTools.defaultProps = {
 	showHelp: null,
 	currentUser: null,
 	signIn: null,
-	signOut: null
+	signOut: null,
+	siteHome: null
 }
 
 AppTools.propTypes = {
@@ -120,7 +134,8 @@ AppTools.propTypes = {
 	showHelp: PropTypes.func,
 	currentUser: PropTypes.instanceOf(AppUser),
 	signIn: PropTypes.func,
-	signOut: PropTypes.func
+	signOut: PropTypes.func,
+	siteHome: PropTypes.func
 }
 
 export default withStyles(styles, { withTheme: true })(AppTools);

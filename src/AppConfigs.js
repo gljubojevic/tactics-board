@@ -1,11 +1,13 @@
 const AppConfigs = {
 	default: {
 		useFirebase: true,
+		siteHomeURL: null,
 		siteLogoURL: null,
 		pitchCenterADURL: null,
 	},
 	coatchingfutsal: {
 		useFirebase: false,
+		siteHomeURL: '/',
 		siteLogoURL: '/TacticsBoard/ext/cf_logo.png',
 		pitchCenterADURL: '/TacticsBoard/ext/heineken-logo.png',
 		signInURL: '/Account/LoginRegister',

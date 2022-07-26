@@ -84,11 +84,16 @@ class App extends Component {
 		this.signIn = this.signIn.bind(this);
 		this.signOut = this.signOut.bind(this);
 		this.signedInCallback = this.signedInCallback.bind(this);
+		this.goSiteHome = this.goSiteHome.bind(this);
 
 		if (this.config.useFirebase) {
-			this.server = new FirebaseServer(this.signedInCallback);
+			this.server = new FirebaseServer(
+				this.config.siteHomeURL,
+				this.signedInCallback
+			);
 		} else {
 			this.server = new CoatchingfutsalServer(
+				this.config.siteHomeURL,
 				this.config.signInURL,
 				this.config.signOutURL,
 				this.config.getUserURL,
@@ -256,6 +261,13 @@ class App extends Component {
 			return true;
 		}
 		return false;
+	}
+
+	///////////////////////////////////
+	// Site home
+
+	goSiteHome() {
+		this.server.goHomeURL();
 	}
 
 	///////////////////////////////////
@@ -549,6 +561,7 @@ class App extends Component {
 						currentUser={this.state.currentUser}
 						signIn={this.signIn}
 						signOut={this.signOut}
+						siteHome={this.server.hasHomeURL() ? this.goSiteHome : null}
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
 						load={this.TacticsBrowse}

@@ -1,5 +1,6 @@
 class CoatchingfutsalServer {
 	constructor(
+		siteHomeURL = null,
 		signInURL = null, 
 		signOutURL = null, 
 		getUserURL = null, 
@@ -10,6 +11,7 @@ class CoatchingfutsalServer {
 		listURL = null,
 		deleteURL = null
 	) {
+		this.siteHomeURL = siteHomeURL;
 		this.signInURL = signInURL;
 		this.signOutURL = signOutURL;
 		this.getUserURL = getUserURL;
@@ -24,6 +26,17 @@ class CoatchingfutsalServer {
 
 	get AppInstance() {
 		return null;
+	}
+
+	hasHomeURL() {
+		return null !== this.siteHomeURL;
+	}
+
+	goHomeURL() {
+		if (!this.hasHomeURL) {
+			return;
+		}
+		document.location = this.siteHomeURL;
 	}
 
 	async SignIn() {

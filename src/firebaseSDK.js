@@ -23,13 +23,25 @@ const firebaseConfig = {
 };
 
 class FirebaseServer {
-	constructor(signedInCallback = null) {
+	constructor(siteHomeURL = null, signedInCallback = null) {
 		// Initialize Firebase
 		this.firebaseApp = firebase.initializeApp(firebaseConfig);
 		//const analytics = getAnalytics(firebaseApp);
 		this.firestore = getFirestore();
 		this.storage = getStorage();
+		this.siteHomeURL = siteHomeURL;
 		this.signedInCallback = signedInCallback;
+	}
+
+	hasHomeURL() {
+		return null !== this.siteHomeURL;
+	}
+
+	goHomeURL() {
+		if (!this.hasHomeURL) {
+			return;
+		}
+		document.location = this.siteHomeURL;
 	}
 
 	get AppInstance() {
