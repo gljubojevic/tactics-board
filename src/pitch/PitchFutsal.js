@@ -120,7 +120,8 @@ class PitchFutsal {
 				new Point(pPos.left + posX, pPos.top),
 				90,
 				new Point(pPos.left + posX, pPos.top),
-				number
+				number,
+				90
 			);
 			players.push(player);
 		}

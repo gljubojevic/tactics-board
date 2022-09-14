@@ -1,7 +1,7 @@
 import Point from "./Point";
 
 class Player {
-	constructor(id="", no="0", name="", color=0, pos=new Point(0,0), rotation=0, posDefault=new Point(0,0), noDefault="0"){
+	constructor(id="", no="0", name="", color=0, pos=new Point(0,0), rotation=0, posDefault=new Point(0,0), noDefault="0", rotDefault=90){
 		this.id = id;
 		this.no = no;
 		this.name = name;
@@ -10,6 +10,7 @@ class Player {
 		this.rotation = rotation;
 		this.posDefault = posDefault;
 		this.noDefault = noDefault;
+		this.rotDefault = rotDefault;
 		this.isEdit = false;
 	}
 
@@ -28,7 +29,7 @@ class Player {
 
 	reset() {
 		this.pos = this.posDefault.clone();
-		this.rotation = 0;
+		this.rotation = this.rotDefault;
 		this.name = "";
 		this.no = this.noDefault;
 		this.isEdit = false;
