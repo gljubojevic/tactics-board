@@ -4,6 +4,7 @@ const AppConfigs = {
 		siteHomeURL: null,
 		siteLogoURL: null,
 		pitchCenterADURL: null,
+		thumbnailWidth: 320,	// height calculated from proportions
 	},
 	coatchingfutsal: {
 		useFirebase: false,
@@ -17,7 +18,8 @@ const AppConfigs = {
 		loadURL: '/TacticsBoard/TacticsLoad',
 		loadSharedURL: '/TacticsBoard/TacticsLoadShared',
 		listURL: '/TacticsBoard/GetTacticsList',
-		deleteURL: '/TacticsBoard/DeleteTactic'
+		deleteURL: '/TacticsBoard/DeleteTactic',
+		thumbnailWidth: 1280,	// height calculated from proportions
 	}
 }
 

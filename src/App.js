@@ -324,7 +324,7 @@ class App extends Component {
 
 		// create thumbnail
 		const svg = this.refPitchEdit.current.getSVG();
-		const tmbWidth = 320;
+		const tmbWidth = this.config.thumbnailWidth;
 		const tmbHeight = tmbWidth * svg.height / svg.width;
 		const thumbnailBlob = await this.refSvgToImg.current.toBlob(
 			svg.svgText,
