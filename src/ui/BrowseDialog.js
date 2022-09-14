@@ -22,12 +22,21 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/Search';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
 class BrowseDialog extends Component {
 	constructor(props, context) {
 		super(props, context);
 		this.Show = this.Show.bind(this);
 		this.handleClose = this.handleClose.bind(this);
+		this.handleDateFromChange = this.handleDateFromChange.bind(this);
+		this.handleDateToChange = this.handleDateToChange.bind(this);
+		this.handleTextChange = this.handleTextChange.bind(this);
+		this.handleSearch = this.handleSearch.bind(this);
 		this.loadTactics = this.loadTactics.bind(this);
 		this.nextPage = this.nextPage.bind(this);
 		this.menuOpen = this.menuOpen.bind(this);
@@ -39,7 +48,10 @@ class BrowseDialog extends Component {
 			loadMore: false,
 			menuOpen: false,
 			menuAnchorEl: null,
-			menuTacticsID: null
+			menuTacticsID: null,
+			searchDateFrom: null,
+			searchDateTo: null,
+			searchText: null
 		}
 	}
 
@@ -52,7 +64,10 @@ class BrowseDialog extends Component {
 			loadMore: false,
 			menuOpen: false,
 			menuAnchorEl: null,
-			menuTacticsID: null
+			menuTacticsID: null,
+			searchDateFrom: null,
+			searchDateTo: null,
+			searchText: null
 		});
 		this.List();
 	}
@@ -61,9 +76,31 @@ class BrowseDialog extends Component {
 		this.setState({open: false});
 	}
 
+	handleDateFromChange(e) {
+		this.setState({searchDateFrom: e});
+	}
+
+	handleDateToChange(e) {
+		this.setState({searchDateTo: e});
+	}
+
+	handleTextChange(e) {
+		this.setState({searchText: e.target.value});
+	}
+
+	handleSearch(e) {
+		this.List();
+	}
+
 	async List(){
 		// docs to show
-		let tactics = await this.props.onList(this.props.perPage, null);
+		let tactics = await this.props.onList(
+			this.props.perPage, 
+			null,
+			this.state.searchDateFrom ? this.state.searchDateFrom.toISOString() : null,
+			this.state.searchDateTo ? this.state.searchDateTo.toISOString() : null,
+			this.state.searchText
+		);
 		// set for display
 		this.setState({
 			tactics: tactics,
@@ -79,7 +116,13 @@ class BrowseDialog extends Component {
 		// last doc reference
 		const afterDoc = this.state.tactics[this.state.tactics.length - 1].docRef;
 		// docs to show
-		let tactics = await this.props.onList(this.props.perPage, afterDoc);
+		let tactics = await this.props.onList(
+			this.props.perPage, 
+			afterDoc,
+			this.state.searchDateFrom ? this.state.searchDateFrom.toISOString() : null,
+			this.state.searchDateTo ? this.state.searchDateTo.toISOString() : null,
+			this.state.searchText
+		);
 		if (0 === tactics.length) {
 			this.setState({
 				loading: false,
@@ -214,6 +257,30 @@ class BrowseDialog extends Component {
 			<Dialog fullWidth={true} maxWidth="lg" open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
 				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>Browse my tactics - click on tactic to open in editor</DialogTitleClose>
 				<DialogContent dividers>
+					<Stack direction="row" justifyContent="center" spacing={3}>
+						<LocalizationProvider dateAdapter={AdapterMoment}>
+							<DesktopDatePicker
+								label="From date"
+								inputFormat="DD.MM.YYYY"
+								value={this.state.searchDateFrom}
+								onChange={this.handleDateFromChange}
+								renderInput={(params) => <TextField {...params} />}
+							/>
+							<DesktopDatePicker
+								label="To date"
+								inputFormat="DD.MM.YYYY"
+								value={this.state.searchDateTo}
+								onChange={this.handleDateToChange}
+								renderInput={(params) => <TextField {...params} />}
+							/>
+						</LocalizationProvider>
+						<TextField 
+							label="Title or description"
+							value={this.state.searchText}
+							onChange={this.handleTextChange}
+						/>
+						<Button onClick={this.handleSearch} variant="contained" color="primary" autoFocus startIcon={<SearchIcon />}>Search</Button>
+					</Stack>
 					<Grid container columns={3}>
 						{this.renderItems()}
 					</Grid>

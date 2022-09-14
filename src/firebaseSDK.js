@@ -70,7 +70,7 @@ class FirebaseServer {
 		this.unregisterAuthObserver();
 	}
 
-	async List(tacticsPerPage, afterDoc) {
+	async List(tacticsPerPage, afterDoc, dateFrom, dateTo, searchText) {
 		// docs to show
 		let tacticsList = [];
 

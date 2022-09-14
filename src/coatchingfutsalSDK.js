@@ -108,13 +108,23 @@ class CoatchingfutsalServer {
 		}
 	}
 
-	async List(tacticsPerPage, afterDoc) {
+	async List(tacticsPerPage, afterDoc, dateFrom, dateTo, searchText) {
 		//console.log("listing tactics");
 		const l = document.location;
 		let url = l.protocol + '//' + l.host + this.listURL + "?perPage=" + tacticsPerPage;
 		if (afterDoc && afterDoc.length > 0) {
-			url += "&after=" + afterDoc
+			url += "&after=" + afterDoc;
 		}
+		if (dateFrom) {
+			url += "&dateFrom=" + encodeURIComponent(dateFrom);
+		}
+		if (dateTo) {
+			url += "&dateTo=" + encodeURIComponent(dateTo);
+		}
+		if (searchText) {
+			url += "&searchText=" + encodeURIComponent(searchText);
+		}
+		//console.log("List", url);
 
 		let tacticsList = await fetch(url, {
 			mode:"same-origin",

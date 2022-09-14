@@ -301,8 +301,8 @@ class App extends Component {
 	///////////////////////////////////
 	// Server related functions
 
-	async TacticsList(tacticsPerPage, afterDoc) {
-		return await this.server.List(tacticsPerPage, afterDoc)
+	async TacticsList(tacticsPerPage, afterDoc, dateFrom, dateTo, searchText) {
+		return await this.server.List(tacticsPerPage, afterDoc, dateFrom, dateTo, searchText);
 	}
 
 	async TacticsDelete(tacticsID) {
