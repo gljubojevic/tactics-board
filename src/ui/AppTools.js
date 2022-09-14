@@ -52,9 +52,11 @@ class AppTools extends Component {
 			return null;
 		}
 		return (
-			<IconButton color="inherit" aria-label="home" onClick={this.props.siteHome}>
-				<HomeIcon />
-			</IconButton>
+			<Tooltip title="Site home">
+				<IconButton color="inherit" aria-label="home" onClick={this.props.siteHome}>
+					<HomeIcon />
+				</IconButton>
+			</Tooltip>
 		)
 	}
 
