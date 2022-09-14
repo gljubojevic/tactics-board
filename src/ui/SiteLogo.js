@@ -10,7 +10,7 @@ class SiteLogo extends Component {
 		}
 		return (
 			<Paper elevation={3} sx={{ position: 'absolute', bottom:0, right:0, m:2, p:0.5 }}>
-				<img alt="site logo" src={this.props.logoURL} />
+				<a href={this.props.logoLink}><img alt="site logo" src={this.props.logoURL} /></a>
 			</Paper>
 		);
 	}
@@ -18,10 +18,12 @@ class SiteLogo extends Component {
 
 SiteLogo.defaultProps = {
 	logoURL: null,
+	logoLink: null,
 }
 
 SiteLogo.propTypes = {
 	logoURL: PropTypes.string,
+	logoLink: PropTypes.string,
 }
 
 export default SiteLogo;
