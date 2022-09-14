@@ -73,6 +73,7 @@ class App extends Component {
 		this.LocalStorageDelete = this.LocalStorageDelete.bind(this);
 		this.ColorPaletteEdit = this.ColorPaletteEdit.bind(this);
 		this.showSaveDialog = this.showSaveDialog.bind(this);
+		this.showSaveAsDialog = this.showSaveAsDialog.bind(this);
 		this.TacticsList = this.TacticsList.bind(this);
 		this.TacticsDelete = this.TacticsDelete.bind(this);
 		this.TacticsSave = this.TacticsSave.bind(this);
@@ -240,6 +241,14 @@ class App extends Component {
 		);
 	}
 
+	showSaveAsDialog() {
+		this.refSaveDialog.current.Show(
+			this.state.pitch.name,
+			this.state.pitch.description,
+			true
+		);
+	}
+
 	///////////////////////////////////
 	// url loading or loading shared
 
@@ -300,13 +309,16 @@ class App extends Component {
 		await this.server.Delete(tacticsID) 
 	}
 
-	async TacticsSave(name, description) {
+	async TacticsSave(name, description, saveAs) {
 		if (!this.isSignedIn) {
 			console.error("User is not signed in");
 			return
 		}
 
 		// save to local storage to keep it and get data for save
+		if (saveAs) {
+			this.state.pitch.id = uuidv4();
+		}
 		this.state.pitch.setNameAndDescription(name, description);
 		const tactics = this.LocalStorageSave();
 
@@ -565,7 +577,8 @@ class App extends Component {
 					/>
 					<DrawerMenu ref={this.refDrawerMenu}
 						load={this.TacticsBrowse}
-						save={this.showSaveDialog} 
+						save={this.showSaveDialog}
+						saveAs={this.showSaveAsDialog}
 						saveImage={this.SaveImage} 
 						newScheme={this.NewScheme}
 						newAnimation={this.NewAnimation}

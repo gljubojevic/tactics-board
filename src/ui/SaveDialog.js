@@ -22,15 +22,17 @@ class SaveDialog extends Component {
 			open: false,
 			name: "",
 			description: "",
+			saveAs: false,
 			errors:{}
 		}
 	}
 
-	Show(name, description) {
+	Show(name, description, saveAs) {
 		this.setState({
 			open: true,
 			name: name,
 			description: description,
+			saveAs: saveAs,
 			errors:{}
 		});
 	}
@@ -49,7 +51,8 @@ class SaveDialog extends Component {
 		this.handleClose();
 		this.props.onSave(
 			this.state.name.trim(),
-			this.state.description.trim()
+			this.state.description.trim(),
+			this.state.saveAs
 		);
 	}
 
@@ -93,7 +96,7 @@ class SaveDialog extends Component {
 	render() {
 		return (
 			<Dialog fullWidth={true} maxWidth={"sm"} open={this.state.open} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
-				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>Save tactics board</DialogTitleClose>
+				<DialogTitleClose id="responsive-dialog-title" onClick={this.handleClose}>{this.state.saveAs ? "Save as new" : "Save"} tactics board</DialogTitleClose>
 				<DialogContent dividers>
 					<TextField 
 						ref={this.refName}

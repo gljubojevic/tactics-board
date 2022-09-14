@@ -26,6 +26,7 @@ class DrawerMenu extends Component {
 		this.deleteAnimation = this.deleteAnimation.bind(this);
 		this.load = this.load.bind(this);
 		this.save = this.save.bind(this);
+		this.saveAs = this.saveAs.bind(this);
 		this.saveImage = this.saveImage.bind(this);
 		this.colorPaletteEdit = this.colorPaletteEdit.bind(this);
 		this.state = {
@@ -69,6 +70,11 @@ class DrawerMenu extends Component {
 	save() {
 		this.setDrawer(false);
 		this.props.save();
+	}
+
+	saveAs() {
+		this.setDrawer(false);
+		this.props.saveAs();
 	}
 
 	saveImage() {
@@ -120,6 +126,12 @@ class DrawerMenu extends Component {
 								<ListItemText primary="Save" />
 							</ListItemButton>
 						</ListItem>
+						<ListItem>
+							<ListItemButton onClick={this.saveAs} disabled={!this.props.isSignedIn}>
+								<ListItemIcon><Save /></ListItemIcon>
+								<ListItemText primary="Save As" />
+							</ListItemButton>
+						</ListItem>
 						<Divider />
 						<ListItem>
 							<ListItemButton onClick={this.saveImage} disabled={!this.props.isSignedIn}>
@@ -144,6 +156,7 @@ class DrawerMenu extends Component {
 DrawerMenu.defaultProps = {
 	load: null,
 	save: null,
+	saveAs: null,
 	saveImage: null,
 	newScheme: null,
 	newAnimation: null,
@@ -156,6 +169,7 @@ DrawerMenu.defaultProps = {
 DrawerMenu.propTypes = {
 	load: PropTypes.func,
 	save: PropTypes.func,
+	saveAs: PropTypes.func,
 	saveImage: PropTypes.func,
 	newScheme: PropTypes.func,
 	newAnimation: PropTypes.func,
