@@ -461,7 +461,7 @@ class PitchEdit extends Component {
 			'.txt4 text { font-size: 2em; }',
 			'.player { pointer-events: none; }',
 			'.player text { font-family: sans-serif; fill: black; }',
-			'.player text.number { fill: white; }',
+			//'.player text.number { fill: white; }',
 			'.dashed { stroke-dasharray: 20; }',
 			'.square { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
 			'.ellipse { stroke-width: 8; stroke-opacity: 1; fill-opacity: 0.6; }',
@@ -487,7 +487,8 @@ class PitchEdit extends Component {
 			[`.ec${dm.editColorIndex} { fill: ${dm.editColor}; stroke: ${dm.editColor}; }`],
 			// player colors
 			dm.colorOptionsPlayer.map((col, idx) => {
-				return `.pc${idx} { fill: ${col}; stroke: ${col}; }`;
+				let textColor = this.props.theme.palette.getContrastText(col);
+				return `.pc${idx} { fill: ${col}; stroke: ${col}; } .pc${idx} text.number { fill: ${textColor}; stroke: ${textColor} }`;
 			}),
 			// player path colors
 			dm.colorOptionsPlayer.map((col, idx) => {
