@@ -10,7 +10,7 @@ const AppConfigs = {
 		useFirebase: false,
 		siteHomeURL: '/',
 		siteLogoURL: '/TacticsBoard/ext/cf_logo.png',
-		pitchCenterADURL: '/TacticsBoard/ext/heineken-logo.png',
+		pitchCenterADURL: '/TacticsBoard/CenterAdvert',
 		signInURL: '/Account/LoginRegister',
 		signOutURL: '/Account/LogOff',
 		getUserURL: '/Account/GetUser',
